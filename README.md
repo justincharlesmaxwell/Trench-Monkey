@@ -1,4 +1,4 @@
-# Pitch Builder
+# Trench Monkey
 
 A single-page web app for advertising/marketing agencies to generate new business pitches. Takes a prospect's URL, industry, competitors, and budget — produces market research, audience segmentation, competitor positioning, a seasonal trigger calendar, and a channel budget split. Exports the whole thing to PowerPoint.
 
