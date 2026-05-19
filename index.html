@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch Builder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1>Pitch Builder</h1>
+        <button id="settings-btn" class="btn-icon" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Settings modal -->
+      <div id="settings-modal" class="modal hidden">
+        <div class="modal-card">
+          <h2>API key</h2>
+          <p class="muted">Your Anthropic API key is stored in your browser only. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+          <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
+          <div class="modal-actions">
+            <button id="save-key-btn" class="btn-primary">Save</button>
+            <button id="close-settings-btn" class="btn-secondary">Close</button>
+          </div>
+          <p class="hint" id="key-status"></p>
+        </div>
+      </div>
+
+      <!-- Input form -->
+      <section id="form-view" class="card">
+        <h2>Generate a pitch</h2>
+        <p class="muted">Enter the prospect's details. Claude will research the market, segment the audience, position against competitors, build a seasonal calendar, and split the budget.</p>
+
+        <div class="field">
+          <label for="url">Company URL</label>
+          <input type="text" id="url" placeholder="https://example.com">
+        </div>
+
+        <div class="field">
+          <label for="industry">Industry</label>
+          <input type="text" id="industry" placeholder="e.g. DTC skincare, fintech, B2B SaaS">
+        </div>
+
+        <div class="field">
+          <label for="competitors">Competitors</label>
+          <input type="text" id="competitors" placeholder="e.g. Glossier, The Ordinary, CeraVe">
+          <span class="hint">Comma-separated</span>
+        </div>
+
+        <div class="field">
+          <label for="budget">Annual budget (£)</label>
+          <input type="text" id="budget" placeholder="e.g. 250000">
+        </div>
+
+        <div class="form-actions">
+          <button id="generate-btn" class="btn-primary">Generate pitch</button>
+        </div>
+
+        <div id="form-error" class="error hidden"></div>
+      </section>
+
+      <!-- Loading state -->
+      <section id="loading-view" class="card hidden">
+        <div class="loading">
+          <div class="spinner"></div>
+          <div class="loading-text" id="loading-step">Starting...</div>
+          <div class="muted small">This usually takes 20–40 seconds.</div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="result-view" class="hidden">
+        <div class="result-header">
+          <div>
+            <h2 id="result-title"></h2>
+            <p class="muted small" id="result-meta"></p>
+          </div>
+          <div class="result-actions">
+            <button id="export-btn" class="btn-secondary">↓ Export to slides</button>
+            <button id="new-btn" class="btn-secondary">New pitch</button>
+          </div>
+        </div>
+        <div id="result-content"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="muted small">Powered by Claude · Your API key stays in your browser</span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
