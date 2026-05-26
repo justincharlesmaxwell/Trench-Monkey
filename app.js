@@ -360,6 +360,14 @@ Return ONLY a valid JSON object (no markdown, no preamble, no backticks) matchin
       {"segment": "segment name matching audience_segments exactly", "message": "the one message this segment must hear, in one sentence"}
     ]
   },
+  "search_trends": {
+    "top_queries": [
+      {"query": "search term", "direction": "rising", "insight": "1 sentence on what this tells us about consumer intent"}
+    ],
+    "seasonal_peaks": ["e.g. January sees high search intent around X — 1 sentence"],
+    "emerging_topics": ["emerging topic 1", "emerging topic 2", "emerging topic 3"],
+    "strategic_implication": "1-2 sentences on how to use these search trends in paid search and content strategy"
+  },
   "trigger_calendar": [
     {"name": "trigger name", "months": [1,2], "month_labels": "Jan-Feb", "rationale": "why this matters for this brand — 1 sentence", "priority": "high"}
   ],
@@ -372,6 +380,9 @@ REQUIREMENTS
 - audience_segments: exactly 4 segments, size_pct must sum to 100
 - positioning.competitor_analysis: one entry per competitor listed in the input, in the same order
 - creative_territory.key_messages: exactly 4 entries, one per audience segment, in the same order as audience_segments
+- search_trends.top_queries: 5-8 entries. direction must be exactly "rising", "stable", or "declining". Base on known search behaviour patterns for this industry.
+- search_trends.seasonal_peaks: 2-4 entries describing when search volume peaks and why
+- search_trends.emerging_topics: 3-5 short topic labels representing newer or growing search areas
 - trigger_calendar: 5-8 entries spanning the year. months is an array of integers (1=Jan, 12=Dec). priority must be exactly "high", "medium", or "low"
 - budget_split: 5-7 channels covering the realistic media mix for this industry. pct must sum to 100. amounts must sum to exactly ${sym}${budget.toLocaleString()}
 - Be specific and tactical. Reference the named competitors. Avoid generic phrases like "leverage synergies" or "engage consumers".
@@ -477,6 +488,41 @@ function showResult() {
     ${voicePills ? `<p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Brand voice</p><div class="flex flex-wrap gap-2 mb-4">${voicePills}</div>` : ''}
     ${keyMessages ? `<p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Key messages by audience</p>${keyMessages}` : ''}` : '';
 
+  const st = d.search_trends || {};
+  const directionBadge = dir => {
+    const cfg = {
+      rising:   { cls: 'bg-green-100 text-green-800',  icon: 'trending_up' },
+      stable:   { cls: 'bg-surface-container text-on-surface-variant', icon: 'trending_flat' },
+      declining:{ cls: 'bg-error-container text-on-error-container', icon: 'trending_down' }
+    };
+    const { cls, icon } = cfg[dir] || cfg.stable;
+    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cls}"><span class="material-symbols-outlined text-[12px]">${icon}</span>${escapeHtml(dir)}</span>`;
+  };
+
+  const searchTrendsContent = st.top_queries ? `
+    <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Top search queries</p>
+    <div class="space-y-2 mb-5">
+      ${(st.top_queries || []).map(q => `
+        <div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-start gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm">${escapeHtml(q.query)}</span>
+              ${directionBadge(q.direction)}
+            </div>
+            <p class="text-xs text-on-surface-variant leading-relaxed">${escapeHtml(q.insight)}</p>
+          </div>
+        </div>`).join('')}
+    </div>
+    <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Emerging topics</p>
+    <div class="flex flex-wrap gap-2 mb-5">
+      ${(st.emerging_topics || []).map(t => `<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-semibold">${escapeHtml(t)}</span>`).join('')}
+    </div>
+    <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Seasonal patterns</p>
+    <ul class="list-disc list-inside space-y-1 text-sm mb-5">${(st.seasonal_peaks || []).map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+    <div class="p-4 bg-surface-container rounded-lg border-l-4 border-primary text-sm">
+      <span class="font-semibold">Strategic implication:</span> ${escapeHtml(st.strategic_implication)}
+    </div>` : '';
+
   const triggersContent = `
     <div class="space-y-3">
       ${d.trigger_calendar.map(t => `
@@ -516,6 +562,7 @@ function showResult() {
     ${accordion('groups', 'Audience segments', segmentsContent)}
     ${accordion('compare', 'Competitor positioning', competitorsContent)}
     ${ct.campaign_thought ? accordion('auto_awesome', 'Creative territory', creativeContent) : ''}
+    ${st.top_queries ? accordion('search', 'Search trend analysis', searchTrendsContent) : ''}
     ${accordion('calendar_month', 'Key trigger points', triggersContent)}
     ${accordion('payments', 'Budget split per channel', budgetContent)}
   `;
