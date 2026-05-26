@@ -1,132 +1,356 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trench Monkey</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#fcf8fa",
+            "inverse-surface": "#303031",
+            "error-container": "#ffdad6",
+            "secondary-container": "#dce2f3",
+            "on-surface-variant": "#45464c",
+            "on-background": "#1b1b1d",
+            "surface-container-highest": "#e5e2e3",
+            "on-surface": "#1b1b1d",
+            "primary-fixed": "#dce2f7",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#5e6572",
+            "error": "#ba1a1a",
+            "surface-container": "#f0edee",
+            "inverse-primary": "#c0c6db",
+            "surface-variant": "#e5e2e3",
+            "on-error": "#ffffff",
+            "outline": "#76777d",
+            "surface-container-high": "#eae7e9",
+            "outline-variant": "#c6c6cd",
+            "primary-container": "#141b2b",
+            "on-primary-container": "#7d8497",
+            "surface-container-low": "#f6f3f4",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#585f6c",
+            "primary": "#111827",
+            "background": "#fcf8fa",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#dce2f3"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "container_padding_mobile": "20px",
+            "container_padding_desktop": "40px",
+            "stack_sm": "8px",
+            "gutter": "24px",
+            "stack_md": "16px",
+            "stack_lg": "32px"
+          },
+          fontFamily: {
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "display": ["Inter"]
+          },
+          fontSize: {
+            "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "display": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }]
+          }
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <div class="app">
-    <header class="header">
-      <div class="header-inner">
-        <h1 id="agency-title">Trench Monkey</h1>
-        <div class="header-actions">
-          <button id="history-btn" class="btn-icon" aria-label="Pitch history">☰</button>
-          <button id="settings-btn" class="btn-icon" aria-label="Settings">⚙</button>
-        </div>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+
+  <!-- ============================================================
+       HEADER (fixed, full-width)
+  ============================================================ -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm">
+    <div class="max-w-[900px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="font-headline-md text-headline-md text-primary tracking-tight" id="agency-title">Trench Monkey</span>
       </div>
-    </header>
-
-    <main class="main">
-      <!-- Settings modal -->
-      <div id="settings-modal" class="modal hidden">
-        <div class="modal-card">
-          <h2>Settings</h2>
-
-          <div class="field">
-            <label for="agency-name-input">Agency name</label>
-            <input type="text" id="agency-name-input" placeholder="e.g. Acme Agency">
-          </div>
-
-          <div class="field">
-            <label for="currency-select">Currency</label>
-            <select id="currency-select">
-              <option value="GBP">£ GBP</option>
-              <option value="USD">$ USD</option>
-              <option value="EUR">€ EUR</option>
-              <option value="AUD">A$ AUD</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="api-key-input">Anthropic API key</label>
-            <p class="muted small">Stored in your browser only. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
-            <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
-          </div>
-
-          <div class="modal-actions">
-            <button id="save-settings-btn" class="btn-primary">Save</button>
-            <button id="close-settings-btn" class="btn-secondary">Close</button>
-          </div>
-          <p class="hint" id="key-status"></p>
-        </div>
+      <nav class="hidden md:flex items-center gap-1">
+        <a class="text-primary font-bold text-body-md hover:bg-surface-container-high px-3 py-2 rounded transition-colors" href="#">Generator</a>
+        <a class="text-on-surface-variant text-body-md hover:bg-surface-container-high px-3 py-2 rounded transition-colors" href="#">Archive</a>
+      </nav>
+      <div class="flex items-center gap-1">
+        <button id="history-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all active:scale-95" aria-label="Pitch history">history</button>
+        <button id="settings-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all active:scale-95" aria-label="Settings">settings</button>
       </div>
+    </div>
+  </header>
 
-      <!-- History modal -->
-      <div id="history-modal" class="modal hidden">
-        <div class="modal-card modal-card-wide">
-          <div class="modal-header">
-            <h2>Pitch history</h2>
-            <button id="close-history-btn" class="btn-icon">✕</button>
-          </div>
-          <div id="history-list" class="history-list"></div>
-          <p id="history-empty" class="muted small hidden">No pitches saved yet. Generate your first pitch to see it here.</p>
-        </div>
+  <!-- ============================================================
+       SIDEBAR (desktop only, lg+)
+  ============================================================ -->
+  <aside class="fixed left-0 top-0 h-full border-r border-outline-variant bg-surface-container-low w-64 hidden lg:block z-40 pt-20">
+    <div class="flex flex-col h-full px-4 gap-2">
+      <div class="mb-6 px-2">
+        <h3 class="font-headline-md text-headline-md text-primary">Marketing Suite</h3>
+        <p class="text-label-md font-label-md text-on-surface-variant opacity-70">High-Performance Mode</p>
       </div>
+      <nav class="flex flex-col gap-1">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-highest font-label-md text-label-md" href="#">
+          <span class="material-symbols-outlined">auto_awesome</span>
+          Generator
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all font-label-md text-label-md" href="#">
+          <span class="material-symbols-outlined">inventory_2</span>
+          Archive
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all font-label-md text-label-md" href="#">
+          <span class="material-symbols-outlined">insights</span>
+          Analytics
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all font-label-md text-label-md" href="#" onclick="event.preventDefault(); document.getElementById('settings-btn').click()">
+          <span class="material-symbols-outlined">settings</span>
+          Settings
+        </a>
+      </nav>
+      <div class="mt-auto mb-10">
+        <button onclick="if(typeof resetToForm==='function') resetToForm()" class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md shadow-sm hover:opacity-90 transition-opacity active:scale-95">
+          New Pitch
+        </button>
+      </div>
+    </div>
+  </aside>
 
-      <!-- Input form -->
-      <section id="form-view" class="card">
-        <h2>Generate a pitch</h2>
-        <p class="muted">Enter the prospect's details. <span id="agency-name-inline">Trench Monkey</span> will research the market, segment the audience, position against competitors, build a seasonal calendar, and split the budget.</p>
-
-        <div class="field">
-          <label for="url">Company URL</label>
-          <input type="text" id="url" placeholder="https://example.com">
+  <!-- ============================================================
+       SETTINGS MODAL
+  ============================================================ -->
+  <div id="settings-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-5 bg-on-background/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-[480px] bg-surface rounded-xl shadow-2xl border border-outline-variant overflow-hidden">
+      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant">
+        <h2 class="font-headline-md text-headline-md">Settings</h2>
+        <button id="close-settings-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-95">close</button>
+      </div>
+      <div class="px-6 py-5 space-y-5">
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider block" for="agency-name-input">Agency name</label>
+          <input id="agency-name-input" type="text" placeholder="e.g. Acme Agency" class="w-full p-3 border border-outline-variant rounded bg-white text-body-md input-focus-ring transition-all">
         </div>
-
-        <div class="field">
-          <label for="industry">Industry</label>
-          <input type="text" id="industry" placeholder="e.g. DTC skincare, fintech, B2B SaaS">
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider block" for="currency-select">Currency</label>
+          <select id="currency-select" class="w-full p-3 border border-outline-variant rounded bg-white text-body-md input-focus-ring transition-all">
+            <option value="GBP">£ GBP</option>
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="AUD">A$ AUD</option>
+          </select>
         </div>
-
-        <div class="field">
-          <label for="competitors">Competitors</label>
-          <input type="text" id="competitors" placeholder="e.g. Glossier, The Ordinary, CeraVe">
-          <span class="hint">Comma-separated</span>
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider block" for="api-key-input">Anthropic API key</label>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Stored in your browser only. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" class="underline">console.anthropic.com</a>.</p>
+          <input id="api-key-input" type="password" placeholder="sk-ant-..." autocomplete="off" class="w-full p-3 border border-outline-variant rounded bg-white font-mono text-sm input-focus-ring transition-all">
         </div>
-
-        <div class="field">
-          <label for="budget">Annual budget (<span class="currency-symbol">£</span>)</label>
-          <input type="text" id="budget" placeholder="e.g. 250000">
-        </div>
-
-        <div class="form-actions">
-          <button id="generate-btn" class="btn-primary">Generate pitch</button>
-        </div>
-
-        <div id="form-error" class="error hidden"></div>
-      </section>
-
-      <!-- Loading state -->
-      <section id="loading-view" class="card hidden">
-        <div class="loading">
-          <div class="spinner"></div>
-          <div class="loading-text" id="loading-step">Connecting to Claude...</div>
-          <div class="muted small">This usually takes 20–40 seconds.</div>
-        </div>
-      </section>
-
-      <!-- Results -->
-      <section id="result-view" class="hidden">
-        <div class="result-header">
-          <div>
-            <h2 id="result-title"></h2>
-            <p class="muted small" id="result-meta"></p>
-          </div>
-          <div class="result-actions">
-            <button id="export-btn" class="btn-secondary">↓ Export to slides</button>
-            <button id="new-btn" class="btn-secondary">New pitch</button>
-          </div>
-        </div>
-        <div id="result-content"></div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <span class="muted small">Powered by Claude · Your API key stays in your browser</span>
-    </footer>
+        <p class="text-body-sm font-body-sm min-h-[20px]" id="key-status"></p>
+      </div>
+      <div class="flex gap-3 px-6 pb-6">
+        <button id="save-settings-btn" class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95">Save</button>
+        <button onclick="document.getElementById('close-settings-btn').click()" class="flex-1 border border-outline-variant text-on-surface py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors active:scale-95">Cancel</button>
+      </div>
+    </div>
   </div>
+
+  <!-- ============================================================
+       HISTORY MODAL
+  ============================================================ -->
+  <div id="history-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-5 bg-on-background/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-[700px] bg-surface rounded-xl shadow-2xl border border-outline-variant overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant flex-shrink-0">
+        <div>
+          <h2 class="font-headline-md text-headline-md">Pitch history</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Manage your saved pitch generations</p>
+        </div>
+        <button id="close-history-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-95">close</button>
+      </div>
+      <div id="history-list" class="flex-1 overflow-y-auto px-6 py-4"></div>
+      <p id="history-empty" class="hidden px-6 py-10 text-center text-body-sm font-body-sm text-on-surface-variant">No pitches saved yet. Generate your first pitch to see it here.</p>
+      <div class="px-6 py-4 border-t border-outline-variant flex-shrink-0 flex justify-between items-center bg-surface-container-low">
+        <span class="text-label-sm font-label-sm text-on-surface-variant">History stored locally in your browser</span>
+        <button onclick="document.getElementById('close-history-btn').click()" class="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main class="pt-24 pb-20 px-5 md:px-10 flex flex-col items-center min-h-screen">
+    <div class="w-full max-w-[900px]">
+
+      <!-- --------------------------------------------------------
+           FORM VIEW (visible by default)
+      -------------------------------------------------------- -->
+      <section id="form-view" class="flex flex-col space-y-stack_lg">
+        <div class="space-y-stack_sm">
+          <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Generate a pitch</h1>
+          <p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+            Enter your prospect's details and <span id="agency-name-inline">Trench Monkey</span> will research the market, segment the audience, position against competitors, build a seasonal calendar, and split the budget.
+          </p>
+        </div>
+
+        <div class="bg-white border border-outline-variant rounded-xl p-8 md:p-12 shadow-sm relative overflow-hidden">
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-surface-container rounded-full blur-3xl opacity-40 pointer-events-none"></div>
+          <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-x-gutter gap-y-stack_lg">
+            <div class="flex flex-col space-y-stack_sm col-span-1 md:col-span-2">
+              <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider" for="url">Company URL</label>
+              <input id="url" type="text" placeholder="https://example.com" class="w-full p-4 border border-outline-variant rounded bg-white text-body-md font-body-md input-focus-ring transition-all">
+            </div>
+            <div class="flex flex-col space-y-stack_sm">
+              <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider" for="industry">Industry</label>
+              <input id="industry" type="text" placeholder="e.g. DTC skincare, fintech, B2B SaaS" class="w-full p-4 border border-outline-variant rounded bg-white text-body-md font-body-md input-focus-ring transition-all">
+            </div>
+            <div class="flex flex-col space-y-stack_sm">
+              <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider" for="budget">Annual Budget (<span class="currency-symbol">£</span>)</label>
+              <div class="relative">
+                <span class="currency-symbol absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">£</span>
+                <input id="budget" type="text" placeholder="e.g. 250000" class="w-full p-4 pl-8 border border-outline-variant rounded bg-white text-body-md font-body-md input-focus-ring transition-all">
+              </div>
+            </div>
+            <div class="flex flex-col space-y-stack_sm col-span-1 md:col-span-2">
+              <label class="font-label-md text-label-md text-on-surface uppercase tracking-wider" for="competitors">Competitors</label>
+              <input id="competitors" type="text" placeholder="e.g. Glossier, The Ordinary, CeraVe" class="w-full p-4 border border-outline-variant rounded bg-white text-body-md font-body-md input-focus-ring transition-all">
+              <p class="text-body-sm font-body-sm text-on-surface-variant italic">Hint: Comma-separated names work best.</p>
+            </div>
+            <div class="col-span-1 md:col-span-2 pt-stack_sm">
+              <div id="form-error" class="hidden p-4 bg-error-container text-on-error-container rounded-lg text-body-sm font-body-sm mb-4"></div>
+              <button id="generate-btn" type="button" class="w-full md:w-auto md:min-w-[200px] bg-primary text-on-primary py-4 px-8 rounded font-label-md text-label-md shadow-md hover:opacity-95 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                <span>Generate pitch</span>
+                <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <div class="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col space-y-2">
+            <span class="material-symbols-outlined text-primary">verified</span>
+            <h4 class="font-label-md text-label-md text-on-surface">Data-Backed</h4>
+            <p class="text-body-sm font-body-sm text-on-surface-variant">Every pitch draws from current market trends and competitor benchmarks.</p>
+          </div>
+          <div class="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col space-y-2">
+            <span class="material-symbols-outlined text-primary">bolt</span>
+            <h4 class="font-label-md text-label-md text-on-surface">Instant Results</h4>
+            <p class="text-body-sm font-body-sm text-on-surface-variant">Complete deck outline and copy strategy generated in 20–40 seconds.</p>
+          </div>
+          <div class="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col space-y-2">
+            <span class="material-symbols-outlined text-primary">lock</span>
+            <h4 class="font-label-md text-label-md text-on-surface">Private &amp; Secure</h4>
+            <p class="text-body-sm font-body-sm text-on-surface-variant">Your API key and pitch history stay in your browser — never sent to our servers.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------------
+           LOADING VIEW (hidden by default)
+      -------------------------------------------------------- -->
+      <section id="loading-view" class="hidden">
+        <div class="w-full h-[2px] bg-outline-variant mb-stack_lg overflow-hidden rounded-full">
+          <div class="h-full bg-primary loading-bar-anim"></div>
+        </div>
+        <div class="bg-white border border-outline-variant rounded-xl shadow-sm flex flex-col items-center justify-center py-20 px-8">
+          <div class="relative mb-stack_lg">
+            <div class="spinner-ring"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
+            </div>
+          </div>
+          <div class="text-center space-y-stack_sm">
+            <h1 class="font-headline-md text-headline-md text-primary transition-opacity duration-300" id="loading-step">Connecting to Claude...</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant">This usually takes 20–40 seconds.</p>
+          </div>
+          <div class="mt-stack_lg flex flex-wrap justify-center gap-stack_sm opacity-60">
+            <div class="flex items-center gap-1 px-3 py-1 bg-surface-container rounded-full text-label-sm font-label-sm">
+              <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              Market Trends
+            </div>
+            <div class="flex items-center gap-1 px-3 py-1 bg-surface-container rounded-full text-label-sm font-label-sm">
+              <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              Ad Spend Data
+            </div>
+            <div class="flex items-center gap-1 px-3 py-1 bg-surface-container border border-outline rounded-full text-label-sm font-label-sm animate-pulse">
+              <span class="material-symbols-outlined text-[14px] animate-spin">sync</span>
+              Strategic Benchmarking
+            </div>
+          </div>
+        </div>
+        <div class="mt-stack_lg text-center">
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest opacity-40">Powered by Claude · Your API key stays in your browser</p>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------------
+           RESULT VIEW (hidden by default)
+      -------------------------------------------------------- -->
+      <section id="result-view" class="hidden flex flex-col space-y-stack_lg">
+        <div class="w-full h-0.5 bg-primary rounded-full"></div>
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-gutter">
+          <div class="min-w-0">
+            <h1 class="font-headline-lg text-headline-lg text-primary truncate" id="result-title"></h1>
+            <p class="text-body-sm font-body-sm text-on-surface-variant mt-1" id="result-meta"></p>
+          </div>
+          <div class="flex items-center gap-stack_sm flex-wrap flex-shrink-0">
+            <button id="export-btn" class="px-4 py-2 bg-white border border-outline-variant text-on-surface font-label-md text-label-md rounded-lg flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">download</span>
+              Export to slides
+            </button>
+            <button id="new-btn" class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">add</span>
+              New pitch
+            </button>
+          </div>
+        </div>
+        <div id="result-content" class="flex flex-col gap-stack_md"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ============================================================
+       MOBILE BOTTOM NAV
+  ============================================================ -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant z-50 flex items-center justify-around h-16 px-4">
+    <a class="flex flex-col items-center gap-1 text-primary" href="#">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+      <span class="text-[10px] font-bold">Generate</span>
+    </a>
+    <a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span class="text-[10px] font-medium">Archive</span>
+    </a>
+    <a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#" onclick="event.preventDefault(); document.getElementById('history-btn').click()">
+      <span class="material-symbols-outlined">history</span>
+      <span class="text-[10px] font-medium">History</span>
+    </a>
+    <a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#" onclick="event.preventDefault(); document.getElementById('settings-btn').click()">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="text-[10px] font-medium">Settings</span>
+    </a>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
   <script src="app.js"></script>
