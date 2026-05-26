@@ -129,14 +129,19 @@ function renderHistoryList() {
     const time = new Date(h.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
     const cur  = CURRENCIES[h.inputs.currencyCode] || CURRENCIES.GBP;
     return `
-      <div class="history-item">
-        <div class="history-item-main">
-          <div class="history-url">${escapeHtml(h.inputs.url)}</div>
-          <div class="history-meta">${escapeHtml(h.inputs.industry)} · ${cur.symbol}${Number(h.inputs.budget).toLocaleString()} · ${date} ${time}</div>
+      <div class="flex items-center justify-between p-4 bg-white border border-outline-variant rounded-lg mb-2 hover:shadow-md transition-all">
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm text-primary truncate">${escapeHtml(h.inputs.url)}</div>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px] uppercase font-semibold tracking-wider text-on-surface-variant">${escapeHtml(h.inputs.industry)}</span>
+            <span class="text-xs text-on-surface-variant">${cur.symbol}${Number(h.inputs.budget).toLocaleString()} · ${date} ${time}</span>
+          </div>
         </div>
-        <div class="history-item-actions">
-          <button class="btn-secondary history-load-btn" data-id="${h.id}">Load</button>
-          <button class="btn-icon history-del-btn" data-id="${h.id}" title="Delete">✕</button>
+        <div class="flex items-center gap-2 flex-shrink-0 ml-3">
+          <button class="history-load-btn px-3 py-2 text-xs border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors font-medium" data-id="${h.id}">Load</button>
+          <button class="history-del-btn flex items-center justify-center w-8 h-8 rounded-lg border border-outline-variant hover:bg-error-container text-on-surface-variant hover:text-error transition-colors" data-id="${h.id}" title="Delete">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+          </button>
         </div>
       </div>`;
   }).join('');
@@ -385,10 +390,26 @@ function escapeHtml(s) {
 
 function monthGrid(months) {
   const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-  return '<div class="cal-grid">' + labels.map((l, i) => {
+  return '<div class="grid grid-cols-12 gap-1 mt-2">' + labels.map((l, i) => {
     const active = months.includes(i + 1);
-    return `<div class="cal-month${active ? ' active' : ''}">${l}</div>`;
+    return `<div class="text-center py-1 rounded text-[10px] font-semibold ${active ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'}">${l}</div>`;
   }).join('') + '</div>';
+}
+
+function accordion(icon, title, content) {
+  return `
+    <div class="group expanded border border-outline-variant rounded-xl bg-white shadow-sm overflow-hidden" onclick="toggleAccordion(this)">
+      <div class="p-6 flex items-center justify-between cursor-pointer select-none">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-on-surface-variant">${icon}</span>
+          <h2 class="font-headline-md text-headline-md">${title}</h2>
+        </div>
+        <span class="material-symbols-outlined chevron text-on-surface-variant">expand_more</span>
+      </div>
+      <div class="collapse-content px-6 pb-6">
+        <div class="pt-4 border-t border-outline-variant">${content}</div>
+      </div>
+    </div>`;
 }
 
 function showResult() {
@@ -398,89 +419,105 @@ function showResult() {
   $('result-title').textContent = pitchInputs.url;
   $('result-meta').textContent  = `${pitchInputs.industry} · ${sym}${Number(pitchInputs.budget).toLocaleString()} · vs ${pitchInputs.competitors}`;
 
-  const ct          = d.creative_territory || {};
-  const voicePills  = (ct.brand_voice || []).map(v => `<span class="voice-pill">${escapeHtml(v)}</span>`).join('');
+  const ct = d.creative_territory || {};
+
+  const voicePills = (ct.brand_voice || []).map(v =>
+    `<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-semibold uppercase tracking-wider">${escapeHtml(v)}</span>`
+  ).join('');
+
   const keyMessages = (ct.key_messages || []).map(m => `
-    <div class="key-message">
-      <div class="key-message-segment">${escapeHtml(m.segment)}</div>
-      <div class="key-message-text">"${escapeHtml(m.message)}"</div>
+    <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant mb-2">
+      <div class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-1">${escapeHtml(m.segment)}</div>
+      <div class="text-sm italic">"${escapeHtml(m.message)}"</div>
     </div>`).join('');
 
-  $('result-content').innerHTML = `
-    <div class="summary-card">
-      <div class="summary-label">About this brand</div>
-      <div>${escapeHtml(d.company_summary)}</div>
-    </div>
+  const marketContent = `
+    <p class="text-sm text-on-surface-variant mb-4 leading-relaxed">${escapeHtml(d.market_research.market_size)}</p>
+    <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Key trends</p>
+    <ul class="list-disc list-inside space-y-1 mb-4 text-sm">${d.market_research.key_trends.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
+    <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Consumer shifts</p>
+    <ul class="list-disc list-inside space-y-1 mb-4 text-sm">${d.market_research.consumer_shifts.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
+    <div class="p-4 bg-surface-container rounded-lg border-l-4 border-primary text-sm">
+      <span class="font-semibold">Opportunity:</span> ${escapeHtml(d.market_research.opportunity)}
+    </div>`;
 
-    <div class="section">
-      <h3>Market research</h3>
-      <div style="margin-bottom: 14px; line-height: 1.6;">${escapeHtml(d.market_research.market_size)}</div>
-      <div class="kv-label">Key trends</div>
-      <ul class="tight">${d.market_research.key_trends.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
-      <div class="kv-label">Consumer shifts</div>
-      <ul class="tight">${d.market_research.consumer_shifts.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
-      <div class="callout callout-success"><strong>Opportunity:</strong> ${escapeHtml(d.market_research.opportunity)}</div>
-    </div>
-
-    <div class="section">
-      <h3>Audience segmentation</h3>
+  const segmentsContent = `
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       ${d.audience_segments.map(s => `
-        <div class="segment">
-          <div class="segment-head">
-            <div class="segment-name">${escapeHtml(s.name)}</div>
-            <div class="segment-pct">${Math.round(s.size_pct)}% of audience</div>
+        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-semibold text-sm">${escapeHtml(s.name)}</span>
+            <span class="text-xs text-on-surface-variant font-semibold bg-surface-container px-2 py-0.5 rounded-full">${Math.round(s.size_pct)}%</span>
           </div>
-          <div class="segment-desc">${escapeHtml(s.description)}</div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">${escapeHtml(s.description)}</p>
         </div>`).join('')}
-    </div>
+    </div>`;
 
-    <div class="section">
-      <h3>Positioning vs competitors</h3>
-      <div class="callout callout-info"><strong>Our recommended position:</strong> ${escapeHtml(d.positioning.our_recommended_position)}</div>
+  const competitorsContent = `
+    <div class="p-4 bg-surface-container rounded-lg mb-4 text-sm">
+      <span class="font-semibold">Our recommended position:</span>
+      <p class="mt-1 text-on-surface-variant">${escapeHtml(d.positioning.our_recommended_position)}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       ${d.positioning.competitor_analysis.map(c => `
-        <div class="competitor">
-          <div class="competitor-name">${escapeHtml(c.name)}</div>
-          <div class="comp-row"><div class="comp-row-label">Position</div><div class="comp-row-val">${escapeHtml(c.position)}</div></div>
-          <div class="comp-row"><div class="comp-row-label">Strength</div><div class="comp-row-val">${escapeHtml(c.strength)}</div></div>
-          <div class="comp-row"><div class="comp-row-label">Gap</div><div class="comp-row-val">${escapeHtml(c.weakness)}</div></div>
+        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+          <p class="font-semibold text-sm mb-3">${escapeHtml(c.name)}</p>
+          <div class="space-y-2">
+            <div><p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Position</p><p class="text-xs leading-relaxed">${escapeHtml(c.position)}</p></div>
+            <div><p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Strength</p><p class="text-xs leading-relaxed">${escapeHtml(c.strength)}</p></div>
+            <div><p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Gap</p><p class="text-xs leading-relaxed">${escapeHtml(c.weakness)}</p></div>
+          </div>
         </div>`).join('')}
+    </div>`;
+
+  const creativeContent = ct.campaign_thought ? `
+    <div class="p-5 bg-surface-container rounded-lg mb-4">
+      <p class="text-lg font-semibold italic leading-relaxed">"${escapeHtml(ct.campaign_thought)}"</p>
     </div>
+    ${voicePills ? `<p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Brand voice</p><div class="flex flex-wrap gap-2 mb-4">${voicePills}</div>` : ''}
+    ${keyMessages ? `<p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Key messages by audience</p>${keyMessages}` : ''}` : '';
 
-    ${ct.campaign_thought ? `
-    <div class="section section-creative">
-      <h3>Creative territory</h3>
-      <div class="campaign-thought">"${escapeHtml(ct.campaign_thought)}"</div>
-      ${voicePills ? `<div class="kv-label" style="margin-top:16px;">Brand voice</div><div class="voice-pills">${voicePills}</div>` : ''}
-      ${keyMessages ? `<div class="kv-label" style="margin-top:16px;">Key messages by audience</div>${keyMessages}` : ''}
-    </div>` : ''}
-
-    <div class="section">
-      <h3>Key trigger points across the year</h3>
+  const triggersContent = `
+    <div class="space-y-3">
       ${d.trigger_calendar.map(t => `
-        <div class="trigger">
-          <div class="trigger-head">
-            <span class="month-badge ${escapeHtml(t.priority)}">${escapeHtml(t.month_labels)}</span>
-            <span class="trigger-name">${escapeHtml(t.name)}</span>
-            <span class="trigger-priority">· ${escapeHtml(t.priority)} priority</span>
+        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="inline-block px-2 py-1 rounded text-[10px] font-bold uppercase priority-${escapeHtml(t.priority)}">${escapeHtml(t.month_labels)}</span>
+            <span class="font-semibold text-sm">${escapeHtml(t.name)}</span>
+            <span class="text-xs text-on-surface-variant capitalize">· ${escapeHtml(t.priority)} priority</span>
           </div>
           ${monthGrid(t.months)}
-          <div class="trigger-rationale">${escapeHtml(t.rationale)}</div>
+          <p class="text-xs text-on-surface-variant mt-2 leading-relaxed">${escapeHtml(t.rationale)}</p>
         </div>`).join('')}
-    </div>
+    </div>`;
 
-    <div class="section">
-      <h3>Budget split per channel</h3>
-      <div class="muted small" style="margin-bottom: 14px;">Total: ${sym}${Number(pitchInputs.budget).toLocaleString()}</div>
+  const budgetContent = `
+    <p class="text-xs text-on-surface-variant mb-4">Total: ${sym}${Number(pitchInputs.budget).toLocaleString()}</p>
+    <div class="space-y-5">
       ${d.budget_split.map(b => `
-        <div class="budget-row">
-          <div class="budget-head">
-            <div class="budget-label">${escapeHtml(b.channel)}</div>
-            <div class="budget-track"><div class="budget-fill" style="width: ${b.pct}%"></div></div>
-            <div class="budget-val">${Math.round(b.pct)}% · ${sym}${Math.round(b.amount).toLocaleString()}</div>
+        <div>
+          <div class="flex justify-between items-end mb-1">
+            <span class="text-sm font-semibold">${escapeHtml(b.channel)}</span>
+            <span class="text-xs text-on-surface-variant">${Math.round(b.pct)}% · ${sym}${Math.round(b.amount).toLocaleString()}</span>
           </div>
-          <div class="budget-rationale">${escapeHtml(b.rationale)}</div>
+          <div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden mb-1">
+            <div class="h-full bg-primary rounded-full" style="width:${b.pct}%"></div>
+          </div>
+          <p class="text-xs text-on-surface-variant italic">${escapeHtml(b.rationale)}</p>
         </div>`).join('')}
+    </div>`;
+
+  $('result-content').innerHTML = `
+    <div class="border border-outline-variant rounded-xl bg-white shadow-sm p-6">
+      <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-2">About this brand</p>
+      <p class="text-base text-on-surface leading-relaxed">${escapeHtml(d.company_summary)}</p>
     </div>
+    ${accordion('bar_chart', 'Market research', marketContent)}
+    ${accordion('groups', 'Audience segments', segmentsContent)}
+    ${accordion('compare', 'Competitor positioning', competitorsContent)}
+    ${ct.campaign_thought ? accordion('auto_awesome', 'Creative territory', creativeContent) : ''}
+    ${accordion('calendar_month', 'Key trigger points', triggersContent)}
+    ${accordion('payments', 'Budget split per channel', budgetContent)}
   `;
 
   $('result-view').classList.remove('hidden');
@@ -630,6 +667,13 @@ function exportToSlides() {
 
   const safeName = pitchInputs.url.replace(/https?:\/\//, '').replace(/[^a-z0-9]/gi, '_').slice(0, 40);
   pptx.writeFile({ fileName: `pitch_${safeName}.pptx` });
+}
+
+// ------------------------------------------------------------
+// Accordion toggle (used by result sections)
+// ------------------------------------------------------------
+function toggleAccordion(el) {
+  el.classList.toggle('expanded');
 }
 
 // ------------------------------------------------------------
