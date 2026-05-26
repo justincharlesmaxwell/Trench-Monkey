@@ -447,3 +447,102 @@ ul.tight li { margin-bottom: 4px; }
   .comp-row { flex-direction: column; gap: 2px; }
   .comp-row-label { flex: none; }
 }
+
+/* Header actions */
+.header-actions { display: flex; align-items: center; gap: 4px; }
+
+/* Settings: select field */
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.field select:focus {
+  outline: none;
+  border-color: var(--text);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+}
+
+/* History modal */
+.modal-card-wide { max-width: 680px; }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.modal-header h2 { margin: 0; }
+
+.history-list { max-height: 420px; overflow-y: auto; }
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  transition: background 0.12s;
+}
+.history-item:hover { background: var(--surface-muted); }
+.history-item-main { flex: 1; min-width: 0; }
+.history-url { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.history-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.history-item-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+/* Creative territory section */
+.section-creative { border-left: 3px solid var(--info); }
+
+.campaign-thought {
+  font-size: 19px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--text);
+  padding: 16px 20px;
+  background: var(--surface-muted);
+  border-radius: var(--radius);
+  margin-bottom: 4px;
+}
+
+.voice-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.voice-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--info-bg);
+  color: var(--info-text);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.key-message {
+  background: var(--surface-muted);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.key-message-segment {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.key-message-text { font-size: 14px; font-style: italic; line-height: 1.5; }

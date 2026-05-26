@@ -10,8 +10,11 @@
   <div class="app">
     <header class="header">
       <div class="header-inner">
-        <h1>Trench Monkey</h1>
-        <button id="settings-btn" class="btn-icon" aria-label="Settings">⚙</button>
+        <h1 id="agency-title">Trench Monkey</h1>
+        <div class="header-actions">
+          <button id="history-btn" class="btn-icon" aria-label="Pitch history">☰</button>
+          <button id="settings-btn" class="btn-icon" aria-label="Settings">⚙</button>
+        </div>
       </div>
     </header>
 
@@ -19,21 +22,53 @@
       <!-- Settings modal -->
       <div id="settings-modal" class="modal hidden">
         <div class="modal-card">
-          <h2>API key</h2>
-          <p class="muted">Your Anthropic API key is stored in your browser only. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
-          <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
+          <h2>Settings</h2>
+
+          <div class="field">
+            <label for="agency-name-input">Agency name</label>
+            <input type="text" id="agency-name-input" placeholder="e.g. Acme Agency">
+          </div>
+
+          <div class="field">
+            <label for="currency-select">Currency</label>
+            <select id="currency-select">
+              <option value="GBP">£ GBP</option>
+              <option value="USD">$ USD</option>
+              <option value="EUR">€ EUR</option>
+              <option value="AUD">A$ AUD</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="api-key-input">Anthropic API key</label>
+            <p class="muted small">Stored in your browser only. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+            <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
+          </div>
+
           <div class="modal-actions">
-            <button id="save-key-btn" class="btn-primary">Save</button>
+            <button id="save-settings-btn" class="btn-primary">Save</button>
             <button id="close-settings-btn" class="btn-secondary">Close</button>
           </div>
           <p class="hint" id="key-status"></p>
         </div>
       </div>
 
+      <!-- History modal -->
+      <div id="history-modal" class="modal hidden">
+        <div class="modal-card modal-card-wide">
+          <div class="modal-header">
+            <h2>Pitch history</h2>
+            <button id="close-history-btn" class="btn-icon">✕</button>
+          </div>
+          <div id="history-list" class="history-list"></div>
+          <p id="history-empty" class="muted small hidden">No pitches saved yet. Generate your first pitch to see it here.</p>
+        </div>
+      </div>
+
       <!-- Input form -->
       <section id="form-view" class="card">
         <h2>Generate a pitch</h2>
-        <p class="muted">Enter the prospect's details. Trench Monkey will research the market, segment the audience, position against competitors, build a seasonal calendar, and split the budget.</p>
+        <p class="muted">Enter the prospect's details. <span id="agency-name-inline">Trench Monkey</span> will research the market, segment the audience, position against competitors, build a seasonal calendar, and split the budget.</p>
 
         <div class="field">
           <label for="url">Company URL</label>
@@ -52,7 +87,7 @@
         </div>
 
         <div class="field">
-          <label for="budget">Annual budget (£)</label>
+          <label for="budget">Annual budget (<span class="currency-symbol">£</span>)</label>
           <input type="text" id="budget" placeholder="e.g. 250000">
         </div>
 
@@ -67,7 +102,7 @@
       <section id="loading-view" class="card hidden">
         <div class="loading">
           <div class="spinner"></div>
-          <div class="loading-text" id="loading-step">Starting...</div>
+          <div class="loading-text" id="loading-step">Connecting to Claude...</div>
           <div class="muted small">This usually takes 20–40 seconds.</div>
         </div>
       </section>
