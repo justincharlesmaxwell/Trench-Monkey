@@ -73,7 +73,7 @@ $('save-settings-btn').addEventListener('click', () => {
 
   if (key && !key.startsWith('sk-ant-')) {
     $('key-status').textContent  = 'API key should start with "sk-ant-". Double-check before saving.';
-    $('key-status').style.color  = 'var(--danger)';
+    $('key-status').style.color  = '#ba1a1a';
     return;
   }
 
@@ -84,7 +84,7 @@ $('save-settings-btn').addEventListener('click', () => {
   refreshCurrencyUI();
 
   $('key-status').textContent = 'Saved.';
-  $('key-status').style.color = 'var(--success)';
+  $('key-status').style.color = '#0f6e56';
   setTimeout(closeSettings, 600);
 });
 
