@@ -97,7 +97,7 @@
     <div class="max-w-[1040px] mx-auto h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="./screen.png" alt="Trench Monkey Logo" class="w-16 h-16 object-contain drop-shadow-sm">
-        <span style="font-family:'Arial Black',Arial,sans-serif;font-size:26px;letter-spacing:-0.02em;line-height:1;text-transform:uppercase" id="agency-title"><span style="color:#17a8f1">Trench</span> <span style="color:#ff9614">Monkey</span></span>
+        <span style="font-family:var(--tm-font-display);font-size:26px;letter-spacing:-0.02em;line-height:1;text-transform:uppercase" id="agency-title"><span style="color:var(--tm-blue)">Trench</span> <span style="color:var(--tm-orange)">Monkey</span></span>
       </div>
 <div class="flex items-center gap-1">
         <button id="history-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all active:scale-95" aria-label="Pitch history">history</button>
@@ -224,17 +224,17 @@
         <!-- Feature cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           <div class="bg-surface-container-low rounded-xl p-6 flex flex-col space-y-2">
-            <span class="material-symbols-outlined text-primary">verified</span>
+            <i data-lucide="database" class="lucide" style="color:var(--tm-blue)"></i>
             <h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Data-Backed</h4>
             <p class="text-body-sm font-body-sm text-on-surface-variant">Pitches are synthesised from current market trends and granular competitor benchmarks.</p>
           </div>
           <div class="bg-surface-container-low rounded-xl p-6 flex flex-col space-y-2">
-            <span class="material-symbols-outlined text-primary">bolt</span>
+            <i data-lucide="zap" class="lucide" style="color:var(--tm-blue)"></i>
             <h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Instant Results</h4>
             <p class="text-body-sm font-body-sm text-on-surface-variant">Receive a curated deck outline and strategic copy in under 30 seconds.</p>
           </div>
           <div class="bg-surface-container-low rounded-xl p-6 flex flex-col space-y-2">
-            <span class="material-symbols-outlined text-primary">encrypted</span>
+            <i data-lucide="shield" class="lucide" style="color:var(--tm-blue)"></i>
             <h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Scholarly Privacy</h4>
             <p class="text-body-sm font-body-sm text-on-surface-variant">Your intellectual property remains private to your account — never sent to our servers.</p>
           </div>
@@ -242,15 +242,15 @@
 
         <!-- Problem / Solution: flat grid so each row aligns across columns -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-          <h2 class="font-headline-lg text-headline-lg leading-tight" style="color:#17a8f1">The Problem</h2>
-          <h2 class="font-headline-lg text-headline-lg leading-tight" style="color:#ff9614">The Solution</h2>
+          <h2 class="font-headline-lg text-headline-lg leading-tight" style="font-family:var(--tm-font-display);color:var(--tm-blue)">The Problem</h2>
+          <h2 class="font-headline-lg text-headline-lg leading-tight" style="font-family:var(--tm-font-display);color:var(--tm-orange)">The Solution</h2>
           <p class="text-body-lg font-body-lg text-on-surface-variant leading-relaxed">Feeling similar emotions? At Trench Monkey we know this problem all too well.</p>
           <p class="text-body-lg font-body-lg text-on-surface-variant leading-relaxed">World class AI automation, taking you away from our meaningless marketing job, and onto the golf course where life really matters.</p>
-          <div class="rounded-xl overflow-hidden shadow-sm bg-surface-container-highest">
-            <video src="./New%20Video%201.mp4" controls playsinline class="w-full h-auto block"></video>
+          <div class="video-clickable rounded-xl overflow-hidden shadow-sm" onclick="const v=this.querySelector('video');v.paused?v.play():v.pause()">
+            <video src="./New%20Video%201.mp4" autoplay muted loop playsinline class="w-full block" style="aspect-ratio:16/9;object-fit:cover"></video>
           </div>
-          <div class="rounded-xl overflow-hidden shadow-sm bg-surface-container-highest">
-            <video src="./new%20video%202.mp4" controls playsinline class="w-full h-auto block"></video>
+          <div class="video-clickable rounded-xl overflow-hidden shadow-sm" onclick="const v=this.querySelector('video');v.paused?v.play():v.pause()">
+            <video src="./new%20video%202.mp4" autoplay muted loop playsinline class="w-full block" style="aspect-ratio:16/9;object-fit:cover"></video>
           </div>
         </div>
 
@@ -390,6 +390,8 @@
     </a>
   </nav>
 
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
   <script src="app.js"></script>
 </body>

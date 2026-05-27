@@ -1,3 +1,16 @@
+/* Trench Monkey design tokens */
+:root {
+  --tm-blue: #17a8f1;
+  --tm-orange: #ff9614;
+  --tm-ink: #0f1523;
+  --tm-text: #4a5068;
+  --tm-text-muted: #7a7f99;
+  --tm-card: #eef0f7;
+  --tm-hairline: rgba(200, 204, 217, 0.5);
+  --tm-font-display: 'Arial Black', Arial, sans-serif;
+  --tm-font-ui: Inter, 'Public Sans', sans-serif;
+}
+
 /* Material Symbols baseline */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -5,30 +18,41 @@
   vertical-align: middle;
 }
 
+/* Lucide icon baseline */
+.lucide { width: 22px; height: 22px; stroke-width: 2; flex-shrink: 0; }
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
 
-/* Ghost border — outline-variant at 15% opacity */
+/* Ghost border — hairline token */
 .ghost-border {
-  border: 1px solid rgba(200, 204, 217, 0.5);
+  border: 1px solid var(--tm-hairline);
 }
 
 /* Input / select focus ring */
 .input-focus-ring:focus {
   outline: none;
-  border-color: #094cb2;
-  box-shadow: 0 0 0 2px rgba(9, 76, 178, 0.15);
+  border-color: var(--tm-blue);
+  box-shadow: 0 0 0 3px rgba(23, 168, 241, 0.18);
+  transition: box-shadow 150ms ease-out, border-color 150ms ease-out;
 }
 
 /* Gradient CTA button */
 .btn-gradient {
   background: linear-gradient(135deg, #094cb2 0%, #2563eb 100%);
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 .btn-gradient:hover {
   background: linear-gradient(135deg, #0a56c8 0%, #2f6ef0 100%);
+  box-shadow: 0 6px 20px rgba(9, 76, 178, 0.35);
+  transform: translateY(-1px);
+}
+.btn-gradient:active {
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
 /* Active nav underline tab */
@@ -39,14 +63,14 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #094cb2;
+  background: var(--tm-blue);
   border-radius: 2px 2px 0 0;
 }
 
 /* Spinner for loading view */
 .spinner-ring {
   border: 3px solid #e5e7eb;
-  border-top-color: #094cb2;
+  border-top-color: var(--tm-blue);
   border-radius: 50%;
   width: 48px;
   height: 48px;
@@ -83,3 +107,6 @@
 .priority-high   { background: #ffdad6; color: #ba1a1a; }
 .priority-medium { background: #faeeda; color: #854f0b; }
 .priority-low    { background: #f0edee; color: #45464c; }
+
+/* Video click-to-pause wrapper */
+.video-clickable { cursor: pointer; }

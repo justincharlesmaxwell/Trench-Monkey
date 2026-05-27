@@ -37,9 +37,9 @@ function refreshAgencyUI() {
   if (el) {
     const words = name.split(' ');
     if (words.length >= 2) {
-      el.innerHTML = `<span style="color:#17a8f1">${escapeHtml(words[0])}</span> <span style="color:#ff9614">${escapeHtml(words.slice(1).join(' '))}</span>`;
+      el.innerHTML = `<span style="color:var(--tm-blue)">${escapeHtml(words[0])}</span> <span style="color:var(--tm-orange)">${escapeHtml(words.slice(1).join(' '))}</span>`;
     } else {
-      el.innerHTML = `<span style="color:#094cb2">${escapeHtml(name)}</span>`;
+      el.innerHTML = `<span style="color:var(--tm-blue)">${escapeHtml(name)}</span>`;
     }
   }
   $('agency-name-inline').textContent = name;
