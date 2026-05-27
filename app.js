@@ -243,8 +243,8 @@ async function callClaude(url, industry, competitors, budget, currency, apiKey) 
       'anthropic-dangerous-direct-browser-access': 'true'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 8000,
+      model: 'claude-opus-4-7',
+      max_tokens: 16000,
       stream: true,
       messages: [{ role: 'user', content: prompt }]
     })
@@ -323,7 +323,7 @@ async function callClaude(url, industry, competitors, budget, currency, apiKey) 
 // ------------------------------------------------------------
 function buildPrompt(url, industry, competitors, budget, currency) {
   const sym = currency.symbol;
-  return `You are a senior strategist at an advertising and marketing agency preparing a new business pitch. Generate a comprehensive pitch document for this prospect.
+  return `You are a senior strategist at an advertising and marketing agency preparing a new business pitch. Generate a rich, detailed, comprehensive pitch document for this prospect. Write with depth — every field should be substantive and insightful, not a placeholder.
 
 PROSPECT
 Company URL: ${url}
@@ -334,37 +334,45 @@ Annual marketing budget: ${sym}${budget.toLocaleString()} ${currency.name}
 Return ONLY a valid JSON object (no markdown, no preamble, no backticks) matching this exact schema:
 
 {
-  "company_summary": "2-3 sentence summary of who this company likely is based on the URL and industry context",
+  "company_summary": "4-5 sentence summary covering who this company is, their likely positioning, target customer, key product or service differentiator, and the market they operate in",
   "market_research": {
-    "market_size": "1-2 sentences on market size, value, growth rate in this industry/region",
-    "key_trends": ["trend 1", "trend 2", "trend 3", "trend 4"],
-    "consumer_shifts": ["shift 1", "shift 2", "shift 3"],
-    "opportunity": "1-2 sentences naming the single biggest opportunity for this specific brand"
+    "market_size": "3-4 sentences on market size, value, growth rate, key dynamics and regional nuances relevant to this industry",
+    "key_trends": ["detailed trend 1 with context", "detailed trend 2 with context", "detailed trend 3 with context", "detailed trend 4 with context", "detailed trend 5 with context"],
+    "consumer_shifts": ["shift 1 with explanation of why it matters", "shift 2 with explanation", "shift 3 with explanation", "shift 4 with explanation"],
+    "opportunity": "3-4 sentences naming the single biggest opportunity for this specific brand, why it exists now, and what it would take to capture it"
   },
   "audience_segments": [
-    {"name": "segment name", "size_pct": 30, "description": "who they are, what motivates them, where to reach them — 2 sentences"},
+    {"name": "segment name", "size_pct": 30, "description": "4-5 sentences covering who they are, what drives their decisions, their pain points, media consumption habits, and the most effective way to reach and convert them"},
     {"name": "...", "size_pct": 25, "description": "..."},
     {"name": "...", "size_pct": 25, "description": "..."},
     {"name": "...", "size_pct": 20, "description": "..."}
   ],
   "positioning": {
-    "our_recommended_position": "1-2 sentences on where this brand should position itself in the market",
+    "our_recommended_position": "3-4 sentences on where this brand should position itself, why that space is ownable, and how it creates defensible differentiation",
     "competitor_analysis": [
-      {"name": "competitor name exactly as provided", "position": "their positioning in 1 sentence", "strength": "main strength", "weakness": "main weakness or gap we can exploit"}
+      {"name": "competitor name exactly as provided", "position": "2-3 sentences on their current positioning and messaging", "strength": "2-3 sentences on their main strengths and why customers choose them", "weakness": "2-3 sentences on their weaknesses, gaps, and how we exploit them"}
     ]
   },
   "creative_territory": {
-    "campaign_thought": "the single big idea in one punchy sentence — the creative platform this brand should own",
-    "brand_voice": ["tone word 1", "tone word 2", "tone word 3"],
+    "campaign_thought": "the single big idea in one punchy, memorable sentence — the creative platform this brand should own",
+    "brand_voice": ["tone word 1", "tone word 2", "tone word 3", "tone word 4"],
     "key_messages": [
-      {"segment": "segment name matching audience_segments exactly", "message": "the one message this segment must hear, in one sentence"}
+      {"segment": "segment name matching audience_segments exactly", "message": "2-3 sentences — the core message this segment must hear, the emotional hook, and the proof point that makes it credible"}
     ]
   },
+  "search_trends": {
+    "top_queries": [
+      {"query": "search term", "direction": "rising", "insight": "2-3 sentences on what this tells us about consumer intent, how it has shifted, and what it means for our strategy"}
+    ],
+    "seasonal_peaks": ["2-3 sentences on when search volume peaks, why, and how to capitalise on it"],
+    "emerging_topics": ["emerging topic 1", "emerging topic 2", "emerging topic 3", "emerging topic 4", "emerging topic 5"],
+    "strategic_implication": "3-4 sentences on how to use these search trends in paid search, content strategy, and campaign timing"
+  },
   "trigger_calendar": [
-    {"name": "trigger name", "months": [1,2], "month_labels": "Jan-Feb", "rationale": "why this matters for this brand — 1 sentence", "priority": "high"}
+    {"name": "trigger name", "months": [1,2], "month_labels": "Jan-Feb", "rationale": "2-3 sentences on why this moment matters for this brand, what the consumer mindset is, and what activity to run", "priority": "high"}
   ],
   "budget_split": [
-    {"channel": "Paid social", "pct": 30, "amount": ${Math.round(budget * 0.3)}, "rationale": "1 sentence on why this allocation"}
+    {"channel": "Paid social", "pct": 30, "amount": ${Math.round(budget * 0.3)}, "rationale": "2-3 sentences on why this allocation, what it buys, and what success looks like"}
   ]
 }
 
@@ -372,9 +380,13 @@ REQUIREMENTS
 - audience_segments: exactly 4 segments, size_pct must sum to 100
 - positioning.competitor_analysis: one entry per competitor listed in the input, in the same order
 - creative_territory.key_messages: exactly 4 entries, one per audience segment, in the same order as audience_segments
-- trigger_calendar: 5-8 entries spanning the year. months is an array of integers (1=Jan, 12=Dec). priority must be exactly "high", "medium", or "low"
+- search_trends.top_queries: 6-8 entries. direction must be exactly "rising", "stable", or "declining". Base on known search behaviour patterns for this industry.
+- search_trends.seasonal_peaks: 3-4 entries describing when search volume peaks and why
+- search_trends.emerging_topics: 4-5 short topic labels representing newer or growing search areas
+- trigger_calendar: 6-8 entries spanning the year. months is an array of integers (1=Jan, 12=Dec). priority must be exactly "high", "medium", or "low"
 - budget_split: 5-7 channels covering the realistic media mix for this industry. pct must sum to 100. amounts must sum to exactly ${sym}${budget.toLocaleString()}
-- Be specific and tactical. Reference the named competitors. Avoid generic phrases like "leverage synergies" or "engage consumers".
+- Be deeply specific and tactical. Reference the named competitors by name throughout. Avoid all generic phrases.
+- Every insight should feel like it came from a strategist who has studied this market, not a template.
 - Return raw JSON only. No \`\`\`json fences. No explanation before or after.`;
 }
 
