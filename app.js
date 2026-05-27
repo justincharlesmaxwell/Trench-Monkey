@@ -37,13 +37,14 @@ function refreshAgencyUI() {
   if (el) {
     const words = name.split(' ');
     if (words.length >= 2) {
-      el.innerHTML = `<span style="color:var(--tm-blue)">${escapeHtml(words[0])}</span> <span style="color:var(--tm-orange)">${escapeHtml(words.slice(1).join(' '))}</span>`;
+      el.innerHTML = `<span style="color:var(--tm-blue)">${escapeHtml(words[0])}</span><br><span style="color:var(--tm-orange)">${escapeHtml(words.slice(1).join(' '))}</span>`;
     } else {
       el.innerHTML = `<span style="color:var(--tm-blue)">${escapeHtml(name)}</span>`;
     }
   }
-  $('agency-name-inline').textContent = name;
-  document.title                      = name;
+  const inline = $('agency-name-inline');
+  if (inline) inline.textContent = name;
+  document.title = name;
 }
 
 // ------------------------------------------------------------
