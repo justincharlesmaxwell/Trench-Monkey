@@ -583,134 +583,276 @@ function exportToSlides() {
   const pptx       = new PptxGenJS();
   pptx.layout      = 'LAYOUT_WIDE';
 
-  const DARK     = '1A1A1A';
-  const MUTED    = '6B6B6B';
-  const ACCENT   = '185FA5';
-  const BG       = 'FAFAF7';
-  const LIGHT_BG = 'F4F3EE';
+  // Palette
+  const C = {
+    navy:    '0F172A',
+    blue:    '2563EB',
+    blueMid: '3B82F6',
+    blueLight: 'DBEAFE',
+    white:   'FFFFFF',
+    offWhite:'F8FAFC',
+    slate:   '64748B',
+    slateLight: 'F1F5F9',
+    border:  'E2E8F0',
+    green:   '16A34A',
+    amber:   'D97706',
+    red:     'DC2626',
+    dark:    '1E293B',
+  };
 
-  function addHeader(slide, title) {
-    slide.addText(title, { x: 0.6, y: 0.4, w: 12, h: 0.7, fontSize: 24, bold: true, color: DARK, fontFace: 'Calibri' });
-    slide.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 1.15, w: 0.4, h: 0.04, fill: { color: ACCENT }, line: { color: ACCENT } });
-  }
+  // Slide canvas is 13.33 × 7.5 inches (LAYOUT_WIDE)
+  const W = 13.33;
 
-  // --- Slide 1: Title
-  const s1 = pptx.addSlide();
-  s1.background = { color: BG };
-  s1.addText(agencyName, { x: 0.6, y: 2.2, w: 12, h: 0.5, fontSize: 13, color: MUTED, fontFace: 'Calibri' });
-  s1.addText('New Business Pitch', { x: 0.6, y: 2.65, w: 12, h: 0.5, fontSize: 14, color: MUTED, fontFace: 'Calibri' });
-  s1.addText(pitchInputs.url, { x: 0.6, y: 3.1, w: 12, h: 1.2, fontSize: 44, bold: true, color: DARK, fontFace: 'Calibri' });
-  s1.addText(`${pitchInputs.industry}  ·  ${sym}${Number(pitchInputs.budget).toLocaleString()} annual budget`, { x: 0.6, y: 4.3, w: 12, h: 0.5, fontSize: 16, color: MUTED, fontFace: 'Calibri' });
-  s1.addText(d.company_summary, { x: 0.6, y: 5.0, w: 11, h: 1.5, fontSize: 14, color: DARK, fontFace: 'Calibri' });
-
-  // --- Slide 2: Market research
-  const s2 = pptx.addSlide();
-  s2.background = { color: BG };
-  addHeader(s2, 'Market research');
-  s2.addText(d.market_research.market_size, { x: 0.6, y: 1.3, w: 12, h: 0.8, fontSize: 14, color: DARK, fontFace: 'Calibri', italic: true });
-  s2.addText('Key trends', { x: 0.6, y: 2.2, w: 6, h: 0.4, fontSize: 13, bold: true, color: MUTED, fontFace: 'Calibri' });
-  s2.addText(d.market_research.key_trends.map(t => ({ text: t, options: { bullet: true } })), { x: 0.6, y: 2.6, w: 6, h: 3, fontSize: 13, color: DARK, fontFace: 'Calibri', valign: 'top' });
-  s2.addText('Consumer shifts', { x: 6.9, y: 2.2, w: 6, h: 0.4, fontSize: 13, bold: true, color: MUTED, fontFace: 'Calibri' });
-  s2.addText(d.market_research.consumer_shifts.map(t => ({ text: t, options: { bullet: true } })), { x: 6.9, y: 2.6, w: 6, h: 3, fontSize: 13, color: DARK, fontFace: 'Calibri', valign: 'top' });
-  s2.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 5.9, w: 12.1, h: 1.1, fill: { color: 'E1F5EE' }, line: { color: 'E1F5EE' } });
-  s2.addText([{ text: 'Opportunity:  ', options: { bold: true, color: '04342C' } }, { text: d.market_research.opportunity, options: { color: '04342C' } }],
-    { x: 0.85, y: 5.95, w: 11.6, h: 1, fontSize: 13, fontFace: 'Calibri', valign: 'middle' });
-
-  // --- Slide 3: Audience segmentation
-  const s3 = pptx.addSlide();
-  s3.background = { color: BG };
-  addHeader(s3, 'Audience segmentation');
-  const cols = 2, gridX = 0.6, gridY = 1.4, gridW = 12.1, gridH = 5.6;
-  const cellW = (gridW - 0.3) / cols, cellH = (gridH - 0.3) / 2;
-  d.audience_segments.slice(0, 4).forEach((seg, i) => {
-    const col = i % cols, row = Math.floor(i / cols);
-    const x = gridX + col * (cellW + 0.3), y = gridY + row * (cellH + 0.3);
-    s3.addShape(pptx.shapes.RECTANGLE, { x, y, w: cellW, h: cellH, fill: { color: LIGHT_BG }, line: { color: LIGHT_BG } });
-    s3.addText(seg.name, { x: x + 0.2, y: y + 0.15, w: cellW - 1.2, h: 0.45, fontSize: 16, bold: true, color: DARK, fontFace: 'Calibri' });
-    s3.addText(`${Math.round(seg.size_pct)}%`, { x: x + cellW - 1.1, y: y + 0.15, w: 0.9, h: 0.45, fontSize: 16, bold: true, color: ACCENT, fontFace: 'Calibri', align: 'right' });
-    s3.addText(seg.description, { x: x + 0.2, y: y + 0.7, w: cellW - 0.4, h: cellH - 0.85, fontSize: 12, color: MUTED, fontFace: 'Calibri', valign: 'top' });
-  });
-
-  // --- Slide 4: Positioning vs competitors
-  const s4 = pptx.addSlide();
-  s4.background = { color: BG };
-  addHeader(s4, 'Positioning vs competitors');
-  s4.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 1.3, w: 12.1, h: 0.9, fill: { color: 'E6F1FB' }, line: { color: 'E6F1FB' } });
-  s4.addText([{ text: 'Our recommended position:  ', options: { bold: true, color: '042C53' } }, { text: d.positioning.our_recommended_position, options: { color: '042C53' } }],
-    { x: 0.85, y: 1.35, w: 11.6, h: 0.8, fontSize: 13, fontFace: 'Calibri', valign: 'middle' });
-  const compRows = [[
-    { text: 'Competitor', options: { bold: true, color: DARK, fill: { color: LIGHT_BG } } },
-    { text: 'Position',   options: { bold: true, color: DARK, fill: { color: LIGHT_BG } } },
-    { text: 'Strength',   options: { bold: true, color: DARK, fill: { color: LIGHT_BG } } },
-    { text: 'Gap',        options: { bold: true, color: DARK, fill: { color: LIGHT_BG } } }
-  ]];
-  d.positioning.competitor_analysis.forEach(c => {
-    compRows.push([
-      { text: c.name,     options: { bold: true, color: DARK } },
-      { text: c.position, options: { color: DARK } },
-      { text: c.strength, options: { color: DARK } },
-      { text: c.weakness, options: { color: DARK } }
-    ]);
-  });
-  s4.addTable(compRows, { x: 0.6, y: 2.5, w: 12.1, colW: [2.2, 3.8, 3.05, 3.05], fontSize: 11, fontFace: 'Calibri', border: { type: 'solid', color: 'E6E4DD', pt: 0.5 }, valign: 'top' });
-
-  // --- Slide 5: Creative territory
-  const ct = d.creative_territory;
-  if (ct) {
-    const s5 = pptx.addSlide();
-    s5.background = { color: BG };
-    addHeader(s5, 'Creative territory');
-    s5.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 1.3, w: 12.1, h: 1.2, fill: { color: LIGHT_BG }, line: { color: LIGHT_BG } });
-    s5.addText(`"${ct.campaign_thought}"`, { x: 0.85, y: 1.35, w: 11.6, h: 1.1, fontSize: 18, bold: true, color: DARK, fontFace: 'Calibri', italic: true, valign: 'middle' });
-    s5.addText('Brand voice', { x: 0.6, y: 2.7, w: 12, h: 0.4, fontSize: 13, bold: true, color: MUTED, fontFace: 'Calibri' });
-    s5.addText((ct.brand_voice || []).join('  ·  '), { x: 0.6, y: 3.1, w: 12, h: 0.5, fontSize: 15, bold: true, color: ACCENT, fontFace: 'Calibri' });
-    s5.addText('Key messages by audience', { x: 0.6, y: 3.8, w: 12, h: 0.4, fontSize: 13, bold: true, color: MUTED, fontFace: 'Calibri' });
-    const msgRows = (ct.key_messages || []).map(m => [
-      { text: m.segment,           options: { bold: true, color: DARK } },
-      { text: `"${m.message}"`,    options: { color: MUTED, italic: true } }
-    ]);
-    if (msgRows.length) {
-      s5.addTable(msgRows, { x: 0.6, y: 4.2, w: 12.1, colW: [3.5, 8.6], fontSize: 11, fontFace: 'Calibri', border: { type: 'solid', color: 'E6E4DD', pt: 0.5 }, valign: 'top' });
+  function navyHeader(slide, title, subtitle) {
+    slide.addShape(pptx.shapes.RECTANGLE, { x: 0, y: 0, w: W, h: 1.1, fill: { color: C.navy }, line: { color: C.navy } });
+    slide.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 0.88, w: 0.5, h: 0.06, fill: { color: C.blue }, line: { color: C.blue } });
+    slide.addText(title, { x: 0.6, y: 0.2, w: 10, h: 0.65, fontSize: 28, bold: true, color: C.white, fontFace: 'Calibri' });
+    if (subtitle) {
+      slide.addText(subtitle, { x: 0.6, y: 0.72, w: 12, h: 0.28, fontSize: 9, color: '94A3B8', fontFace: 'Calibri', italic: true });
     }
   }
 
-  // --- Slide 6: Trigger calendar
-  const s6 = pptx.addSlide();
-  s6.background = { color: BG };
-  addHeader(s6, 'Key trigger points across the year');
-  const triggers = d.trigger_calendar;
-  const tHeight  = Math.min(0.6, 5.5 / triggers.length);
-  triggers.forEach((t, i) => {
-    const y = 1.3 + i * (tHeight + 0.15);
-    s6.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y, w: 12.1, h: tHeight, fill: { color: LIGHT_BG }, line: { color: LIGHT_BG } });
-    const priorityColor = t.priority === 'high' ? '993556' : t.priority === 'medium' ? '854F0B' : '6B6B6B';
-    s6.addText(t.month_labels, { x: 0.75, y: y + 0.08, w: 1.4, h: tHeight - 0.16, fontSize: 11, bold: true, color: priorityColor, fontFace: 'Calibri', valign: 'middle' });
-    s6.addText(t.name,         { x: 2.2,  y: y + 0.08, w: 4,   h: tHeight - 0.16, fontSize: 13, bold: true, color: DARK,          fontFace: 'Calibri', valign: 'middle' });
-    s6.addText(t.rationale,    { x: 6.3,  y: y + 0.08, w: 6.3, h: tHeight - 0.16, fontSize: 11,             color: MUTED,         fontFace: 'Calibri', valign: 'middle' });
+  function label(slide, text, x, y, w) {
+    slide.addText(text.toUpperCase(), { x, y, w: w || 6, h: 0.25, fontSize: 8, bold: true, color: C.slate, fontFace: 'Calibri', charSpacing: 1.5 });
+  }
+
+  function rule(slide, x, y, w) {
+    slide.addShape(pptx.shapes.RECTANGLE, { x, y, w, h: 0.015, fill: { color: C.border }, line: { color: C.border } });
+  }
+
+  // ── SLIDE 1: Title (split layout) ────────────────────────────
+  const s1 = pptx.addSlide();
+  s1.background = { color: C.offWhite };
+
+  s1.addShape(pptx.shapes.RECTANGLE, { x: 0, y: 0, w: 5.6, h: 7.5, fill: { color: C.navy }, line: { color: C.navy } });
+  s1.addShape(pptx.shapes.RECTANGLE, { x: 5.6, y: 0, w: 0.07, h: 7.5, fill: { color: C.blue }, line: { color: C.blue } });
+
+  s1.addText('NEW BUSINESS PITCH', { x: 0.55, y: 1.8, w: 4.7, h: 0.35, fontSize: 9, bold: true, color: C.blue, fontFace: 'Calibri', charSpacing: 3 });
+  s1.addText(pitchInputs.url.replace(/https?:\/\//, ''), { x: 0.55, y: 2.2, w: 4.7, h: 1.9, fontSize: 34, bold: true, color: C.white, fontFace: 'Calibri', valign: 'top' });
+  s1.addText(pitchInputs.industry, { x: 0.55, y: 4.2, w: 4.7, h: 0.4, fontSize: 14, color: 'CBD5E1', fontFace: 'Calibri' });
+  s1.addText(`${sym}${Number(pitchInputs.budget).toLocaleString()} annual budget`, { x: 0.55, y: 4.6, w: 4.7, h: 0.35, fontSize: 12, color: '94A3B8', fontFace: 'Calibri' });
+  s1.addText(agencyName, { x: 0.55, y: 6.95, w: 4.7, h: 0.3, fontSize: 10, color: '475569', fontFace: 'Calibri' });
+
+  label(s1, 'About the prospect', 6.0, 2.1, 6.8);
+  rule(s1, 6.0, 2.38, 6.8);
+  s1.addText(d.company_summary, { x: 6.0, y: 2.5, w: 6.8, h: 3.8, fontSize: 15, color: C.dark, fontFace: 'Calibri', valign: 'top' });
+
+  // ── SLIDE 2: Market Research ──────────────────────────────────
+  const s2 = pptx.addSlide();
+  s2.background = { color: C.offWhite };
+  navyHeader(s2, 'Market Research', pitchInputs.industry);
+
+  s2.addText(d.market_research.market_size, { x: 0.6, y: 1.2, w: 12.1, h: 0.75, fontSize: 13, color: C.slate, fontFace: 'Calibri', italic: true });
+
+  label(s2, 'Key Trends', 0.6, 2.05);
+  rule(s2, 0.6, 2.32, 5.85);
+  s2.addText(d.market_research.key_trends.map(t => ({ text: t, options: { bullet: true } })),
+    { x: 0.6, y: 2.42, w: 5.85, h: 3.0, fontSize: 12, color: C.dark, fontFace: 'Calibri', valign: 'top', paraSpaceAfter: 4 });
+
+  label(s2, 'Consumer Shifts', 7.05, 2.05);
+  rule(s2, 7.05, 2.32, 5.85);
+  s2.addText(d.market_research.consumer_shifts.map(t => ({ text: t, options: { bullet: true } })),
+    { x: 7.05, y: 2.42, w: 5.85, h: 3.0, fontSize: 12, color: C.dark, fontFace: 'Calibri', valign: 'top', paraSpaceAfter: 4 });
+
+  s2.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 5.75, w: 12.1, h: 1.4, fill: { color: C.blue }, line: { color: C.blue } });
+  s2.addText([
+    { text: 'OPPORTUNITY  ', options: { bold: true, color: C.white, charSpacing: 1.5 } },
+    { text: d.market_research.opportunity, options: { color: C.blueLight } }
+  ], { x: 0.85, y: 5.82, w: 11.7, h: 1.26, fontSize: 13, fontFace: 'Calibri', valign: 'middle' });
+
+  // ── SLIDE 3: Audience Segmentation ───────────────────────────
+  const s3 = pptx.addSlide();
+  s3.background = { color: C.offWhite };
+  navyHeader(s3, 'Audience Segmentation');
+
+  const cardW = 5.9, cardH = 2.72;
+  const cardPos = [{ x: 0.6, y: 1.25 }, { x: 6.73, y: 1.25 }, { x: 0.6, y: 4.1 }, { x: 6.73, y: 4.1 }];
+  d.audience_segments.slice(0, 4).forEach((seg, i) => {
+    const { x, y } = cardPos[i];
+    slide_addSegCard(s3, seg, x, y, cardW, cardH);
   });
 
-  // --- Slide 7: Budget split
+  function slide_addSegCard(slide, seg, x, y, cW, cH) {
+    slide.addShape(pptx.shapes.RECTANGLE, { x, y, w: cW, h: cH, fill: { color: C.white }, line: { color: C.border, pt: 1 } });
+    slide.addShape(pptx.shapes.RECTANGLE, { x, y, w: cW, h: 0.07, fill: { color: C.blue }, line: { color: C.blue } });
+    slide.addText(`${Math.round(seg.size_pct)}%`, { x: x + cW - 1.3, y: y + 0.12, w: 1.1, h: 0.6, fontSize: 30, bold: true, color: C.blue, fontFace: 'Calibri', align: 'right' });
+    slide.addText(seg.name, { x: x + 0.2, y: y + 0.12, w: cW - 1.6, h: 0.6, fontSize: 16, bold: true, color: C.navy, fontFace: 'Calibri', valign: 'middle' });
+    slide.addText(seg.description, { x: x + 0.2, y: y + 0.78, w: cW - 0.4, h: cH - 0.95, fontSize: 11, color: C.slate, fontFace: 'Calibri', valign: 'top' });
+  }
+
+  // ── SLIDE 4: Competitor Positioning ──────────────────────────
+  const s4 = pptx.addSlide();
+  s4.background = { color: C.offWhite };
+  navyHeader(s4, 'Competitor Positioning');
+
+  s4.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 1.2, w: 12.1, h: 1.0, fill: { color: C.blueLight }, line: { color: C.blueLight } });
+  s4.addText([
+    { text: 'OUR POSITION  ', options: { bold: true, color: C.blue, charSpacing: 1.5 } },
+    { text: d.positioning.our_recommended_position, options: { color: C.navy } }
+  ], { x: 0.85, y: 1.25, w: 11.7, h: 0.9, fontSize: 13, fontFace: 'Calibri', valign: 'middle' });
+
+  const compHeader = [
+    { text: 'COMPETITOR', options: { bold: true, color: C.white, fill: { color: C.navy } } },
+    { text: 'POSITION',   options: { bold: true, color: C.white, fill: { color: C.navy } } },
+    { text: 'STRENGTH',   options: { bold: true, color: C.white, fill: { color: C.navy } } },
+    { text: 'GAP TO EXPLOIT', options: { bold: true, color: C.white, fill: { color: C.navy } } }
+  ];
+  const compBody = d.positioning.competitor_analysis.map((c, i) => {
+    const bg = i % 2 === 0 ? C.white : C.slateLight;
+    return [
+      { text: c.name,     options: { bold: true, color: C.dark,  fill: { color: bg } } },
+      { text: c.position, options: { color: C.slate, fill: { color: bg } } },
+      { text: c.strength, options: { color: C.slate, fill: { color: bg } } },
+      { text: c.weakness, options: { color: C.slate, fill: { color: bg } } }
+    ];
+  });
+  s4.addTable([compHeader, ...compBody], {
+    x: 0.6, y: 2.35, w: 12.1, colW: [2.2, 3.8, 3.0, 3.1],
+    fontSize: 11, fontFace: 'Calibri', valign: 'top',
+    border: { type: 'solid', color: C.border, pt: 0.5 }, rowH: 0.55
+  });
+
+  // ── SLIDE 5: Creative Territory (dark slide) ──────────────────
+  const ct = d.creative_territory;
+  if (ct && ct.campaign_thought) {
+    const s5 = pptx.addSlide();
+    s5.background = { color: C.navy };
+
+    label(s5, 'Creative Territory', 0.6, 0.5, 12);
+    s5.addText(`"${ct.campaign_thought}"`, {
+      x: 0.6, y: 0.85, w: 12.1, h: 2.6,
+      fontSize: 30, bold: true, italic: true, color: C.white, fontFace: 'Calibri', valign: 'middle'
+    });
+
+    label(s5, 'Brand Voice', 0.6, 3.65, 12);
+    (ct.brand_voice || []).forEach((v, i) => {
+      s5.addShape(pptx.shapes.RECTANGLE, { x: 0.6 + i * 2.3, y: 3.92, w: 2.1, h: 0.44, fill: { color: C.blue }, line: { color: C.blue } });
+      s5.addText(v.toUpperCase(), { x: 0.6 + i * 2.3, y: 3.92, w: 2.1, h: 0.44, fontSize: 10, bold: true, color: C.white, fontFace: 'Calibri', align: 'center', valign: 'middle', charSpacing: 1 });
+    });
+
+    label(s5, 'Key Messages by Audience', 0.6, 4.55, 12);
+    rule(s5, 0.6, 4.8, 12.1);
+    const msgRows = (ct.key_messages || []).map((m, i) => {
+      const bg = i % 2 === 0 ? '1E293B' : '0F172A';
+      return [
+        { text: m.segment,       options: { bold: true, color: C.white,  fill: { color: bg } } },
+        { text: `"${m.message}"`, options: { italic: true, color: '94A3B8', fill: { color: bg } } }
+      ];
+    });
+    if (msgRows.length) {
+      s5.addTable(msgRows, { x: 0.6, y: 4.9, w: 12.1, colW: [3.5, 8.6], fontSize: 11, fontFace: 'Calibri', valign: 'top', border: { type: 'solid', color: '334155', pt: 0.5 }, rowH: 0.44 });
+    }
+  }
+
+  // ── SLIDE 6: Search Trend Analysis ───────────────────────────
+  const st = d.search_trends;
+  if (st && st.top_queries && st.top_queries.length) {
+    const s6 = pptx.addSlide();
+    s6.background = { color: C.offWhite };
+    navyHeader(s6, 'Search Trend Analysis', 'Based on known search behaviour patterns for this industry');
+
+    const dirCfg = {
+      rising:   { color: C.green,  icon: '▲' },
+      declining:{ color: C.red,    icon: '▼' },
+      stable:   { color: C.slate,  icon: '─' }
+    };
+
+    label(s6, 'Top Queries', 0.6, 1.2, 7.6);
+    rule(s6, 0.6, 1.46, 7.6);
+    (st.top_queries || []).slice(0, 6).forEach((q, i) => {
+      const y = 1.56 + i * 0.72;
+      const dc = dirCfg[q.direction] || dirCfg.stable;
+      s6.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y, w: 7.6, h: 0.64, fill: { color: i % 2 === 0 ? C.white : C.slateLight }, line: { color: C.border, pt: 0.5 } });
+      s6.addText(dc.icon, { x: 0.68, y: y + 0.08, w: 0.35, h: 0.48, fontSize: 13, bold: true, color: dc.color, fontFace: 'Calibri', valign: 'middle', align: 'center' });
+      s6.addText(q.query, { x: 1.1, y: y + 0.06, w: 2.9, h: 0.28, fontSize: 12, bold: true, color: C.dark, fontFace: 'Calibri' });
+      s6.addText(q.direction.toUpperCase(), { x: 1.1, y: y + 0.36, w: 2.0, h: 0.2, fontSize: 8, bold: true, color: dc.color, fontFace: 'Calibri', charSpacing: 1 });
+      s6.addText(q.insight, { x: 4.05, y: y + 0.06, w: 4.1, h: 0.52, fontSize: 10, color: C.slate, fontFace: 'Calibri', valign: 'middle' });
+    });
+
+    label(s6, 'Emerging Topics', 8.55, 1.2, 4.3);
+    rule(s6, 8.55, 1.46, 4.3);
+    (st.emerging_topics || []).forEach((t, i) => {
+      const ex = 8.55 + (i % 2) * 2.2, ey = 1.56 + Math.floor(i / 2) * 0.56;
+      s6.addShape(pptx.shapes.RECTANGLE, { x: ex, y: ey, w: 2.05, h: 0.44, fill: { color: C.blueLight }, line: { color: C.blueLight } });
+      s6.addText(t, { x: ex, y: ey, w: 2.05, h: 0.44, fontSize: 10, bold: true, color: C.blue, fontFace: 'Calibri', align: 'center', valign: 'middle' });
+    });
+
+    label(s6, 'Seasonal Patterns', 8.55, 3.4, 4.3);
+    rule(s6, 8.55, 3.66, 4.3);
+    (st.seasonal_peaks || []).forEach((p, i) => {
+      s6.addText(`• ${p}`, { x: 8.55, y: 3.76 + i * 0.56, w: 4.3, h: 0.5, fontSize: 10, color: C.dark, fontFace: 'Calibri', valign: 'top' });
+    });
+
+    s6.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 6.1, w: 12.1, h: 1.05, fill: { color: C.blue }, line: { color: C.blue } });
+    s6.addText([
+      { text: 'STRATEGIC IMPLICATION  ', options: { bold: true, color: C.white, charSpacing: 1.5 } },
+      { text: st.strategic_implication, options: { color: C.blueLight } }
+    ], { x: 0.85, y: 6.16, w: 11.7, h: 0.93, fontSize: 12, fontFace: 'Calibri', valign: 'middle' });
+  }
+
+  // ── SLIDE 7: Trigger Calendar ─────────────────────────────────
   const s7 = pptx.addSlide();
-  s7.background = { color: BG };
-  addHeader(s7, `Budget split per channel  ·  ${sym}${Number(pitchInputs.budget).toLocaleString()}`);
-  const budgets = d.budget_split;
-  const bRowH   = Math.min(0.75, 5.5 / budgets.length);
-  budgets.forEach((b, i) => {
-    const y = 1.3 + i * (bRowH + 0.05);
-    s7.addText(b.channel, { x: 0.6, y, w: 2.5, h: 0.35, fontSize: 13, bold: true, color: DARK, fontFace: 'Calibri', valign: 'top' });
-    const trackX = 3.2, trackW = 6.5;
-    s7.addShape(pptx.shapes.RECTANGLE, { x: trackX, y: y + 0.08, w: trackW,                  h: 0.18, fill: { color: LIGHT_BG }, line: { color: LIGHT_BG } });
-    s7.addShape(pptx.shapes.RECTANGLE, { x: trackX, y: y + 0.08, w: trackW * (b.pct / 100), h: 0.18, fill: { color: ACCENT },   line: { color: ACCENT } });
-    s7.addText(`${Math.round(b.pct)}%  ·  ${sym}${Math.round(b.amount).toLocaleString()}`, { x: 9.8, y, w: 2.9, h: 0.35, fontSize: 12, color: DARK, fontFace: 'Calibri', align: 'right', valign: 'top' });
-    s7.addText(b.rationale, { x: 0.6, y: y + 0.35, w: 12.1, h: bRowH - 0.35, fontSize: 10, color: MUTED, fontFace: 'Calibri', italic: true, valign: 'top' });
+  s7.background = { color: C.offWhite };
+  navyHeader(s7, 'Key Trigger Points');
+
+  const triggers   = d.trigger_calendar;
+  const tH         = Math.min(0.64, 5.85 / triggers.length);
+  const priorityCfg = {
+    high:   { bar: C.red,   text: 'DC2626' },
+    medium: { bar: C.amber, text: 'D97706' },
+    low:    { bar: C.slate, text: C.slate }
+  };
+
+  triggers.forEach((t, i) => {
+    const y    = 1.22 + i * (tH + 0.07);
+    const pcfg = priorityCfg[t.priority] || priorityCfg.low;
+    s7.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y, w: 12.1, h: tH, fill: { color: i % 2 === 0 ? C.white : C.slateLight }, line: { color: C.border, pt: 0.5 } });
+    s7.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y, w: 0.07, h: tH, fill: { color: pcfg.bar }, line: { color: pcfg.bar } });
+    s7.addText(t.month_labels, { x: 0.78, y: y + 0.04, w: 1.5, h: tH - 0.08, fontSize: 11, bold: true, color: pcfg.text, fontFace: 'Calibri', valign: 'middle' });
+    s7.addText(t.name,         { x: 2.4,  y: y + 0.04, w: 4.0, h: tH - 0.08, fontSize: 13, bold: true, color: C.dark,     fontFace: 'Calibri', valign: 'middle' });
+    s7.addText(t.rationale,    { x: 6.55, y: y + 0.04, w: 6.1, h: tH - 0.08, fontSize: 11,             color: C.slate,    fontFace: 'Calibri', valign: 'middle' });
   });
 
-  // --- Slide 8: Close
+  // ── SLIDE 8: Budget Split (list + doughnut chart) ─────────────
   const s8 = pptx.addSlide();
-  s8.background = { color: DARK };
-  s8.addText("Let's build it.", { x: 0.6, y: 3.0, w: 12, h: 1.5, fontSize: 54, bold: true, color: 'FFFFFF', fontFace: 'Calibri' });
-  s8.addText('Next steps: align on scope, contract, kick-off.', { x: 0.6, y: 4.4, w: 12, h: 0.6, fontSize: 16, color: 'B4B2A9', fontFace: 'Calibri' });
-  s8.addText(agencyName, { x: 0.6, y: 6.8, w: 12, h: 0.4, fontSize: 12, color: '6B6B6B', fontFace: 'Calibri' });
+  s8.background = { color: C.offWhite };
+  navyHeader(s8, `Budget Split  ·  ${sym}${Number(pitchInputs.budget).toLocaleString()}`);
+
+  const budgets = d.budget_split;
+  const bH      = Math.min(0.74, 5.85 / budgets.length);
+
+  budgets.forEach((b, i) => {
+    const y = 1.22 + i * (bH + 0.04);
+    s8.addText(b.channel, { x: 0.6, y, w: 3.5, h: 0.34, fontSize: 13, bold: true, color: C.dark, fontFace: 'Calibri' });
+    s8.addText(`${Math.round(b.pct)}%  ·  ${sym}${Math.round(b.amount).toLocaleString()}`, { x: 3.5, y, w: 2.5, h: 0.34, fontSize: 11, color: C.slate, fontFace: 'Calibri', align: 'right' });
+    s8.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: y + 0.37, w: 5.5, h: 0.15, fill: { color: C.border }, line: { color: C.border } });
+    s8.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: y + 0.37, w: 5.5 * (b.pct / 100), h: 0.15, fill: { color: C.blue }, line: { color: C.blue } });
+    if (bH > 0.56) {
+      s8.addText(b.rationale, { x: 0.6, y: y + 0.55, w: 5.9, h: bH - 0.55, fontSize: 9, color: C.slate, fontFace: 'Calibri', italic: true, valign: 'top' });
+    }
+  });
+
+  s8.addChart(pptx.charts.DOUGHNUT, [{
+    name: 'Budget',
+    labels: budgets.map(b => b.channel),
+    values: budgets.map(b => Math.round(b.pct))
+  }], {
+    x: 7.0, y: 1.1, w: 5.9, h: 5.9,
+    holeSize: 55,
+    showLegend: true, legendPos: 'b', legendFontSize: 10, legendFontFace: 'Calibri',
+    showLabel: false, showValue: false, showPercent: true,
+    dataLabelFontSize: 10, dataLabelFontFace: 'Calibri',
+    chartColors: ['2563EB','3B82F6','60A5FA','93C5FD','1D4ED8','BFDBFE','1E40AF'],
+    showTitle: false,
+  });
+
+  // ── SLIDE 9: Close ────────────────────────────────────────────
+  const s9 = pptx.addSlide();
+  s9.background = { color: C.navy };
+  s9.addShape(pptx.shapes.RECTANGLE, { x: 0.6, y: 2.55, w: 1.1, h: 0.07, fill: { color: C.blue }, line: { color: C.blue } });
+  s9.addText("Let's build it.", { x: 0.6, y: 2.7, w: 12.1, h: 2.0, fontSize: 62, bold: true, color: C.white, fontFace: 'Calibri' });
+  s9.addText('Next steps: align on scope  ·  contract  ·  kick-off', { x: 0.6, y: 4.65, w: 12.1, h: 0.5, fontSize: 16, color: '94A3B8', fontFace: 'Calibri' });
+  s9.addText(agencyName, { x: 0.6, y: 6.95, w: 12.1, h: 0.3, fontSize: 10, color: '475569', fontFace: 'Calibri' });
 
   const safeName = pitchInputs.url.replace(/https?:\/\//, '').replace(/[^a-z0-9]/gi, '_').slice(0, 40);
   pptx.writeFile({ fileName: `pitch_${safeName}.pptx` });
