@@ -1,14 +1,24 @@
 /* Trench Monkey design tokens */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
 :root {
   --tm-blue: #17a8f1;
   --tm-orange: #ff9614;
+  --tm-navy: #094cb2;
   --tm-ink: #0f1523;
   --tm-text: #4a5068;
-  --tm-text-muted: #7a7f99;
+  --tm-text-muted: #6c7388;
   --tm-card: #eef0f7;
-  --tm-hairline: rgba(200, 204, 217, 0.5);
-  --tm-font-display: 'Arial Black', Arial, sans-serif;
-  --tm-font-ui: Inter, 'Public Sans', sans-serif;
+  --tm-hairline: #e5e8ee;
+  --tm-font-display: "Fredoka", "Baloo 2", system-ui, sans-serif;
+  --tm-font-ui: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: var(--tm-font-ui);
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--tm-font-ui);
 }
 
 /* Material Symbols baseline */

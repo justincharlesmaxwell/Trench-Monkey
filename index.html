@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trench Monkey</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <script id="tailwind-config">
     tailwind.config = {
@@ -63,14 +63,14 @@
             "stack_lg": "32px"
           },
           fontFamily: {
-            "label-sm": ["'Public Sans'", "Inter", "sans-serif"],
-            "body-lg": ["Inter", "sans-serif"],
-            "headline-md": ["'Arial Black'", "Arial", "sans-serif"],
-            "label-md": ["'Public Sans'", "Inter", "sans-serif"],
-            "headline-lg": ["'Arial Black'", "Arial", "sans-serif"],
-            "body-sm": ["Inter", "sans-serif"],
-            "body-md": ["Inter", "sans-serif"],
-            "display": ["'Arial Black'", "Arial", "sans-serif"]
+            "label-sm": ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+            "body-lg": ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+            "headline-md": ["'Fredoka'", "system-ui", "sans-serif"],
+            "label-md": ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+            "headline-lg": ["'Fredoka'", "system-ui", "sans-serif"],
+            "body-sm": ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+            "body-md": ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+            "display": ["'Fredoka'", "system-ui", "sans-serif"]
           },
           fontSize: {
             "label-sm": ["11px", { lineHeight: "16px", letterSpacing: "0.07em", fontWeight: "600" }],
@@ -246,11 +246,11 @@
           <h2 class="font-headline-lg text-headline-lg leading-tight" style="font-family:var(--tm-font-display);color:var(--tm-orange)">The Solution</h2>
           <p class="text-body-lg font-body-lg text-on-surface-variant leading-relaxed">Feeling similar emotions? At Trench Monkey we know this problem all too well.</p>
           <p class="text-body-lg font-body-lg text-on-surface-variant leading-relaxed">World class AI automation, taking you away from our meaningless marketing job, and onto the golf course where life really matters.</p>
-          <div class="video-clickable rounded-xl overflow-hidden shadow-sm" onclick="const v=this.querySelector('video');v.paused?v.play():v.pause()">
-            <video src="./New%20Video%201.mp4" autoplay muted loop playsinline class="w-full block" style="aspect-ratio:16/9;object-fit:cover"></video>
+          <div class="rounded-xl overflow-hidden shadow-sm bg-surface-container-highest">
+            <video src="./New%20Video%201.mp4" controls playsinline class="w-full h-auto block"></video>
           </div>
-          <div class="video-clickable rounded-xl overflow-hidden shadow-sm" onclick="const v=this.querySelector('video');v.paused?v.play():v.pause()">
-            <video src="./new%20video%202.mp4" autoplay muted loop playsinline class="w-full block" style="aspect-ratio:16/9;object-fit:cover"></video>
+          <div class="rounded-xl overflow-hidden shadow-sm bg-surface-container-highest">
+            <video src="./new%20video%202.mp4" controls playsinline class="w-full h-auto block"></video>
           </div>
         </div>
 
