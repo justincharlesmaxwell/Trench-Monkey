@@ -565,7 +565,7 @@ function showResult() {
   $('result-content').innerHTML = `
     <div class="rounded-xl bg-surface-container-lowest shadow-sm p-6">
       <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-2" style="letter-spacing:0.07em;">About this brand</p>
-      <p class="text-base text-on-surface leading-relaxed font-['Noto_Serif']">${escapeHtml(d.company_summary)}</p>
+      <p class="text-base text-on-surface leading-relaxed">${escapeHtml(d.company_summary)}</p>
     </div>
     ${accordion('bar_chart', 'Market research', marketContent)}
     ${accordion('groups', 'Audience segments', segmentsContent)}
