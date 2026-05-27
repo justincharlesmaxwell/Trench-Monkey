@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Feature Card</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .wrap { padding: 22px 28px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .fcard {
+    background: var(--tm-card);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .fcard .icon { color: var(--tm-navy); width: 22px; height: 22px; }
+  .fcard .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tm-ink); margin-top: 4px; }
+  .fcard .desc { font-size: 13px; color: var(--tm-text); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="fcard">
+    <i data-lucide="badge-check" class="icon"></i>
+    <div class="eyebrow">DATA-BACKED</div>
+    <div class="desc">Pitches are synthesised from current market trends and granular competitor benchmarks.</div>
+  </div>
+  <div class="fcard">
+    <i data-lucide="zap" class="icon"></i>
+    <div class="eyebrow">INSTANT RESULTS</div>
+    <div class="desc">Receive a curated deck outline and strategic copy in under 30 seconds.</div>
+  </div>
+  <div class="fcard">
+    <i data-lucide="shield" class="icon"></i>
+    <div class="eyebrow">SCHOLARLY PRIVACY</div>
+    <div class="desc">Your intellectual property remains private to your account — never sent to our servers.</div>
+  </div>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voice Examples</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .wrap { padding: 22px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cell { background: var(--tm-card); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .cell.good { background: rgba(30, 158, 91, 0.08); box-shadow: inset 0 0 0 1px rgba(30, 158, 91, 0.18); }
+  .cell.bad { background: rgba(216, 69, 58, 0.06); box-shadow: inset 0 0 0 1px rgba(216, 69, 58, 0.18); }
+  .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .good .tag { color: var(--tm-success); }
+  .bad .tag { color: var(--tm-danger); }
+  .quote { font-size: 14px; color: var(--tm-ink); line-height: 1.5; }
+  .note { font-size: 12px; color: var(--tm-text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cell good">
+    <div class="tag">Sounds like us</div>
+    <div class="quote">"…onto the golf course where life really matters."</div>
+    <div class="note">Self-aware. Picks a side (the user's).</div>
+  </div>
+  <div class="cell bad">
+    <div class="tag">Off-brand</div>
+    <div class="quote">"Unleash the power of AI to supercharge your pipeline."</div>
+    <div class="note">Buzzword bingo. Could be any SaaS.</div>
+  </div>
+  <div class="cell good">
+    <div class="tag">Sounds like us</div>
+    <div class="quote">"No templates. No guesswork. Just a pitch ready to present."</div>
+    <div class="note">Three-beat closer. Confident.</div>
+  </div>
+  <div class="cell bad">
+    <div class="tag">Off-brand</div>
+    <div class="quote">"We believe every marketer deserves better tooling. 🚀"</div>
+    <div class="note">First-person plural. Emoji. No.</div>
+  </div>
+</div>
+</body>
+</html>
