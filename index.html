@@ -114,7 +114,7 @@
   <!-- ============================================================
        SIDEBAR (desktop only, lg+)
   ============================================================ -->
-  <aside class="fixed left-0 top-0 h-full border-r border-outline-variant bg-surface-container-low w-64 hidden lg:block z-40 pt-20">
+  <aside class="fixed left-0 top-0 h-full border-r border-outline-variant bg-surface-container-low w-64 hidden z-40 pt-20">
     <div class="flex flex-col h-full px-4 gap-2">
       <div class="mb-6 px-2">
         <h3 class="font-headline-md text-headline-md text-primary">Marketing Suite</h3>
@@ -150,8 +150,8 @@
        SETTINGS MODAL
   ============================================================ -->
   <div id="settings-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-5 bg-on-background/40 backdrop-blur-sm">
-    <div class="relative w-full max-w-[480px] bg-surface rounded-xl shadow-2xl border border-outline-variant overflow-hidden">
-      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant">
+    <div class="relative w-full max-w-[480px] bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden" style="box-shadow:0 24px 48px rgba(15,21,35,0.12)">
+      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant/30">
         <h2 class="font-headline-md text-headline-md">Settings</h2>
         <button id="close-settings-btn" class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-95">close</button>
       </div>
@@ -187,8 +187,8 @@
        HISTORY MODAL
   ============================================================ -->
   <div id="history-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-5 bg-on-background/40 backdrop-blur-sm">
-    <div class="relative w-full max-w-[700px] bg-surface rounded-xl shadow-2xl border border-outline-variant overflow-hidden flex flex-col max-h-[85vh]">
-      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant flex-shrink-0">
+    <div class="relative w-full max-w-[700px] bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]" style="box-shadow:0 24px 48px rgba(15,21,35,0.12)">
+      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-outline-variant/30 flex-shrink-0">
         <div>
           <h2 class="font-headline-md text-headline-md">Pitch history</h2>
           <p class="text-body-sm font-body-sm text-on-surface-variant">Manage your saved pitch generations</p>
@@ -197,7 +197,7 @@
       </div>
       <div id="history-list" class="flex-1 overflow-y-auto px-6 py-4"></div>
       <p id="history-empty" class="hidden px-6 py-10 text-center text-body-sm font-body-sm text-on-surface-variant">No pitches saved yet. Generate your first pitch to see it here.</p>
-      <div class="px-6 py-4 border-t border-outline-variant flex-shrink-0 flex justify-between items-center bg-surface-container-low">
+      <div class="px-6 py-4 border-t border-outline-variant/30 flex-shrink-0 flex justify-between items-center bg-surface-container-low">
         <span class="text-label-sm font-label-sm text-on-surface-variant">History stored locally in your browser</span>
         <button onclick="document.getElementById('close-history-btn').click()" class="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95">Close</button>
       </div>
@@ -295,7 +295,7 @@
         <div class="w-full h-[2px] bg-outline-variant mb-stack_lg overflow-hidden rounded-full">
           <div class="h-full bg-primary loading-bar-anim"></div>
         </div>
-        <div class="bg-white border border-outline-variant rounded-xl shadow-sm flex flex-col items-center justify-center py-20 px-8">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-sm flex flex-col items-center justify-center py-20 px-8">
           <div class="relative mb-stack_lg">
             <div class="spinner-ring"></div>
             <div class="absolute inset-0 flex items-center justify-center">
@@ -337,7 +337,7 @@
             <p class="text-body-sm font-body-sm text-on-surface-variant mt-1" id="result-meta"></p>
           </div>
           <div class="flex items-center gap-stack_sm flex-wrap flex-shrink-0">
-            <button id="export-btn" class="px-4 py-2 bg-white border border-outline-variant text-on-surface font-label-md text-label-md rounded-lg flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95">
+            <button id="export-btn" class="px-4 py-2 bg-surface-container text-on-surface font-label-md text-label-md rounded-xl flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95">
               <span class="material-symbols-outlined text-[18px]">download</span>
               Export to slides
             </button>
@@ -356,7 +356,7 @@
   <!-- ============================================================
        MOBILE BOTTOM NAV
   ============================================================ -->
-  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant z-50 flex items-center justify-around h-16 px-4">
+  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface/80 backdrop-blur-xl border-t border-outline-variant/20 z-50 flex items-center justify-around h-16 px-4">
     <a class="flex flex-col items-center gap-1 text-primary" href="#">
       <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
       <span class="text-[10px] font-bold">Generate</span>

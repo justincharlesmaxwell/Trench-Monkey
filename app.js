@@ -33,7 +33,15 @@ function setAgency(name)  { localStorage.setItem(AGENCY_KEY, name || 'Trench Mon
 
 function refreshAgencyUI() {
   const name = getAgency();
-  $('agency-title').textContent       = name;
+  const el = $('agency-title');
+  if (el) {
+    const words = name.split(' ');
+    if (words.length >= 2) {
+      el.innerHTML = `<span class="text-tertiary">${escapeHtml(words[0])}</span> <span class="text-primary">${escapeHtml(words.slice(1).join(' '))}</span>`;
+    } else {
+      el.innerHTML = `<span class="text-primary">${escapeHtml(name)}</span>`;
+    }
+  }
   $('agency-name-inline').textContent = name;
   document.title                      = name;
 }
@@ -129,7 +137,7 @@ function renderHistoryList() {
     const time = new Date(h.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
     const cur  = CURRENCIES[h.inputs.currencyCode] || CURRENCIES.GBP;
     return `
-      <div class="flex items-center justify-between p-4 bg-white border border-outline-variant rounded-lg mb-2 hover:shadow-md transition-all">
+      <div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl mb-2 hover:bg-surface-container transition-all">
         <div class="flex-1 min-w-0">
           <div class="font-semibold text-sm text-primary truncate">${escapeHtml(h.inputs.url)}</div>
           <div class="flex items-center gap-2 mt-1">
@@ -138,8 +146,8 @@ function renderHistoryList() {
           </div>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0 ml-3">
-          <button class="history-load-btn px-3 py-2 text-xs border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors font-medium" data-id="${h.id}">Load</button>
-          <button class="history-del-btn flex items-center justify-center w-8 h-8 rounded-lg border border-outline-variant hover:bg-error-container text-on-surface-variant hover:text-error transition-colors" data-id="${h.id}" title="Delete">
+          <button class="history-load-btn px-3 py-2 text-xs bg-primary-fixed text-on-primary-container rounded-lg hover:bg-primary text-primary hover:text-on-primary transition-colors font-semibold" data-id="${h.id}">Load</button>
+          <button class="history-del-btn flex items-center justify-center w-8 h-8 rounded-lg bg-surface-container hover:bg-error-container text-on-surface-variant hover:text-error transition-colors" data-id="${h.id}" title="Delete">
             <span class="material-symbols-outlined text-[16px]">close</span>
           </button>
         </div>
@@ -409,16 +417,16 @@ function monthGrid(months) {
 
 function accordion(icon, title, content) {
   return `
-    <div class="group expanded border border-outline-variant rounded-xl bg-white shadow-sm overflow-hidden" onclick="toggleAccordion(this)">
+    <div class="group expanded rounded-xl bg-surface-container-lowest shadow-sm overflow-hidden" onclick="toggleAccordion(this)">
       <div class="p-6 flex items-center justify-between cursor-pointer select-none">
         <div class="flex items-center gap-3">
-          <span class="material-symbols-outlined text-on-surface-variant">${icon}</span>
+          <span class="material-symbols-outlined text-primary">${icon}</span>
           <h2 class="font-headline-md text-headline-md">${title}</h2>
         </div>
         <span class="material-symbols-outlined chevron text-on-surface-variant">expand_more</span>
       </div>
       <div class="collapse-content px-6 pb-6">
-        <div class="pt-4 border-t border-outline-variant">${content}</div>
+        <div class="pt-4 border-t border-outline-variant/30">${content}</div>
       </div>
     </div>`;
 }
@@ -437,7 +445,7 @@ function showResult() {
   ).join('');
 
   const keyMessages = (ct.key_messages || []).map(m => `
-    <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant mb-2">
+    <div class="p-4 bg-surface-container rounded-xl mb-2">
       <div class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-1">${escapeHtml(m.segment)}</div>
       <div class="text-sm italic">"${escapeHtml(m.message)}"</div>
     </div>`).join('');
@@ -455,7 +463,7 @@ function showResult() {
   const segmentsContent = `
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       ${d.audience_segments.map(s => `
-        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+        <div class="p-4 bg-surface-container rounded-xl">
           <div class="flex justify-between items-start mb-2">
             <span class="font-semibold text-sm">${escapeHtml(s.name)}</span>
             <span class="text-xs text-on-surface-variant font-semibold bg-surface-container px-2 py-0.5 rounded-full">${Math.round(s.size_pct)}%</span>
@@ -471,7 +479,7 @@ function showResult() {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       ${d.positioning.competitor_analysis.map(c => `
-        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+        <div class="p-4 bg-surface-container rounded-xl">
           <p class="font-semibold text-sm mb-3">${escapeHtml(c.name)}</p>
           <div class="space-y-2">
             <div><p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Position</p><p class="text-xs leading-relaxed">${escapeHtml(c.position)}</p></div>
@@ -503,7 +511,7 @@ function showResult() {
     <p class="text-[10px] uppercase tracking-wider font-semibold text-on-surface-variant mb-2">Top search queries</p>
     <div class="space-y-2 mb-5">
       ${(st.top_queries || []).map(q => `
-        <div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-start gap-3">
+        <div class="p-3 bg-surface-container rounded-xl flex items-start gap-3">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-1">
               <span class="font-semibold text-sm">${escapeHtml(q.query)}</span>
@@ -526,7 +534,7 @@ function showResult() {
   const triggersContent = `
     <div class="space-y-3">
       ${d.trigger_calendar.map(t => `
-        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+        <div class="p-4 bg-surface-container rounded-xl">
           <div class="flex flex-wrap items-center gap-2 mb-2">
             <span class="inline-block px-2 py-1 rounded text-[10px] font-bold uppercase priority-${escapeHtml(t.priority)}">${escapeHtml(t.month_labels)}</span>
             <span class="font-semibold text-sm">${escapeHtml(t.name)}</span>
@@ -554,9 +562,9 @@ function showResult() {
     </div>`;
 
   $('result-content').innerHTML = `
-    <div class="border border-outline-variant rounded-xl bg-white shadow-sm p-6">
-      <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-2">About this brand</p>
-      <p class="text-base text-on-surface leading-relaxed">${escapeHtml(d.company_summary)}</p>
+    <div class="rounded-xl bg-surface-container-lowest shadow-sm p-6">
+      <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold mb-2" style="letter-spacing:0.07em;">About this brand</p>
+      <p class="text-base text-on-surface leading-relaxed font-['Noto_Serif']">${escapeHtml(d.company_summary)}</p>
     </div>
     ${accordion('bar_chart', 'Market research', marketContent)}
     ${accordion('groups', 'Audience segments', segmentsContent)}
