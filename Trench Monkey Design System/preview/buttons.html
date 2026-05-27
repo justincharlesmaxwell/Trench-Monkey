@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .wrap { padding: 22px 28px; display: flex; flex-direction: column; gap: 14px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .label { font-size: 11px; color: var(--tm-text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; width: 80px; }
+  .btn {
+    font-family: var(--tm-font-ui);
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 10px;
+    padding: 10px 16px;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background 120ms var(--tm-ease-out), box-shadow 120ms var(--tm-ease-out), transform 80ms var(--tm-ease-out);
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--tm-blue); color: white; box-shadow: var(--tm-shadow-btn); }
+  .btn-primary:hover { background: var(--tm-blue-press); box-shadow: var(--tm-shadow-btn-hover); }
+  .btn-accent { background: var(--tm-orange); color: white; box-shadow: var(--tm-shadow-btn); }
+  .btn-accent:hover { background: var(--tm-orange-press); }
+  .btn-secondary { background: white; color: var(--tm-ink); box-shadow: inset 0 0 0 1px var(--tm-hairline); }
+  .btn-secondary:hover { background: var(--tm-card); }
+  .btn-ghost { background: transparent; color: var(--tm-ink); }
+  .btn-ghost:hover { background: var(--tm-card); }
+  .btn .ic { width: 16px; height: 16px; }
+  .btn-sm { padding: 6px 12px; font-size: 13px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row">
+    <div class="label">Primary</div>
+    <button class="btn btn-primary"><i data-lucide="sparkles" class="ic"></i>Generate pitch</button>
+    <button class="btn btn-primary btn-sm">Save</button>
+  </div>
+  <div class="row">
+    <div class="label">Accent</div>
+    <button class="btn btn-accent"><i data-lucide="arrow-right" class="ic"></i>Present</button>
+    <button class="btn btn-accent btn-sm">Hit the course</button>
+  </div>
+  <div class="row">
+    <div class="label">Secondary</div>
+    <button class="btn btn-secondary">Cancel</button>
+    <button class="btn btn-secondary"><i data-lucide="download" class="ic"></i>Export</button>
+  </div>
+  <div class="row">
+    <div class="label">Ghost</div>
+    <button class="btn btn-ghost">Skip for now</button>
+    <button class="btn btn-ghost"><i data-lucide="settings" class="ic"></i>Settings</button>
+  </div>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

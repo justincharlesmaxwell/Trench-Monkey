@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shadows</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .card { padding: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .box { width: 100%; height: 64px; background: white; border-radius: 12px; }
+  .name { font-weight: 700; color: var(--tm-ink); font-size: 13px; }
+  .use { font-size: 11px; color: var(--tm-text-muted); line-height: 1.4; text-align: center; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="swatch"><div class="box" style="box-shadow: var(--tm-shadow-none); box-shadow: inset 0 0 0 1px var(--tm-hairline);"></div><div class="name">None</div><div class="use">Default — cards rely on fill, not depth.</div></div>
+  <div class="swatch"><div class="box" style="box-shadow: var(--tm-shadow-btn);"></div><div class="name">Button</div><div class="use">Filled CTA at rest.</div></div>
+  <div class="swatch"><div class="box" style="box-shadow: var(--tm-shadow-popover);"></div><div class="name">Popover</div><div class="use">Menus, tooltips.</div></div>
+  <div class="swatch"><div class="box" style="box-shadow: var(--tm-shadow-modal);"></div><div class="name">Modal</div><div class="use">Dialogs over scrim.</div></div>
+</div>
+</body>
+</html>

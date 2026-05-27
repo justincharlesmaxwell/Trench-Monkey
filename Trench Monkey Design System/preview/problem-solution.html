@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Problem / Solution Block</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .wrap { padding: 22px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .h { font-family: var(--tm-font-display); font-weight: 600; font-size: 36px; line-height: 1.1; }
+  .blue { color: var(--tm-blue); }
+  .orange { color: var(--tm-orange); }
+  .p { color: var(--tm-text); font-size: 14px; line-height: 1.55; max-width: 38ch; }
+  .media { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; background-size: cover; background-position: center; background-color: #0f1523; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="col">
+    <div class="h blue">The Problem</div>
+    <div class="p">Feeling similar emotions? At Trench Monkey we know this problem all too well.</div>
+    <div class="media" style="background-image: url('../assets/hero-trench.jpg')"></div>
+  </div>
+  <div class="col">
+    <div class="h orange">The Solution</div>
+    <div class="p">World class AI automation, taking you away from our meaningless marketing job, and onto the golf course where life really matters.</div>
+    <div class="media" style="background-image: url('../assets/hero-golf.jpg')"></div>
+  </div>
+</div>
+</body>
+</html>

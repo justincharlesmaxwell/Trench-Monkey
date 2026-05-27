@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iconography</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .wrap { padding: 22px 28px; }
+  .row { display: flex; align-items: center; gap: 18px; padding: 8px 0; }
+  .ic-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .ic-tile {
+    width: 56px; height: 56px;
+    background: var(--tm-card);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--tm-navy);
+  }
+  .ic-tile.muted { color: var(--tm-text); }
+  .ic-tile svg { width: 24px; height: 24px; }
+  .label { font-size: 11px; color: var(--tm-text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; width: 84px; }
+  .meta { font-family: var(--tm-font-mono); font-size: 11px; color: var(--tm-text-muted); margin-top: 8px; }
+  p { font-size: 13px; color: var(--tm-text); line-height: 1.5; margin: 12px 0 0; max-width: 70ch; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row">
+    <div class="label">In cards</div>
+    <div class="ic-wrap">
+      <div class="ic-tile"><i data-lucide="badge-check"></i></div>
+      <div class="ic-tile"><i data-lucide="zap"></i></div>
+      <div class="ic-tile"><i data-lucide="shield"></i></div>
+      <div class="ic-tile"><i data-lucide="sparkles"></i></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="label">In nav</div>
+    <div class="ic-wrap">
+      <div class="ic-tile muted"><i data-lucide="history"></i></div>
+      <div class="ic-tile muted"><i data-lucide="settings"></i></div>
+      <div class="ic-tile muted"><i data-lucide="search"></i></div>
+      <div class="ic-tile muted"><i data-lucide="user"></i></div>
+    </div>
+  </div>
+  <p><strong style="color: var(--tm-ink)">Lucide</strong>, 2px stroke. Navy <code class="tm-code">#094cb2</code> for semantic accents inside cards, slate <code class="tm-code">#4a5068</code> for nav chrome. No emoji, no unicode glyphs as icons.</p>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

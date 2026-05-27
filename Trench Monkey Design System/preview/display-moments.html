@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Display Moments</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .card { padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: end; }
+  .label { font-size: 11px; color: var(--tm-text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .sub { font-size: 13px; color: var(--tm-text); line-height: 1.5; margin-top: 10px; max-width: 28ch; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div>
+    <div class="label">Problem moment</div>
+    <div class="tm-display tm-display--blue">The Problem</div>
+    <div class="sub">Empathetic, brief. Acknowledges the user's pain in one short sentence.</div>
+  </div>
+  <div>
+    <div class="label">Solution moment</div>
+    <div class="tm-display tm-display--orange">The Solution</div>
+    <div class="sub">Cheeky, absurd, on-mascot. This is where the voice gets to wink.</div>
+  </div>
+</div>
+</body>
+</html>

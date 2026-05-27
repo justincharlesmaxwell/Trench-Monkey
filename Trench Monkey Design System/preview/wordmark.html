@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wordmark</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--tm-canvas); font-family: var(--tm-font-ui); }
+  .card { padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .logo-box {
+    width: 64px; height: 64px; border-radius: 10px; background: white;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 1px var(--tm-hairline);
+    overflow: hidden;
+  }
+  .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+  .stack { display: flex; flex-direction: column; gap: 4px; }
+  .label { font-size: 11px; color: var(--tm-text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div>
+    <div class="stack" style="gap: 14px;">
+      <div class="label">Title case · primary</div>
+      <div class="lockup">
+        <div class="logo-box"><img src="../assets/monkey-logo.png" alt=""></div>
+        <span class="tm-wordmark"><span class="blue">Trench</span> <span class="orange">Monkey</span></span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="stack" style="gap: 14px;">
+      <div class="label">All caps · alt</div>
+      <div class="lockup">
+        <div class="logo-box"><img src="../assets/monkey-logo.png" alt=""></div>
+        <span class="tm-wordmark tm-wordmark--upper"><span class="blue" style="color:var(--tm-blue)">TRENCH</span> <span class="orange" style="color:var(--tm-orange)">MONKEY</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
