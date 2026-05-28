@@ -19,6 +19,347 @@ const SAMPLE_AUDIENCE = [
   { name: "Interior designers",       pct: 12 },
 ];
 
+const ST_PHASES = [
+  { id: "diagnosis",   num: "01", label: "Diagnosis" },
+  { id: "strategy",    num: "02", label: "Strategy" },
+  { id: "tactics",     num: "03", label: "Tactics" },
+  { id: "measurement", num: "04", label: "Measurement" },
+];
+
+function SplitBar({ data }) {
+  return (
+    <div className="st-split-bar">
+      {data.map((d, i) => (
+        <div key={i} style={{ flex: d.pct, background: ST_PALETTE[d.key] }} />
+      ))}
+    </div>
+  );
+}
+
+function DiagnosisPanels() {
+  const sov = [
+    { name: "Wren Kitchens", pct: 24 },
+    { name: "Howdens",       pct: 19 },
+    { name: "IKEA",          pct: 17 },
+    { name: "Magnet (you)",  pct: 14, us: true },
+    { name: "B&Q · Wickes",  pct: 13 },
+    { name: "Long-tail",     pct: 13 },
+  ];
+  const spark = [42, 48, 51, 47, 58, 64, 71];
+  return (
+    <React.Fragment>
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Market context</span>
+          <span className="r">UK · fitted kitchens</span>
+        </div>
+        <div className="st-bignum"><span className="b">£4.8B</span><span className="u">/ yr</span></div>
+        <div style={{ fontSize: 11, color: "var(--st-muted)", letterSpacing: "0.04em" }}>Category size · 2026</div>
+        <div className="st-spark">
+          {spark.map((h, i) => <div key={i} className="st-spark__bar" style={{ height: `${h}%` }} />)}
+        </div>
+        <div className="st-spark__lbl">
+          <span>NOV</span><span>DEC</span><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span>
+        </div>
+        <div className="st-substats">
+          <div>
+            <div className="v"><span className="g">+3.4%</span></div>
+            <div className="l">CAGR · 3-yr</div>
+          </div>
+          <div>
+            <div className="v"><span className="o">22%</span></div>
+            <div className="l">Online share</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Competitive landscape</span>
+          <span className="r">Share of voice</span>
+        </div>
+        <div className="st-sov">
+          {sov.map((s, i) => (
+            <div key={i} className={"st-sov__row" + (s.us ? " st-sov__row--us" : "")}>
+              <div className="st-sov__top">
+                <span className="st-sov__name">{s.name}</span>
+                <span className="st-sov__pct">{s.pct}%</span>
+              </div>
+              <div className="st-sov__bar">
+                <div className="st-sov__fill" style={{ width: `${s.pct * 3.5}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">SWOT synthesis</span>
+          <span className="r">4 quadrants</span>
+        </div>
+        <div className="st-swot">
+          <div className="st-swot__cell st-swot--s">
+            <div className="st-swot__lbl">Strengths</div>
+            <div className="st-swot__txt">220-showroom UK network · designer-led service · brand recall 71%.</div>
+          </div>
+          <div className="st-swot__cell st-swot--w">
+            <div className="st-swot__lbl">Weaknesses</div>
+            <div className="st-swot__txt">Quote-to-order gap · younger-buyer perception lag.</div>
+          </div>
+          <div className="st-swot__cell st-swot--o">
+            <div className="st-swot__lbl">Opportunities</div>
+            <div className="st-swot__txt">First-time buyers under-served · trade-pro channel un-built.</div>
+          </div>
+          <div className="st-swot__cell st-swot--t">
+            <div className="st-swot__lbl">Threats</div>
+            <div className="st-swot__txt">Wickes &amp; B&amp;Q price pressure · IKEA digital convenience.</div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function StrategyPanels() {
+  return (
+    <React.Fragment>
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Positioning</span>
+          <span className="r">Statement &amp; frame</span>
+        </div>
+        <div className="st-pos">
+          For <span className="hl-b">renovators</span> navigating a saturated kitchen market, <span className="hl-o">Magnet</span> is the showroom-led specialist that turns a confusing decision into a <span className="hl-g">designed-in-30-days</span> certainty — because every Magnet kitchen is paired with a real designer and a real showroom, not a configurator.
+          <div className="st-pos__attr">
+            <div className="row"><div className="l">Target</div><div className="v">Renovators, 35–54</div></div>
+            <div className="row"><div className="l">Frame</div><div className="v">Designer-led specialist</div></div>
+            <div className="row"><div className="l">Benefit</div><div className="v">Confidence to commit</div></div>
+            <div className="row"><div className="l">RTB</div><div className="v">220 showrooms · 30-day install</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Audience priorities</span>
+          <span className="r">4 segments</span>
+        </div>
+        <div className="st-aud">
+          {SAMPLE_AUDIENCE.map((a, i) => (
+            <div className="st-aud__row" key={i}>
+              <div className="st-aud__top">
+                <span className="st-aud__name">{a.name}</span>
+                <span className="st-aud__pct">{a.pct}%</span>
+              </div>
+              <div className="st-aud__bar">
+                <div className="st-aud__fill" style={{ width: `${a.pct}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Goals · twelve-month</span>
+          <span className="r">North-star + 3</span>
+        </div>
+        <div className="st-goals">
+          <div className="st-goal">
+            <div className="st-goal__v"><span className="b">+25%</span></div>
+            <div className="st-goal__l">MQL volume by Q4 — <span className="meta">north-star</span></div>
+          </div>
+          <div className="st-goal">
+            <div className="st-goal__v"><span className="o">4.2×</span></div>
+            <div className="st-goal__l">Blended ROAS — <span className="meta">efficiency</span></div>
+          </div>
+          <div className="st-goal">
+            <div className="st-goal__v"><span className="g">11.4%</span></div>
+            <div className="st-goal__l">Share of voice — <span className="meta">up from 8.7%</span></div>
+          </div>
+          <div className="st-goal">
+            <div className="st-goal__v"><span className="n">62</span></div>
+            <div className="st-goal__l">Showroom NPS — <span className="meta">category-leading</span></div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function TacticsPanels() {
+  return (
+    <React.Fragment>
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Channel split</span>
+          <span className="r">£150K · monthly</span>
+        </div>
+        <SplitBar data={SAMPLE_BUDGET} />
+        <div className="st-split-list">
+          {SAMPLE_BUDGET.map((d, i) => (
+            <div className="row" key={i}>
+              <span className="sw" style={{ background: ST_PALETTE[d.key] }} />
+              <span className="name">{d.name}</span>
+              <span className="pct">{d.pct}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Audience segments</span>
+          <span className="r">4 priority</span>
+        </div>
+        <div className="st-aud">
+          {SAMPLE_AUDIENCE.map((a, i) => (
+            <div className="st-aud__row" key={i}>
+              <div className="st-aud__top">
+                <span className="st-aud__name">{a.name}</span>
+                <span className="st-aud__pct">{a.pct}%</span>
+              </div>
+              <div className="st-aud__bar">
+                <div className="st-aud__fill" style={{ width: `${a.pct}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">30 / 60 / 90 roadmap</span>
+          <span className="r">3 horizons</span>
+        </div>
+        <div className="st-roadmap">
+          <div className="st-roadmap__row">
+            <div className="st-roadmap__pill">30 days</div>
+            <div className="st-roadmap__txt">
+              Land <strong>showroom-finder SEO</strong>, ship two consideration-phase landing pages, brief paid social agency on Q3 angle.
+            </div>
+          </div>
+          <div className="st-roadmap__row">
+            <div className="st-roadmap__pill">60 days</div>
+            <div className="st-roadmap__txt">
+              Launch <strong>first-time-buyer creative suite</strong>, recover abandoned-quote audience, baseline category brand-track.
+            </div>
+          </div>
+          <div className="st-roadmap__row">
+            <div className="st-roadmap__pill">90 days</div>
+            <div className="st-roadmap__txt">
+              Open <strong>trade-pro partner programme</strong>, retest pricing page, measurement readout to board.
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function MeasurementPanels() {
+  const kpis = [
+    { name: "Brand search volume",  target: "+20% YoY",   stat: "+24%", mod: "up" },
+    { name: "Lead-to-quote rate",   target: "Target 38%", stat: "41%",  mod: "up" },
+    { name: "Quote-to-order rate",  target: "Target 24%", stat: "22%",  mod: "watch" },
+    { name: "Blended ROAS",         target: "Target 4.2×", stat: "3.9×", mod: "watch" },
+    { name: "Showroom NPS",         target: "Target 62",  stat: "59",   mod: "flat" },
+  ];
+  const risks = [
+    { name: "Quote-to-order drop-off post-design visit",         sev: "high", label: "High" },
+    { name: "Wickes Q3 pricing aggression on entry-tier ranges", sev: "med",  label: "Watch" },
+    { name: "Seasonal demand dip · August showroom traffic",     sev: "med",  label: "Watch" },
+    { name: "Trade-pro partner programme launch readiness",      sev: "low",  label: "Managed" },
+  ];
+  return (
+    <React.Fragment>
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">KPI framework</span>
+          <span className="r">5 leading · monthly</span>
+        </div>
+        <div className="st-kpi">
+          {kpis.map((k, i) => (
+            <div className="st-kpi__row" key={i}>
+              <span className="st-kpi__name">{k.name}</span>
+              <span className="st-kpi__target">{k.target}</span>
+              <span className={"st-kpi__stat st-kpi__stat--" + k.mod}>{k.stat}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Funnel · attribution</span>
+          <span className="r">Last 30 days</span>
+        </div>
+        <div className="st-funnel">
+          <div className="st-funnel__step"><span>Impressions</span><span className="v">18.4M</span></div>
+          <div className="st-funnel__cr">6.4% engaged</div>
+          <div className="st-funnel__step st-funnel__step--2"><span>Engaged sessions</span><span className="v">1.18M</span></div>
+          <div className="st-funnel__cr">7.1% lead</div>
+          <div className="st-funnel__step st-funnel__step--3"><span>Leads</span><span className="v">84.0K</span></div>
+          <div className="st-funnel__cr">14.8% order</div>
+          <div className="st-funnel__step st-funnel__step--4"><span>Orders</span><span className="v">12.4K</span></div>
+        </div>
+      </div>
+
+      <div className="st-plan-mod">
+        <div className="st-plan-mod__h">
+          <span className="l">Risk register</span>
+          <span className="r">Watchlist · Q3</span>
+        </div>
+        <div className="st-risk">
+          {risks.map((r, i) => (
+            <div className="st-risk__row" key={i}>
+              <span className={"st-risk__dot st-risk__dot--" + r.sev} />
+              <span className="st-risk__name">{r.name}</span>
+              <span className={"st-risk__sev st-risk__sev--" + r.sev}>{r.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function StPlanSection({ onScrollToForm }) {
+  const [active, setActive] = React.useState("tactics");
+  const Panels = (
+    active === "diagnosis"   ? DiagnosisPanels :
+    active === "strategy"    ? StrategyPanels :
+    active === "measurement" ? MeasurementPanels :
+                               TacticsPanels
+  );
+  return (
+    <section className="st-plan">
+      <div className="st-plan__head">
+        <h2 className="st-plan__h">
+          What you walk into the boardroom with — a <span className="b">four-phase plan</span>, ready to <span className="o">present</span>.
+        </h2>
+        <div className="st-plan__tabs" role="tablist">
+          {ST_PHASES.map((p) => (
+            <button
+              key={p.id}
+              role="tab"
+              aria-selected={active === p.id}
+              className={"st-plan__tab" + (active === p.id ? " st-plan__tab--active" : "")}
+              onClick={() => setActive(p.id)}
+            >
+              <span className="n">{p.num}</span>{p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="st-plan__card" key={active}>
+        <Panels />
+      </div>
+    </section>
+  );
+}
+
 function HeroDonut() {
   const r = 14, C = 2 * Math.PI * r;
   let offset = 0;
@@ -315,89 +656,8 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── SAMPLE PLAN PREVIEW ───────────────────────────────── */}
-      <section className="st-plan">
-        <div className="st-plan__head">
-          <h2 className="st-plan__h">
-            What you walk into the boardroom with — a{" "}
-            <span className="b">four-phase plan</span>, ready to{" "}
-            <span className="o">present</span>.
-          </h2>
-          <div className="st-plan__tabs">
-            <button className="st-plan__tab"><span className="n">01</span>Diagnosis</button>
-            <button className="st-plan__tab"><span className="n">02</span>Strategy</button>
-            <button className="st-plan__tab st-plan__tab--active"><span className="n">03</span>Tactics</button>
-            <button className="st-plan__tab"><span className="n">04</span>Measurement</button>
-          </div>
-        </div>
-        <div className="st-plan__card">
-          <div className="st-plan-mod">
-            <div className="st-plan-mod__h">
-              <span className="l">Channel split</span>
-              <span className="r">£150K · monthly</span>
-            </div>
-            <div className="st-split-bar">
-              {SAMPLE_BUDGET.map((d, i) => (
-                <div key={i} style={{ flex: d.pct, background: ST_PALETTE[d.key] }} />
-              ))}
-            </div>
-            <div className="st-split-list">
-              {SAMPLE_BUDGET.map((d, i) => (
-                <div className="row" key={i}>
-                  <span className="sw" style={{ background: ST_PALETTE[d.key] }} />
-                  <span className="name">{d.name}</span>
-                  <span className="pct">{d.pct}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="st-plan-mod">
-            <div className="st-plan-mod__h">
-              <span className="l">Audience segments</span>
-              <span className="r">4 priority</span>
-            </div>
-            <div className="st-aud">
-              {SAMPLE_AUDIENCE.map((a, i) => (
-                <div className="st-aud__row" key={i}>
-                  <div className="st-aud__top">
-                    <span className="st-aud__name">{a.name}</span>
-                    <span className="st-aud__pct">{a.pct}%</span>
-                  </div>
-                  <div className="st-aud__bar">
-                    <div className="st-aud__fill" style={{ width: `${a.pct}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="st-plan-mod">
-            <div className="st-plan-mod__h">
-              <span className="l">30 / 60 / 90 roadmap</span>
-              <span className="r">3 horizons</span>
-            </div>
-            <div className="st-roadmap">
-              <div className="st-roadmap__row">
-                <div className="st-roadmap__pill">30 days</div>
-                <div className="st-roadmap__txt">
-                  Land <strong>showroom-finder SEO</strong>, ship two consideration-phase landing pages, brief paid social agency on Q3 angle.
-                </div>
-              </div>
-              <div className="st-roadmap__row">
-                <div className="st-roadmap__pill">60 days</div>
-                <div className="st-roadmap__txt">
-                  Launch <strong>first-time-buyer creative suite</strong>, recover abandoned-quote audience, baseline category brand-track.
-                </div>
-              </div>
-              <div className="st-roadmap__row">
-                <div className="st-roadmap__pill">90 days</div>
-                <div className="st-roadmap__txt">
-                  Open <strong>trade-pro partner programme</strong>, retest pricing page, measurement readout to board.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── INTERACTIVE PLAN PREVIEW ─────────────────────────── */}
+      <StPlanSection />
 
       {/* ── TESTIMONIAL ───────────────────────────────────────── */}
       <section className="st-testi">
@@ -430,6 +690,40 @@ function InputForm({ onSubmit }) {
             <div className="st-metric__v"><span className="o">£0</span></div>
             <div className="st-metric__l">spend on stock-template subscriptions, retired.</div>
           </div>
+        </div>
+      </section>
+
+      {/* ── CTA ───────────────────────────────────────────────── */}
+      <section className="st-cta">
+        <div className="st-cta__inner">
+          <div className="st-cta__eb">— Free to start —</div>
+          <h2 className="st-cta__h">
+            Brief in.<br />
+            <span className="o">Plan</span> out.<br />
+            Back to the work that pays.
+          </h2>
+          <p className="st-cta__sub">
+            Four fields, forty seconds, one presentable plan. No card. No template gallery. No "schedule a call".
+          </p>
+          <div className="st-cta__actions">
+            <button className="st-btn st-btn--orange st-btn--lg" onClick={scrollToForm}>
+              Start your first brief
+              <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
+            </button>
+            <button className="st-btn st-btn--ghost st-btn--lg" onClick={scrollToForm}>
+              Book a 15-min walkthrough
+            </button>
+          </div>
+        </div>
+        <div className="st-cta__side">
+          <h4>What's in the box</h4>
+          <ul>
+            <li><span className="tick">✓</span> Four-phase plan: diagnosis, strategy, tactics, measurement</li>
+            <li><span className="tick">✓</span> Competitor benchmarks &amp; share-of-voice movement</li>
+            <li><span className="tick">✓</span> Audience segments with priority scoring</li>
+            <li><span className="tick">✓</span> Channel-level budget split &amp; 30/60/90 roadmap</li>
+            <li><span className="tick">✓</span> Export to PDF, Google Slides, or Notion</li>
+          </ul>
         </div>
       </section>
 
