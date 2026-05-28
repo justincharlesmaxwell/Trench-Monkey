@@ -119,21 +119,20 @@
 
 /* --- Hero ---------------------------------------------------- */
 .st-hero {
-  padding: 80px 112px 0;
+  padding: 80px 112px 64px;
   display: grid;
   grid-template-columns: 1fr 360px 1.1fr;
   gap: 40px;
-  align-items: end;
+  align-items: center;
   background:
     radial-gradient(ellipse 80% 60% at 80% 0%, var(--st-blue-soft) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 0% 100%, var(--st-orange-soft) 0%, transparent 60%),
     var(--st-bg);
   border-bottom: 1px solid var(--st-divider);
 }
-.st-hero > :first-child { align-self: center; padding-bottom: 80px; }
 .st-hero__monkey {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 .st-hero__monkey img {
@@ -216,8 +215,6 @@
 /* --- Hero product preview ------------------------------------ */
 .st-preview {
   position: relative;
-  align-self: center;
-  margin-bottom: 40px;
   background: var(--st-chrome);
   border: 1px solid var(--st-divider);
   border-radius: 16px;
