@@ -734,6 +734,9 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
+      {/* ── INTERACTIVE PLAN PREVIEW ─────────────────────────── */}
+      <StPlanSection />
+
       {/* ── FEATURES ──────────────────────────────────────────── */}
       <section className="st-features">
         <div className="st-features__head">
@@ -789,9 +792,6 @@ function InputForm({ onSubmit }) {
           </article>
         </div>
       </section>
-
-      {/* ── INTERACTIVE PLAN PREVIEW ─────────────────────────── */}
-      <StPlanSection />
 
       {/* ── TESTIMONIAL ───────────────────────────────────────── */}
       <section className="st-testi">
