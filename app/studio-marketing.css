@@ -82,6 +82,7 @@
   color: var(--st-muted);
   line-height: 1;
   margin: 0;
+  padding-left: 4px;
 }
 .st-nav__brand-word .b { color: var(--st-blue); }
 .st-nav__brand-word .o { color: var(--st-orange); }
