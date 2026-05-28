@@ -844,7 +844,7 @@ function InputForm({ onSubmit }) {
       <section className="st-testi">
         <div>
           <p className="st-testi__quote">
-            <span className="mark">"</span>The last six pitch decks we won were Trench Monkey first drafts. The hard part used to be the research; now the hard part is just deciding which prospect to brief next.<span className="mark">"</span>
+            <span className="mark">"</span>The last six pitch decks we won were Trench Monkey first drafts. The hard part used to be the research; now the hard part is just deciding which golf course to play next.<span className="mark">"</span>
           </p>
           <div className="st-testi__attr">
             <div className="st-testi__avatar" />
