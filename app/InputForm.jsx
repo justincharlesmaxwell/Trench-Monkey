@@ -149,7 +149,7 @@ function InputForm({ onSubmit }) {
         </div>
 
         {/* ── Form ──────────────────────────────────────────────────── */}
-        <div className="input-card">
+        <div className="input-card" style={{ maxWidth: "none" }}>
           <div className="input-card__rule" />
           <div className="input-card__eyebrow">New analysis</div>
           <h1 className="input-card__title">Tell Trench Monkey about your prospect.</h1>
