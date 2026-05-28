@@ -35,9 +35,7 @@ function LoadingScreen({ onComplete, brand }) {
         if (window.lucide) window.lucide.createIcons();
       }
       if (cancelled) return;
-      setCurrent(LOADING_STEPS.length); // all done
-      await new Promise(r => setTimeout(r, 300));
-      clearInterval(startInterval);
+      setCurrent(LOADING_STEPS.length); // all done — timer keeps running until API responds
       if (!cancelled) onComplete && onComplete();
     }
     run();
@@ -53,7 +51,10 @@ function LoadingScreen({ onComplete, brand }) {
         <span className="blue">Researching</span> <span className="orange">{brand}</span>
       </h2>
       <p className="loading-screen__caption">
-        Six dirty jobs, one report. {elapsedTime.toFixed(1)}s elapsed · target under 40s.
+        {current >= LOADING_STEPS.length
+          ? <>Finalising your report… {elapsedTime.toFixed(1)}s elapsed</>
+          : <>Six dirty jobs, one report. {elapsedTime.toFixed(1)}s elapsed · target under 40s.</>
+        }
       </p>
 
       <div className="loading-steps">

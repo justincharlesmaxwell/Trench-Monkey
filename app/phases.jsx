@@ -207,10 +207,10 @@ function StrategyPhase() {
               {S.northStar.metric}
             </div>
             <div style={{ fontFamily: "var(--tm-font-ui)", fontSize: 56, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--tm-orange)", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
-              {S.northStar.target.toLocaleString()}
+              {S.northStar.target != null ? S.northStar.target.toLocaleString() : "TBC"}
             </div>
             <div style={{ fontSize: 13, color: "var(--tm-text-muted)", marginTop: 6 }}>
-              From {S.northStar.current.toLocaleString()} today · {S.northStar.deltaCap}
+              From {S.northStar.current != null ? S.northStar.current.toLocaleString() : "—"} today · {S.northStar.deltaCap}
             </div>
           </div>
           <div style={{ flex: 1, fontSize: 14, color: "var(--tm-text)", lineHeight: 1.6, borderLeft: "1px solid var(--tm-hairline)", paddingLeft: 32 }}>
