@@ -33,19 +33,6 @@
   font-feature-settings: "ss01";
 }
 
-/* --- Section max-width ---------------------------------------- */
-.st-nav,
-.st-hero,
-.st-stats,
-.st-features,
-.st-plan,
-.st-testi,
-.st-form-section,
-.st-footer {
-  max-width: 1320px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 /* --- Nav ----------------------------------------------------- */
 .st-nav {
