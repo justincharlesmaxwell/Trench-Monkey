@@ -618,11 +618,12 @@ function InputForm({ onSubmit }) {
           </div>
         </div>
 
-        {/* Product preview + monkey */}
-        <div className="st-hero__right">
+        {/* Monkey mascot */}
         <div className="st-hero__monkey">
           <img src="app/assets/monkey-brief.png" alt="Trench Monkey mascot" />
         </div>
+
+        {/* Product preview */}
         <div className="st-preview">
           <div className="st-preview__chrome">
             <span className="dot" /><span className="dot" /><span className="dot" />
@@ -717,7 +718,6 @@ function InputForm({ onSubmit }) {
             <span className="ic">↑</span>
             Share of voice <span className="pct">+11.4%</span>
           </div>
-        </div>
         </div>
       </section>
 
