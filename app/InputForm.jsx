@@ -1,5 +1,5 @@
 // InputForm.jsx — Studio marketing homepage + functional prospect brief form.
-const { useState: useIS, useEffect: useIE, useRef: useIR } = React;
+const { useState: useIS, useEffect: useIE } = React;
 
 const ST_PALETTE = { blue: "#17a8f1", orange: "#ff9614", navy: "#094cb2", green: "#1e9e5b" };
 
@@ -384,15 +384,18 @@ function HeroDonut() {
 }
 
 function InputForm({ onSubmit }) {
+  const [mode,        setMode]        = useIS("landing");
   const [url,         setUrl]         = useIS("");
   const [industry,    setIndustry]    = useIS("");
   const [competitors, setCompetitors] = useIS([]);
   const [draft,       setDraft]       = useIS("");
   const [budget,      setBudget]      = useIS("");
   const [formError,   setFormError]   = useIS("");
-  const formRef = useIR(null);
 
   useIE(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  const goToBrief = () => setMode("brief");
+  const goToLanding = () => setMode("landing");
 
   const removeChip = (i) => setCompetitors(c => c.filter((_, idx) => idx !== i));
   const addChip = () => {
@@ -409,18 +412,153 @@ function InputForm({ onSubmit }) {
   const submit = (e) => {
     e.preventDefault();
     setFormError("");
-    if (!url.trim())      { setFormError("Please enter a company URL.");          return; }
-    if (!industry.trim()) { setFormError("Please enter the industry.");           return; }
-    if (!budget.trim())   { setFormError("Please enter a marketing budget.");     return; }
+    if (!url.trim())      { setFormError("Please enter a company URL.");      return; }
+    if (!industry.trim()) { setFormError("Please enter the industry.");       return; }
+    if (!budget.trim())   { setFormError("Please enter a marketing budget."); return; }
     const budgetNum = parseFloat(String(budget).replace(/[^0-9.]/g, ""));
     if (isNaN(budgetNum) || budgetNum <= 0) { setFormError("Please enter a valid budget number."); return; }
     onSubmit({ url: url.trim(), industry: industry.trim(), competitors, budget: budgetNum, currencySymbol: "£" });
   };
 
-  const scrollToForm = () => {
-    if (formRef.current) formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  /* ── BRIEF FORM SCREEN ──────────────────────────────────────── */
+  if (mode === "brief") {
+    return (
+      <div className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
+        <header className="st-nav">
+          <div className="st-nav__brand">
+            <div className="st-nav__brand-logo">
+              <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
+            </div>
+            <div className="st-nav__brand-word">
+              <span className="b">Trench</span>{" "}<span className="o">Monkey</span>
+            </div>
+          </div>
+          <nav className="st-nav__center" />
+          <div className="st-nav__right">
+            <button type="button" className="st-btn st-btn--ghost" onClick={goToLanding}>
+              <i data-lucide="arrow-left" style={{ width: 14, height: 14 }}></i>
+              Back to home
+            </button>
+          </div>
+        </header>
 
+        <section className="st-form-section">
+          <div className="st-form-section__inner">
+            <div className="st-form-section__head">
+              <div className="st-features__eb">Start a brief</div>
+              <h2 className="st-form-section__title">
+                Brief the <span className="o">monkey</span>.
+              </h2>
+              <p style={{ marginTop: 12, fontSize: 15, color: "var(--st-text)", lineHeight: 1.55 }}>
+                Four fields. Forty seconds. A four-phase plan ready to present.
+              </p>
+            </div>
+
+            <div className="st-form-card">
+              <form onSubmit={submit}>
+                <div className="st-form-grid">
+                  <div className="st-field">
+                    <label className="st-field__lbl">
+                      Company URL <span className="opt">required</span>
+                    </label>
+                    <div className="st-input">
+                      <span className="sym">↗</span>
+                      <input
+                        type="text"
+                        placeholder="e.g. magnet.co.uk"
+                        value={url}
+                        onChange={e => setUrl(e.target.value)}
+                      />
+                    </div>
+                    <div className="st-field__hint">We'll research their positioning, market, and competitors.</div>
+                  </div>
+
+                  <div className="st-field">
+                    <label className="st-field__lbl">
+                      Industry <span className="opt">required</span>
+                    </label>
+                    <div className="st-input">
+                      <input
+                        type="text"
+                        placeholder="e.g. Home improvement · Fitted kitchens"
+                        value={industry}
+                        onChange={e => setIndustry(e.target.value)}
+                      />
+                    </div>
+                    <div className="st-field__hint">Anchors market size, trends, and category benchmarks.</div>
+                  </div>
+
+                  <div className="st-field st-field--full">
+                    <label className="st-field__lbl">
+                      Competitors{" "}
+                      <span className="opt">{competitors.length} added · comma or Enter to add</span>
+                    </label>
+                    <div className="st-chiprow">
+                      {competitors.map((c, i) => (
+                        <span key={i} className="st-chip">
+                          {c}
+                          <button type="button" className="st-chip__x" onClick={() => removeChip(i)} aria-label={"Remove " + c}>×</button>
+                        </span>
+                      ))}
+                      <input
+                        className="st-chiprow__input"
+                        placeholder={competitors.length ? "Add another…" : "e.g. Competitor X, Competitor Y"}
+                        value={draft}
+                        onChange={e => setDraft(e.target.value)}
+                        onKeyDown={onKey}
+                        onBlur={addChip}
+                      />
+                    </div>
+                    <div className="st-field__hint">We'll benchmark positioning, messaging, and digital presence against these.</div>
+                  </div>
+
+                  <div className="st-field">
+                    <label className="st-field__lbl">
+                      Marketing budget <span className="opt">required</span>
+                    </label>
+                    <div className="st-input">
+                      <span className="sym">£</span>
+                      <input
+                        type="text"
+                        placeholder="150,000"
+                        value={budget}
+                        onChange={e => setBudget(e.target.value)}
+                      />
+                    </div>
+                    <div className="st-field__hint">Split across channels in Phase 03 — Tactics.</div>
+                  </div>
+                </div>
+
+                {formError && <div className="st-form-error">{formError}</div>}
+
+                <div className="st-form-card__foot">
+                  <span className="st-form-card__note">
+                    <span className="lock">
+                      <i data-lucide="lock" style={{ width: 11, height: 11 }}></i>
+                    </span>
+                    Inputs processed locally — never sent to our servers.
+                  </span>
+                  <button type="submit" className="st-submit">
+                    Generate plan
+                    <span className="arr">→</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <footer className="st-footer">
+          <span>© 2026 Trench Monkey Ltd · London</span>
+          <span>
+            <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Security</a> · <a href="#">Status</a>
+          </span>
+        </footer>
+      </div>
+    );
+  }
+
+  /* ── MARKETING LANDING PAGE ─────────────────────────────────── */
   return (
     <div className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
 
@@ -441,7 +579,7 @@ function InputForm({ onSubmit }) {
           <a href="#">Customers</a>
         </nav>
         <div className="st-nav__right">
-          <button className="st-btn st-btn--primary" onClick={scrollToForm}>
+          <button type="button" className="st-btn st-btn--primary" onClick={goToBrief}>
             Start a brief
             <i data-lucide="arrow-right" style={{ width: 14, height: 14 }}></i>
           </button>
@@ -464,11 +602,11 @@ function InputForm({ onSubmit }) {
             Give Trench Monkey four inputs — URL, industry, competitors, budget — and receive a four-phase marketing plan: diagnosis, strategy, tactics, and measurement. Grounded in live data, cited inline, ready to present.
           </p>
           <div className="st-hero__actions">
-            <button className="st-btn st-btn--orange st-btn--lg" onClick={scrollToForm}>
+            <button type="button" className="st-btn st-btn--orange st-btn--lg" onClick={goToBrief}>
               Start a brief — free
               <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
             </button>
-            <button className="st-btn st-btn--ghost st-btn--lg" onClick={scrollToForm}>
+            <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={goToBrief}>
               Watch a sample
             </button>
           </div>
@@ -706,11 +844,11 @@ function InputForm({ onSubmit }) {
             Four fields, forty seconds, one presentable plan. No card. No template gallery. No "schedule a call".
           </p>
           <div className="st-cta__actions">
-            <button className="st-btn st-btn--orange st-btn--lg" onClick={scrollToForm}>
+            <button type="button" className="st-btn st-btn--orange st-btn--lg" onClick={goToBrief}>
               Start your first brief
               <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
             </button>
-            <button className="st-btn st-btn--ghost st-btn--lg" onClick={scrollToForm}>
+            <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={goToBrief}>
               Book a 15-min walkthrough
             </button>
           </div>
@@ -724,113 +862,6 @@ function InputForm({ onSubmit }) {
             <li><span className="tick">✓</span> Channel-level budget split &amp; 30/60/90 roadmap</li>
             <li><span className="tick">✓</span> Export to PDF, Google Slides, or Notion</li>
           </ul>
-        </div>
-      </section>
-
-      {/* ── FORM ──────────────────────────────────────────────── */}
-      <section className="st-form-section" ref={formRef}>
-        <div className="st-form-section__inner">
-          <div className="st-form-section__head">
-            <div className="st-features__eb">Start a brief</div>
-            <h2 className="st-form-section__title">
-              Brief the <span className="o">monkey</span>.
-            </h2>
-            <p style={{ marginTop: 12, fontSize: 15, color: "var(--st-text)", lineHeight: 1.55 }}>
-              Four fields. Forty seconds. A four-phase plan ready to present.
-            </p>
-          </div>
-
-          <div className="st-form-card">
-            <form onSubmit={submit}>
-              <div className="st-form-grid">
-                <div className="st-field">
-                  <label className="st-field__lbl">
-                    Company URL <span className="opt">required</span>
-                  </label>
-                  <div className="st-input">
-                    <span className="sym">↗</span>
-                    <input
-                      type="text"
-                      placeholder="e.g. magnet.co.uk"
-                      value={url}
-                      onChange={e => setUrl(e.target.value)}
-                    />
-                  </div>
-                  <div className="st-field__hint">We'll research their positioning, market, and competitors.</div>
-                </div>
-
-                <div className="st-field">
-                  <label className="st-field__lbl">
-                    Industry <span className="opt">required</span>
-                  </label>
-                  <div className="st-input">
-                    <input
-                      type="text"
-                      placeholder="e.g. Home improvement · Fitted kitchens"
-                      value={industry}
-                      onChange={e => setIndustry(e.target.value)}
-                    />
-                  </div>
-                  <div className="st-field__hint">Anchors market size, trends, and category benchmarks.</div>
-                </div>
-
-                <div className="st-field st-field--full">
-                  <label className="st-field__lbl">
-                    Competitors{" "}
-                    <span className="opt">{competitors.length} added · comma or Enter to add</span>
-                  </label>
-                  <div className="st-chiprow">
-                    {competitors.map((c, i) => (
-                      <span key={i} className="st-chip">
-                        {c}
-                        <button type="button" className="st-chip__x" onClick={() => removeChip(i)} aria-label={"Remove " + c}>×</button>
-                      </span>
-                    ))}
-                    <input
-                      className="st-chiprow__input"
-                      placeholder={competitors.length ? "Add another…" : "e.g. Competitor X, Competitor Y"}
-                      value={draft}
-                      onChange={e => setDraft(e.target.value)}
-                      onKeyDown={onKey}
-                      onBlur={addChip}
-                    />
-                  </div>
-                  <div className="st-field__hint">We'll benchmark positioning, messaging, and digital presence against these.</div>
-                </div>
-
-                <div className="st-field">
-                  <label className="st-field__lbl">
-                    Marketing budget <span className="opt">required</span>
-                  </label>
-                  <div className="st-input">
-                    <span className="sym">£</span>
-                    <input
-                      type="text"
-                      placeholder="150,000"
-                      value={budget}
-                      onChange={e => setBudget(e.target.value)}
-                    />
-                  </div>
-                  <div className="st-field__hint">Split across channels in Phase 03 — Tactics.</div>
-                </div>
-              </div>
-
-              {formError && <div className="st-form-error">{formError}</div>}
-
-              <div className="st-form-card__foot">
-                <span className="st-form-card__note">
-                  <span className="lock">
-                    <i data-lucide="lock" style={{ width: 11, height: 11 }}></i>
-                  </span>
-                  Inputs processed locally — never sent to our servers.
-                </span>
-                <button type="submit" className="st-submit">
-                  Generate plan
-                  <span className="arr">→</span>
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       </section>
 
