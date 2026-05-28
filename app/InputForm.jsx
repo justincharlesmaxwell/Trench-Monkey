@@ -636,8 +636,7 @@ function InputForm({ onSubmit }) {
       <section className="st-hero">
         <div>
           <h1 className="st-hero__h">
-            World-class<br />
-            market intelligence,<br />
+            Market intelligence<br />
             in <span className="o">forty seconds</span>.
           </h1>
           <p className="st-hero__sub">
