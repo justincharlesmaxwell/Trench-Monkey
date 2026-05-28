@@ -129,6 +129,8 @@
 .st-btn--orange:hover { background: var(--st-orange-2); color: #fff; }
 .st-btn--ghost { background: transparent; color: var(--st-ink); border: 1px solid var(--st-divider); }
 .st-btn--ghost:hover { border-color: #c8cdda; background: var(--st-card); }
+.st-btn--blue { background: var(--st-blue); color: #fff; border: none; }
+.st-btn--blue:hover { background: var(--st-blue-2); }
 .st-btn--lg { padding: 14px 20px; font-size: 15px; border-radius: 12px; }
 
 /* --- Hero ---------------------------------------------------- */

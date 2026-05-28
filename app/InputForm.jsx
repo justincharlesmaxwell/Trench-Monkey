@@ -648,7 +648,7 @@ function InputForm({ onSubmit }) {
               Start a brief — free
               <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
             </button>
-            <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={openVideo}>
+            <button type="button" className="st-btn st-btn--blue st-btn--lg" onClick={openVideo}>
               <i data-lucide="play-circle" style={{ width: 16, height: 16 }}></i>
               Watch a sample
             </button>
