@@ -326,8 +326,12 @@ function BudgetAllocator({ initial, total = 150000, currency = "£", filter = nu
 // =====================================================================
 function Funnel({ rows }) {
   // Max count for bar width
-  const counts = rows.map(r => parseFloat(r.count.replace(/[^0-9.]/g, "")) * (r.count.includes("M") ? 1e6 : r.count.includes("k") ? 1e3 : 1));
-  const max = Math.max(...counts);
+  const counts = rows.map(r => {
+    const s = String(r.count || "");
+    const n = parseFloat(s.replace(/[^0-9.]/g, "")) * (s.includes("M") ? 1e6 : s.includes("k") ? 1e3 : 1);
+    return isNaN(n) ? 0 : n;
+  });
+  const max = Math.max(...counts, 1);
   return (
     <div className="funnel">
       {rows.map((r, i) => {

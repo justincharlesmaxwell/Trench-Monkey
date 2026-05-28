@@ -139,56 +139,8 @@ function DiagnosisPhase() {
 // =================================================================
 function StrategyPhase() {
   const S = window.MAGNET.strategy;
+  const personas = S.personas || [];
   useLucide();
-
-  // Three personas hard-coded here because they're presentation-specific
-  const personas = [
-    {
-      initials: "RF",
-      name: "Renovating Family",
-      role: "Primary · 48% of buyers",
-      isPrimary: true,
-      stats: [
-        { label: "Age", value: "38–55" },
-        { label: "HHI", value: "£75k+" },
-        { label: "Stage", value: "2nd kitchen" }
-      ],
-      quote: "We want one we'll actually keep. I'm not going through this again in five years.",
-      jtbd: "Make a 10-year decision they won't regret — durable, design-led, supported through install. Confidence beats novelty.",
-      pains: "Conflicting design opinions between partners. Fear of contractor mistakes. Anxiety about hidden costs at quote stage.",
-      channels: ["Pinterest", "Houzz", "Instagram", "Friend recs", "Showroom visits"]
-    },
-    {
-      initials: "FH",
-      name: "Forever Home",
-      role: "Secondary · 27% of buyers",
-      isPrimary: false,
-      stats: [
-        { label: "Age", value: "55–68" },
-        { label: "HHI", value: "£90k+" },
-        { label: "Stage", value: "Empty-nest reno" }
-      ],
-      quote: "The kids have left. The kitchen they grew up in needs to age with us, not against us.",
-      jtbd: "Right-size and future-proof. Less storage, more entertaining. Quality of materials matters more than ever.",
-      pains: "Don't trust 'trends'. Want to talk to a human, not chat with a bot. Hate aggressive sales follow-ups.",
-      channels: ["Print magazines", "Instagram", "Showroom-first", "Word of mouth"]
-    },
-    {
-      initials: "PS",
-      name: "Pre-sale Refresh",
-      role: "Tertiary · 16% of buyers",
-      isPrimary: false,
-      stats: [
-        { label: "Age", value: "42–60" },
-        { label: "HHI", value: "£55k+" },
-        { label: "Stage", value: "Selling in 12mo" }
-      ],
-      quote: "It just needs to look better than the neighbour's when the photographer comes round.",
-      jtbd: "Maximise sale price uplift per pound spent. Speed matters more than longevity. They want a clear ROI calc.",
-      pains: "Time pressure. Anxious about over-spending. Need it done before listing.",
-      channels: ["Rightmove inspiration", "TikTok", "Estate-agent recs", "Wickes/B&Q comparison"]
-    }
-  ];
 
   return (
     <React.Fragment>
@@ -214,9 +166,7 @@ function StrategyPhase() {
             </div>
           </div>
           <div style={{ flex: 1, fontSize: 14, color: "var(--tm-text)", lineHeight: 1.6, borderLeft: "1px solid var(--tm-hairline)", paddingLeft: 32 }}>
-            Showroom consultations are the strongest predictor of installed-kitchen revenue.
-            They sit just behind the moment of decision and convert at 27% to order today.
-            Every other metric in this plan ladders up to this one — if consultations climb, everything else is working.
+            {S.northStar.rationale}
           </div>
         </div>
       </section>
@@ -290,15 +240,15 @@ function StrategyPhase() {
           <div className="col-gap-12">
             <div className="card" style={{ padding: "14px 18px" }}>
               <div className="card__eyebrow" style={{ color: "var(--tm-blue)" }}><Icon name="sun" size={14} /> TOP OF FUNNEL</div>
-              <p className="card__desc" style={{ margin: "4px 0 0" }}>Pinterest, TikTok, YouTube long-form. Quiet-luxury aesthetic is custom-built for visual platforms.</p>
+              <p className="card__desc" style={{ margin: "4px 0 0" }}>{S.funnelStrategy.tofu}</p>
             </div>
             <div className="card" style={{ padding: "14px 18px" }}>
               <div className="card__eyebrow" style={{ color: "var(--tm-navy)" }}><Icon name="layout" size={14} /> MIDDLE OF FUNNEL</div>
-              <p className="card__desc" style={{ margin: "4px 0 0" }}>Meta retargeting, email nurture, YouTube buyer's guides. Reduce friction between research and consult.</p>
+              <p className="card__desc" style={{ margin: "4px 0 0" }}>{S.funnelStrategy.mofu}</p>
             </div>
             <div className="card" style={{ padding: "14px 18px" }}>
               <div className="card__eyebrow" style={{ color: "var(--tm-orange)" }}><Icon name="target" size={14} /> BOTTOM OF FUNNEL</div>
-              <p className="card__desc" style={{ margin: "4px 0 0" }}>Local SEO, paid search. The single biggest near-term lever. Per-showroom landing pages are step one.</p>
+              <p className="card__desc" style={{ margin: "4px 0 0" }}>{S.funnelStrategy.bofu}</p>
             </div>
           </div>
         </div>
@@ -321,18 +271,8 @@ function TacticsPhase() {
   const total = window.MAGNET.brand.budget;
   useLucide();
 
-  // Budget allocations (drag-reorderable)
-  const initialAllocs = [
-    { id: "pse", name: "Paid Search", sub: "Google · brand + commercial",   pct: 22, color: "#17a8f1", stage: ["BOFU"] },
-    { id: "lse", name: "Local SEO",   sub: "200+ showroom pages",           pct: 16, color: "#094cb2", stage: ["BOFU","MOFU"] },
-    { id: "met", name: "Meta",        sub: "IG + FB retargeting",           pct: 18, color: "#ff9614", stage: ["MOFU"] },
-    { id: "pin", name: "Pinterest",   sub: "Quiet luxury inspiration",      pct: 14, color: "#ec4d8e", stage: ["TOFU"] },
-    { id: "yt",  name: "YouTube",     sub: "Buyer's guide series",          pct: 9,  color: "#cc3333", stage: ["TOFU","MOFU"] },
-    { id: "tt",  name: "TikTok",      sub: "Designer-led pilot",            pct: 6,  color: "#0f1523", stage: ["TOFU"] },
-    { id: "em",  name: "Email & CRM", sub: "Lifecycle + recovery",          pct: 8,  color: "#1e9e5b", stage: ["MOFU","Retention"] },
-    { id: "inf", name: "Influencer",  sub: "Interior designers",            pct: 4,  color: "#9b6dff", stage: ["TOFU"] },
-    { id: "res", name: "Test reserve",sub: "Always-on experimentation",     pct: 3,  color: "#d8dce5", stage: ["Reserve"] }
-  ];
+  // Budget allocations (drag-reorderable) — built from the AI budget split
+  const initialAllocs = T.allocations || [];
 
   const [filter, setFilter] = useP(null);
   const filters = [

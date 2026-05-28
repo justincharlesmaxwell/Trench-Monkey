@@ -91,17 +91,43 @@ Return ONLY a valid JSON object (no markdown, no backticks, no preamble) matchin
     "consumer_shifts": ["shift 1 with why it matters", "shift 2", "shift 3", "shift 4"],
     "opportunity": "3-4 sentences on the single biggest opportunity for this brand, why it exists now, and what it takes to capture it"
   },
+  "market_metrics": {
+    "market_size_value": "headline figure only, e.g. ${sym}4.8B",
+    "annual_growth": "headline figure only, e.g. +6.2% CAGR",
+    "avg_order_value": "headline figure only for a typical purchase in this category, e.g. ${sym}8,500",
+    "decision_cycle": "typical consideration-to-purchase window, e.g. 8-14 weeks"
+  },
   "audience_segments": [
     {"name": "segment name", "size_pct": 30, "description": "4-5 sentences: who they are, motivations, pain points, media habits, best way to reach them"},
     {"name": "...", "size_pct": 25, "description": "..."},
     {"name": "...", "size_pct": 25, "description": "..."},
     {"name": "...", "size_pct": 20, "description": "..."}
   ],
+  "personas": [
+    {"initials": "2-letter initials", "name": "evocative persona name (not the segment name)", "role": "Primary · 48% of buyers", "is_primary": true, "age": "38-55", "income": "${sym}75k+ HHI", "stage": "short buying-stage label", "quote": "a verbatim first-person quote that captures their mindset", "jtbd": "2 sentences on the job they are hiring this brand to do", "pains": "2 sentences on their key frictions and anxieties", "channels": ["where they research 1", "channel 2", "channel 3", "channel 4"]}
+  ],
   "positioning": {
     "our_recommended_position": "3-4 sentences on recommended positioning, why it's ownable, and how it creates defensible differentiation",
     "competitor_analysis": [
-      {"name": "competitor name exactly as provided", "position": "2-3 sentences on their positioning and messaging", "strength": "2-3 sentences on their main strengths", "weakness": "2-3 sentences on their weaknesses and how to exploit them"}
+      {"name": "competitor name exactly as provided", "position": "2-3 sentences on their positioning and messaging", "strength": "2-3 sentences on their main strengths", "weakness": "2-3 sentences on their weaknesses and how to exploit them", "price_tier": "one of: Premium+, Mid-market, Value, Trade", "digital_strength": 7, "est_monthly_traffic": "estimated site traffic, e.g. 120k", "domain_authority": 58, "social_following": "largest social following, e.g. 85k IG"}
     ]
+  },
+  "north_star": {
+    "metric": "the single north-star metric name for this brand",
+    "current": 0,
+    "target": 450,
+    "rationale": "3-4 sentences on why this is the right north-star metric and how every other metric ladders up to it"
+  },
+  "goals": [
+    {"type": "PRIMARY", "title": "goal headline", "body": "2-3 sentences", "tags": ["Revenue", "Lead-gen"]},
+    {"type": "BRAND", "title": "...", "body": "...", "tags": ["Awareness"]},
+    {"type": "EFFICIENCY", "title": "...", "body": "...", "tags": ["Efficiency"]},
+    {"type": "RETENTION", "title": "...", "body": "...", "tags": ["Retention", "CLV"]}
+  ],
+  "funnel_strategy": {
+    "tofu": "1-2 sentences naming the specific top-of-funnel channels and the approach for this brand",
+    "mofu": "1-2 sentences on the mid-funnel channels and approach",
+    "bofu": "1-2 sentences on the bottom-funnel channels and the single biggest near-term lever"
   },
   "creative_territory": {
     "campaign_thought": "the single big idea in one punchy memorable sentence — the platform this brand should own",
@@ -122,19 +148,72 @@ Return ONLY a valid JSON object (no markdown, no backticks, no preamble) matchin
     {"name": "trigger name", "months": [1,2], "month_labels": "Jan-Feb", "rationale": "2-3 sentences on why this moment matters", "priority": "high"}
   ],
   "budget_split": [
-    {"channel": "Paid social", "pct": 30, "amount": ${Math.round(budget * 0.3)}, "rationale": "2-3 sentences on why this allocation and what success looks like"}
+    {"channel": "Paid social", "pct": 30, "amount": ${Math.round(budget * 0.3)}, "sub": "short 2-4 word descriptor of how it's used", "stage": ["MOFU"], "rationale": "2-3 sentences on why this allocation and what success looks like"}
+  ],
+  "roadmap": [
+    {"stream": "Foundations", "sub": "Tracking & data", "d30": "30-day milestone (≤5 words)", "d60": "60-day milestone", "d90": "90-day milestone"}
+  ],
+  "content_clusters": [
+    {"hub": "pillar/hub page topic", "spokes": ["spoke topic 1", "spoke topic 2", "spoke topic 3", "spoke topic 4"], "search_volume": "monthly volume, e.g. 12k/mo", "difficulty": 38}
+  ],
+  "organic_social": [
+    {"platform": "Instagram / Meta", "cadence": "e.g. 4 posts + 2 Reels / wk", "format": "content format mix", "note": "1 sentence tactical note"}
+  ],
+  "email_flows": [
+    {"name": "flow name", "trigger": "what triggers it", "emails": 4, "window": "e.g. 0-14 days", "goal": "the flow's goal", "note": "1 sentence note"}
+  ],
+  "seo": {
+    "on_page": ["on-page action 1 (reference real target queries)", "action 2", "action 3"],
+    "technical": ["technical action 1", "action 2", "action 3"],
+    "off_page": ["off-page / digital PR action 1", "action 2"]
+  },
+  "cro_hypotheses": [
+    {"hypothesis": "specific testable hypothesis for this brand's site/funnel", "ice": 9, "area": "TOFU"}
+  ],
+  "partnerships": [
+    {"name": "partnership/PR opportunity name", "body": "2-3 sentences on the opportunity"}
+  ],
+  "tools": [
+    {"tool": "tool name", "purpose": "what it's for", "status": "short status, e.g. Implement / Evaluate / Pilot"}
+  ],
+  "kpis": [
+    {"label": "KPI name", "baseline": "starting value or 'new'", "target": "12-month target value (number or short string)", "delta": "e.g. +30%", "direction": "up"}
+  ],
+  "funnel": [
+    {"stage": "Reach", "monthly_estimate": "180k", "caption": "what this stage counts", "channel": "which channels own it", "tone": "blue"}
+  ],
+  "attribution_model": "2-3 sentences on the recommended attribution model and UTM convention",
+  "reporting_cadence": [
+    {"cadence": "Daily", "who": "audience", "focus": "what they review"}
+  ],
+  "early_warnings": [
+    {"signal": "a measurable warning signal with a threshold", "action": "the immediate response"}
   ]
 }
 
 REQUIREMENTS
 - audience_segments: exactly 4 segments, size_pct must sum to 100
-- positioning.competitor_analysis: one entry per competitor listed above, in same order
+- personas: exactly 3, ordered most to least important; exactly one has is_primary=true; channels has 3-5 entries each
+- positioning.competitor_analysis: one entry per competitor listed above, in same order. digital_strength is 1-10, domain_authority is 1-100
+- north_star: current and target are plain numbers (no symbols/commas). If no baseline exists, set current to 0
+- goals: exactly 4, types PRIMARY, BRAND, EFFICIENCY, RETENTION in that order
 - creative_territory.key_messages: exactly 4 entries, one per audience segment, in same order
 - search_trends.top_queries: 6-8 entries. direction must be exactly "rising", "stable", or "declining"
 - search_trends.seasonal_peaks: 3-4 entries
 - trigger_calendar: 6-8 entries. priority must be "high", "medium", or "low"
-- budget_split: 5-7 channels, pct must sum to 100, amounts must sum to ${sym}${budget.toLocaleString()}
-- Be deeply specific — reference the named competitors throughout. No generic phrases.
+- budget_split: 5-7 channels, pct must sum to 100, amounts must sum to ${sym}${budget.toLocaleString()}. stage values are any of: TOFU, MOFU, BOFU, Retention, Reserve
+- roadmap: exactly 4 workstreams
+- content_clusters: exactly 4 clusters, each with 4-5 spokes. difficulty is 1-100
+- organic_social: 3-4 platforms
+- email_flows: exactly 4 flows
+- cro_hypotheses: exactly 5, each ice score 1-10, area one of TOFU/MOFU/BOFU/All
+- partnerships: exactly 3
+- tools: 5-6 entries
+- kpis: 6-8 entries. direction is "up" (higher is better), "down" (lower is bad), or "down-good" (lower is the win, e.g. cost metrics)
+- funnel: exactly 7 stages from Reach down to Customers. monthly_estimate uses k/M suffixes (e.g. 180k, 1.2M). tone is "blue" for upper funnel, "orange" for lower funnel
+- reporting_cadence: exactly 4 (Daily, Weekly, Monthly, Quarterly)
+- early_warnings: exactly 4
+- Be deeply specific to this prospect — reference the named competitors and real search behaviour throughout. No generic filler.
 - Return raw JSON only. No \`\`\`json fences.`;
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -147,7 +226,7 @@ REQUIREMENTS
     },
     body: JSON.stringify({
       model: 'claude-opus-4-7',
-      max_tokens: 16000,
+      max_tokens: 24000,
       stream: true,
       messages: [{ role: 'user', content: prompt }]
     })
