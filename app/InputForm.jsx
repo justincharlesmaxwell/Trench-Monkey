@@ -326,7 +326,7 @@ function MeasurementPanels() {
 }
 
 function StPlanSection() {
-  const [active, setActive] = useIS("tactics");
+  const [active, setActive] = useIS("diagnosis");
   const Panels =
     active === "diagnosis"   ? DiagnosisPanels :
     active === "strategy"    ? StrategyPanels :
