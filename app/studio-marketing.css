@@ -119,30 +119,16 @@
 
 /* --- Hero ---------------------------------------------------- */
 .st-hero {
-  position: relative;
-  padding: 80px 112px 64px;
+  padding: 80px 192px 64px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 48px;
   align-items: center;
   background:
     radial-gradient(ellipse 80% 60% at 80% 0%, var(--st-blue-soft) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 0% 100%, var(--st-orange-soft) 0%, transparent 60%),
     var(--st-bg);
   border-bottom: 1px solid var(--st-divider);
-}
-.st-hero__text { padding-right: 220px; }
-.st-hero__monkey {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 360px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 16px 32px rgba(12,20,38,0.20));
-  z-index: 2;
-  pointer-events: none;
 }
 .st-hero__eyebrow {
   display: inline-flex;
@@ -218,9 +204,6 @@
 /* --- Hero product preview ------------------------------------ */
 .st-preview {
   position: relative;
-  width: 100%;
-  min-width: 0;
-  margin-left: 220px;
   background: var(--st-chrome);
   border: 1px solid var(--st-divider);
   border-radius: 16px;

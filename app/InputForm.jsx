@@ -444,7 +444,6 @@ function InputForm({ onSubmit }) {
 
         <section className="st-form-section">
           <div className="st-form-section__inner">
-            <div className="st-form-section__form">
             <div className="st-form-section__head">
               <div className="st-features__eb">Start a brief</div>
               <h2 className="st-form-section__title">
@@ -546,7 +545,6 @@ function InputForm({ onSubmit }) {
                 </div>
               </form>
             </div>
-            </div>
           </div>
         </section>
 
@@ -590,8 +588,7 @@ function InputForm({ onSubmit }) {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="st-hero">
-        <img className="st-hero__monkey" src="app/assets/monkey-brief.png" alt="Trench Monkey mascot" />
-        <div className="st-hero__text">
+        <div>
           <h1 className="st-hero__h">
             World-class<br />
             market intelligence,<br />
