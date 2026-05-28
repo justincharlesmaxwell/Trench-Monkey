@@ -849,8 +849,8 @@ function InputForm({ onSubmit }) {
           <div className="st-testi__attr">
             <div className="st-testi__avatar" />
             <div>
-              <div className="st-testi__name">Anya Mensah</div>
-              <div className="st-testi__role">VP Growth · Northwind</div>
+              <div className="st-testi__name">Justin Maxwell</div>
+              <div className="st-testi__role">Digital Strategy Business Director · Havas</div>
             </div>
           </div>
         </div>
