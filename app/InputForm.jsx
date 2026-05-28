@@ -423,7 +423,7 @@ function InputForm({ onSubmit }) {
   /* ── BRIEF FORM SCREEN ──────────────────────────────────────── */
   if (mode === "brief") {
     return (
-      <div className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
+      <div key="brief" className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
         <header className="st-nav">
           <div className="st-nav__brand">
             <div className="st-nav__brand-logo">
@@ -560,7 +560,7 @@ function InputForm({ onSubmit }) {
 
   /* ── MARKETING LANDING PAGE ─────────────────────────────────── */
   return (
-    <div className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
+    <div key="landing" className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
 
       {/* ── NAV ───────────────────────────────────────────────── */}
       <header className="st-nav">
