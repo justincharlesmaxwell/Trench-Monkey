@@ -121,8 +121,8 @@
 .st-hero {
   padding: 80px 112px 64px;
   display: grid;
-  grid-template-columns: 1fr 360px 1.1fr;
-  gap: 40px;
+  grid-template-columns: 1fr 340px 1fr;
+  gap: 56px;
   align-items: center;
   background:
     radial-gradient(ellipse 80% 60% at 80% 0%, var(--st-blue-soft) 0%, transparent 60%),
