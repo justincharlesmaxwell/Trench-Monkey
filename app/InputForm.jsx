@@ -383,6 +383,48 @@ function HeroDonut() {
   );
 }
 
+function StVideoModal({ open, onClose }) {
+  const [key, setKey] = useIS(0);
+  const prevOpen = React.useRef(false);
+  useIE(() => {
+    if (open && !prevOpen.current) setKey(k => k + 1);
+    prevOpen.current = open;
+    if (!open) return;
+    const onKey = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <div
+      className={"st-video-modal" + (open ? " st-video-modal--open" : "")}
+      onClick={onClose}
+    >
+      <div className="st-video-modal__inner" onClick={e => e.stopPropagation()}>
+        <button
+          type="button"
+          className="st-video-modal__close"
+          onClick={onClose}
+          aria-label="Close video"
+        >
+          ✕
+        </button>
+        {open && (
+          <iframe
+            key={key}
+            src="video-studio/index.html"
+            title="Trench Monkey · 34-second product walkthrough"
+            allow="autoplay"
+          />
+        )}
+        <div className="st-video-modal__caption">
+          34-second walkthrough · Trench Monkey · v3.2
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function InputForm({ onSubmit }) {
   const [mode,        setMode]        = useIS("landing");
   const [url,         setUrl]         = useIS("");
@@ -391,11 +433,14 @@ function InputForm({ onSubmit }) {
   const [draft,       setDraft]       = useIS("");
   const [budget,      setBudget]      = useIS("");
   const [formError,   setFormError]   = useIS("");
+  const [videoOpen,   setVideoOpen]   = useIS(false);
 
   useIE(() => { if (window.lucide) window.lucide.createIcons(); });
 
   const goToBrief = () => setMode("brief");
   const goToLanding = () => setMode("landing");
+  const openVideo = () => setVideoOpen(true);
+  const closeVideo = () => setVideoOpen(false);
 
   const removeChip = (i) => setCompetitors(c => c.filter((_, idx) => idx !== i));
   const addChip = () => {
@@ -602,7 +647,8 @@ function InputForm({ onSubmit }) {
               Start a brief — free
               <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
             </button>
-            <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={goToBrief}>
+            <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={openVideo}>
+              <i data-lucide="play-circle" style={{ width: 16, height: 16 }}></i>
               Watch a sample
             </button>
           </div>
@@ -868,6 +914,8 @@ function InputForm({ onSubmit }) {
           <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Security</a> · <a href="#">Status</a>
         </span>
       </footer>
+
+      <StVideoModal open={videoOpen} onClose={closeVideo} />
 
     </div>
   );
