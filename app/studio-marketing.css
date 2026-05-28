@@ -34,6 +34,19 @@
 }
 
 
+/* --- Consistent side padding --------------------------------- */
+.st-nav,
+.st-hero,
+.st-stats,
+.st-features,
+.st-plan,
+.st-testi,
+.st-form-section,
+.st-footer {
+  padding-left: 56px;
+  padding-right: 56px;
+}
+
 /* --- Nav ----------------------------------------------------- */
 .st-nav {
   height: 68px;
