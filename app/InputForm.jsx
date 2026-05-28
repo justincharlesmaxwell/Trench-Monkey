@@ -589,10 +589,6 @@ function InputForm({ onSubmit }) {
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="st-hero">
         <div>
-          <div className="st-hero__eyebrow">
-            <span className="tag">NEW</span>
-            <span>Live competitor benchmarks · v3.2</span>
-          </div>
           <h1 className="st-hero__h">
             World-class<br />
             market intelligence,<br />
