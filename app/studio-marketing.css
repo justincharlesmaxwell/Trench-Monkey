@@ -121,7 +121,7 @@
 .st-hero {
   padding: 80px 112px 64px;
   display: grid;
-  grid-template-columns: 1fr 340px 1fr;
+  grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr);
   gap: 56px;
   align-items: center;
   background:
@@ -215,6 +215,8 @@
 /* --- Hero product preview ------------------------------------ */
 .st-preview {
   position: relative;
+  width: 100%;
+  min-width: 0;
   background: var(--st-chrome);
   border: 1px solid var(--st-divider);
   border-radius: 16px;
