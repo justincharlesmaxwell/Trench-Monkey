@@ -590,7 +590,8 @@ function InputForm({ onSubmit }) {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="st-hero">
-        <div>
+        <img className="st-hero__monkey" src="app/assets/monkey-brief.png" alt="Trench Monkey mascot" />
+        <div className="st-hero__text">
           <h1 className="st-hero__h">
             World-class<br />
             market intelligence,<br />
@@ -616,11 +617,6 @@ function InputForm({ onSubmit }) {
             <span className="dot" />
             <span><strong>4.9★</strong> on G2</span>
           </div>
-        </div>
-
-        {/* Monkey mascot */}
-        <div className="st-hero__monkey">
-          <img src="app/assets/monkey-brief.png" alt="Trench Monkey mascot" />
         </div>
 
         {/* Product preview */}
