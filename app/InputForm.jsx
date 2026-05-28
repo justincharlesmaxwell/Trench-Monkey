@@ -623,12 +623,7 @@ function InputForm({ onSubmit }) {
             <div className="st-nav__brand-tag">Brief in. Plan out.</div>
           </div>
         </div>
-        <nav className="st-nav__center">
-          <a className="active" href="#">Product</a>
-          <a href="#">How it works</a>
-          <a href="#">Pricing</a>
-          <a href="#">Customers</a>
-        </nav>
+        <nav className="st-nav__center" />
         <div className="st-nav__right">
           <button type="button" className="st-btn st-btn--primary" onClick={goToBrief}>
             Start a brief
