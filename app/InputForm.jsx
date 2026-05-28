@@ -325,14 +325,13 @@ function MeasurementPanels() {
   );
 }
 
-function StPlanSection({ onScrollToForm }) {
-  const [active, setActive] = React.useState("tactics");
-  const Panels = (
+function StPlanSection() {
+  const [active, setActive] = useIS("tactics");
+  const Panels =
     active === "diagnosis"   ? DiagnosisPanels :
     active === "strategy"    ? StrategyPanels :
     active === "measurement" ? MeasurementPanels :
-                               TacticsPanels
-  );
+                               TacticsPanels;
   return (
     <section className="st-plan">
       <div className="st-plan__head">
@@ -342,6 +341,7 @@ function StPlanSection({ onScrollToForm }) {
         <div className="st-plan__tabs" role="tablist">
           {ST_PHASES.map((p) => (
             <button
+              type="button"
               key={p.id}
               role="tab"
               aria-selected={active === p.id}
@@ -353,7 +353,7 @@ function StPlanSection({ onScrollToForm }) {
           ))}
         </div>
       </div>
-      <div className="st-plan__card" key={active}>
+      <div className="st-plan__card">
         <Panels />
       </div>
     </section>
