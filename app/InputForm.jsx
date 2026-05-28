@@ -444,9 +444,6 @@ function InputForm({ onSubmit }) {
 
         <section className="st-form-section">
           <div className="st-form-section__inner">
-            <div className="st-form-section__monkey">
-              <img src="app/assets/monkey-brief.png" alt="Trench Monkey" />
-            </div>
             <div className="st-form-section__form">
             <div className="st-form-section__head">
               <div className="st-features__eb">Start a brief</div>
@@ -549,7 +546,7 @@ function InputForm({ onSubmit }) {
                 </div>
               </form>
             </div>
-            </div>{/* st-form-section__form */}
+            </div>
           </div>
         </section>
 
@@ -621,7 +618,11 @@ function InputForm({ onSubmit }) {
           </div>
         </div>
 
-        {/* Product preview */}
+        {/* Product preview + monkey */}
+        <div className="st-hero__right">
+        <div className="st-hero__monkey">
+          <img src="app/assets/monkey-brief.png" alt="Trench Monkey mascot" />
+        </div>
         <div className="st-preview">
           <div className="st-preview__chrome">
             <span className="dot" /><span className="dot" /><span className="dot" />
@@ -716,6 +717,7 @@ function InputForm({ onSubmit }) {
             <span className="ic">↑</span>
             Share of voice <span className="pct">+11.4%</span>
           </div>
+        </div>
         </div>
       </section>
 
