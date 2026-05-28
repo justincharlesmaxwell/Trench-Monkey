@@ -41,7 +41,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding: 0 56px;
+  padding: 0 96px;
   background: var(--st-chrome);
   border-bottom: 1px solid var(--st-divider);
   position: sticky;
@@ -119,7 +119,7 @@
 
 /* --- Hero ---------------------------------------------------- */
 .st-hero {
-  padding: 80px 56px 64px;
+  padding: 80px 96px 64px;
   display: grid;
   grid-template-columns: 1fr 1.05fr;
   gap: 48px;
@@ -416,7 +416,7 @@
 
 /* --- Stats strip -------------------------------------------- */
 .st-stats {
-  padding: 32px 56px;
+  padding: 32px 96px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
@@ -441,7 +441,7 @@
 .st-stat .l { margin-top: 8px; font-size: 12px; color: var(--st-text); letter-spacing: 0.04em; }
 
 /* --- Features ----------------------------------------------- */
-.st-features { padding: 88px 56px 64px; }
+.st-features { padding: 88px 96px 64px; }
 .st-features__head {
   display: flex;
   justify-content: space-between;
@@ -535,7 +535,7 @@
 
 /* --- Sample plan preview ------------------------------------ */
 .st-plan {
-  padding: 64px 56px 80px;
+  padding: 64px 96px 80px;
   background: var(--st-bg);
   border-top: 1px solid var(--st-divider);
 }
@@ -653,7 +653,7 @@
 
 /* --- Testimonial -------------------------------------------- */
 .st-testi {
-  padding: 80px 56px;
+  padding: 80px 96px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 56px;
@@ -699,7 +699,7 @@
 
 /* --- Form section ------------------------------------------- */
 .st-form-section {
-  padding: 80px 56px 100px;
+  padding: 80px 96px 100px;
   background: var(--st-bg);
   border-top: 1px solid var(--st-divider);
 }
@@ -882,7 +882,7 @@
 .st-footer {
   background: var(--st-ink);
   color: rgba(255,255,255,0.5);
-  padding: 20px 56px;
+  padding: 20px 96px;
   border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   justify-content: space-between;
