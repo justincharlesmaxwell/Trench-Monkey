@@ -474,8 +474,11 @@ function InputForm({ onSubmit }) {
             <div className="st-nav__brand-logo">
               <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
             </div>
-            <div className="st-nav__brand-word">
-              <span className="b">Trench</span>{" "}<span className="o">Monkey</span>
+            <div className="st-nav__brand-text">
+              <div className="st-nav__brand-word">
+                <span className="b">Trench</span>{" "}<span className="o">Monkey</span>
+              </div>
+              <div className="st-nav__brand-tag">Brief in. Plan out.</div>
             </div>
           </div>
           <nav className="st-nav__center" />
@@ -613,8 +616,11 @@ function InputForm({ onSubmit }) {
           <div className="st-nav__brand-logo">
             <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
           </div>
-          <div className="st-nav__brand-word">
-            <span className="b">Trench</span>{" "}<span className="o">Monkey</span>
+          <div className="st-nav__brand-text">
+            <div className="st-nav__brand-word">
+              <span className="b">Trench</span>{" "}<span className="o">Monkey</span>
+            </div>
+            <div className="st-nav__brand-tag">Brief in. Plan out.</div>
           </div>
         </div>
         <nav className="st-nav__center">

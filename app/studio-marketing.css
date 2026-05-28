@@ -59,12 +59,25 @@
   place-items: center;
 }
 .st-nav__brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+.st-nav__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 .st-nav__brand-word {
   font-family: var(--st-display);
   font-weight: 600;
   font-size: 28px;
   letter-spacing: -0.01em;
   color: var(--st-ink);
+  line-height: 1;
+}
+.st-nav__brand-tag {
+  font-family: var(--st-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  color: var(--st-muted);
   line-height: 1;
 }
 .st-nav__brand-word .b { color: var(--st-blue); }
