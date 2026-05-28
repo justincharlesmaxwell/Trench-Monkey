@@ -444,6 +444,10 @@ function InputForm({ onSubmit }) {
 
         <section className="st-form-section">
           <div className="st-form-section__inner">
+            <div className="st-form-section__monkey">
+              <img src="app/assets/monkey-brief.png" alt="Trench Monkey" />
+            </div>
+            <div className="st-form-section__form">
             <div className="st-form-section__head">
               <div className="st-features__eb">Start a brief</div>
               <h2 className="st-form-section__title">
@@ -545,6 +549,7 @@ function InputForm({ onSubmit }) {
                 </div>
               </form>
             </div>
+            </div>{/* st-form-section__form */}
           </div>
         </section>
 
