@@ -41,7 +41,7 @@ function LoadingScreen({ onComplete, brand, chars = 0 }) {
   return (
     <main className="loading-screen" data-screen-label="02 Loading">
       <div className="loading-screen__mascot">
-        <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
+        <img src={import.meta.env.BASE_URL + "app/assets/monkey-logo.png"} alt="Trench Monkey" />
       </div>
       <h2 className="loading-screen__title">
         <span className="blue">Researching</span> <span className="orange">{brand}</span>

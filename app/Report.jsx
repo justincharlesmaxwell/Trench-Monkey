@@ -114,7 +114,7 @@ function TopBar({ brand, onNew, genSeconds }) {
   return (
     <header className="app-header">
       <a className="tm-lockup" href="#">
-        <span className="tm-lockup__logo"><img src="app/assets/monkey-logo.png" alt="Trench Monkey" /></span>
+        <span className="tm-lockup__logo"><img src={import.meta.env.BASE_URL + "app/assets/monkey-logo.png"} alt="Trench Monkey" /></span>
         <span className="tm-lockup__word">
           <span className="blue">Trench</span> <span className="orange">Monkey</span>
         </span>
