@@ -1,8 +1,14 @@
-// data.jsx — Magnet Kitchens report content. All static seed data lives here
-// so the report components stay focused on presentation. Editing here updates
-// the whole report.
+// data.jsx — Magnet Kitchens demo data + app config defaults.
+// DEMO_MAGNET: full example report used when startScreen === 'report'.
+// TWEAKS: default tweaks-panel config (was previously inlined in index.html).
 
-window.MAGNET = {
+export const TWEAKS = {
+  navLayout: 'sidebar',
+  showBrowserChrome: false,
+  startScreen: 'input',
+};
+
+export const DEMO_MAGNET = {
   brand: {
     name: "Magnet Kitchens",
     url: "magnet.co.uk",
@@ -302,3 +308,5 @@ window.MAGNET = {
     ]
   }
 };
+
+export default DEMO_MAGNET;

@@ -1,28 +1,7 @@
-// Dependency-free test for transformToMagnet.
-// Run: node app/transform.test.js
-//
-// transform.jsx is browser code that assigns window.transformToMagnet inside an
-// IIFE. We load it in a vm sandbox that provides a fake `window`, then exercise
-// the mapping with both a full Claude response and an empty one (fallbacks).
-
-const fs = require('fs');
-const vm = require('vm');
-const path = require('path');
-const assert = require('assert');
-
-const src = fs.readFileSync(path.join(__dirname, 'transform.jsx'), 'utf8');
-const sandbox = { window: {}, console };
-vm.createContext(sandbox);
-vm.runInContext(src, sandbox, { filename: 'transform.jsx' });
-const transform = sandbox.window.transformToMagnet;
-assert.strictEqual(typeof transform, 'function', 'transformToMagnet should be exported on window');
-
-let passed = 0;
-function check(label, fn) {
-  fn();
-  passed++;
-  console.log('  ok -', label);
-}
+// Tests for transformToMagnet. Run: npm test
+import { test } from 'vitest';
+import assert from 'node:assert';
+import { transformToMagnet } from './transform.jsx';
 
 // ── Full response: AI fields should flow straight through ──────────────────────
 const d = {
@@ -76,15 +55,14 @@ const d = {
 };
 const inputs = { url: 'https://www.acme.co.uk/', industry: 'SaaS', competitors: 'Comp1, Comp2', budget: '100000', currencySymbol: '£' };
 
-console.log('Full response:');
-const m = transform(d, inputs);
+const m = transformToMagnet(d, inputs);
 
-check('brand name derived from URL', () => assert.strictEqual(m.brand.name, 'Acme'));
-check('summary split into 3', () => assert.strictEqual(m.diagnosis.summary.length, 3));
-check('audit has 5 cards', () => assert.strictEqual(m.diagnosis.audit.length, 5));
-check('market stat uses AI headline', () => assert.strictEqual(m.diagnosis.market.stats[0].value, '£4.8B'));
-check('market growth no longer a dash', () => assert.strictEqual(m.diagnosis.market.stats[1].value, '+6.2%'));
-check('competitor dot maps tier/strength/traffic', () => {
+test('brand name derived from URL', () => assert.strictEqual(m.brand.name, 'Acme'));
+test('summary split into 3', () => assert.strictEqual(m.diagnosis.summary.length, 3));
+test('audit has 5 cards', () => assert.strictEqual(m.diagnosis.audit.length, 5));
+test('market stat uses AI headline', () => assert.strictEqual(m.diagnosis.market.stats[0].value, '£4.8B'));
+test('market growth no longer a dash', () => assert.strictEqual(m.diagnosis.market.stats[1].value, '+6.2%'));
+test('competitor dot maps tier/strength/traffic', () => {
   const c0 = m.diagnosis.competitors[0];
   assert.strictEqual(c0.x, 0.8);     // digital_strength 8 / 10
   assert.strictEqual(c0.y, 0.84);    // Premium+
@@ -92,57 +70,54 @@ check('competitor dot maps tier/strength/traffic', () => {
   assert.strictEqual(c0.da, 60);
   assert.strictEqual(c0.ig, '85k IG');
 });
-check('last competitor dot is self', () => assert.strictEqual(m.diagnosis.competitors[m.diagnosis.competitors.length - 1].isSelf, true));
-check('north star numbers + delta', () => {
+test('last competitor dot is self', () => assert.strictEqual(m.diagnosis.competitors[m.diagnosis.competitors.length - 1].isSelf, true));
+test('north star numbers + delta', () => {
   assert.strictEqual(m.strategy.northStar.target, 300);
   assert.strictEqual(m.strategy.northStar.current, 100);
   assert.ok(/\+200%/.test(m.strategy.northStar.deltaCap), 'deltaCap should compute +200%');
   assert.strictEqual(m.strategy.northStar.rationale, 'Because it matters.');
 });
-check('persona mapped with stats', () => {
+test('persona mapped with stats', () => {
   assert.strictEqual(m.strategy.personas[0].name, 'Alpha');
   assert.strictEqual(m.strategy.personas[0].stats.length, 3);
   assert.strictEqual(m.strategy.personas[0].isPrimary, true);
 });
-check('funnel strategy passthrough', () => assert.strictEqual(m.strategy.funnelStrategy.tofu, 'T'));
-check('roadmap mapped', () => assert.strictEqual(m.strategy.timeline[0].d30.label, 'a'));
-check('allocations from budget split with colour + stage', () => {
+test('funnel strategy passthrough', () => assert.strictEqual(m.strategy.funnelStrategy.tofu, 'T'));
+test('roadmap mapped', () => assert.strictEqual(m.strategy.timeline[0].d30.label, 'a'));
+test('allocations from budget split with colour + stage', () => {
   assert.strictEqual(m.tactics.allocations.length, 2);
   assert.deepStrictEqual(m.tactics.allocations[0].stage, ['BOFU']);
   assert.strictEqual(m.tactics.allocations[0].pct, 60);
   assert.ok(/^#/.test(m.tactics.allocations[0].color), 'colour should be a hex');
 });
-check('content cluster volume passthrough', () => assert.strictEqual(m.tactics.contentClusters[0].volume, '12k/mo'));
-check('email flow passthrough', () => assert.strictEqual(m.tactics.email[0].name, 'Welcome'));
-check('seo passthrough', () => assert.strictEqual(m.tactics.seo.onPage[0], 'o1'));
-check('kpi down-good flagged good', () => {
+test('content cluster volume passthrough', () => assert.strictEqual(m.tactics.contentClusters[0].volume, '12k/mo'));
+test('email flow passthrough', () => assert.strictEqual(m.tactics.email[0].name, 'Welcome'));
+test('seo passthrough', () => assert.strictEqual(m.tactics.seo.onPage[0], 'o1'));
+test('kpi down-good flagged good', () => {
   assert.strictEqual(m.measurement.kpis[0].value, '80');
   assert.strictEqual(m.measurement.kpis[0].good, true);
   assert.strictEqual(m.measurement.kpis[1].good, undefined);
   assert.strictEqual(m.measurement.kpis[1].up, true);
 });
-check('funnel counts + tone passthrough', () => {
+test('funnel counts + tone passthrough', () => {
   assert.strictEqual(m.measurement.funnel[0].count, '180k');
   assert.strictEqual(m.measurement.funnel[0].color, 'blue');
   assert.strictEqual(m.measurement.funnel[1].color, 'orange');
 });
-check('attribution passthrough', () => assert.strictEqual(m.measurement.attribution, 'MTA'));
+test('attribution passthrough', () => assert.strictEqual(m.measurement.attribution, 'MTA'));
 
 // ── Empty response: fallbacks must still produce a complete, render-safe report ─
-console.log('Empty response (fallbacks):');
-const e = transform({}, { url: 'shop.example.com', industry: 'Retail', competitors: '', budget: '80000', currencySymbol: '$' });
+const e = transformToMagnet({}, { url: 'shop.example.com', industry: 'Retail', competitors: '', budget: '80000', currencySymbol: '$' });
 
-check('no throw + summary present', () => assert.strictEqual(e.diagnosis.summary.length, 3));
-check('audit still 5 cards', () => assert.strictEqual(e.diagnosis.audit.length, 5));
-check('default allocations provided', () => assert.ok(e.tactics.allocations.length >= 5));
-check('kpis fallback provided', () => assert.ok(e.measurement.kpis.length >= 6));
-check('funnel fallback counts are numeric, never a dash', () => {
+test('no throw + summary present', () => assert.strictEqual(e.diagnosis.summary.length, 3));
+test('audit still 5 cards', () => assert.strictEqual(e.diagnosis.audit.length, 5));
+test('default allocations provided', () => assert.ok(e.tactics.allocations.length >= 5));
+test('kpis fallback provided', () => assert.ok(e.measurement.kpis.length >= 6));
+test('funnel fallback counts are numeric, never a dash', () => {
   e.measurement.funnel.forEach(r => {
     assert.notStrictEqual(r.count, '—', 'fallback funnel should never render a dash');
     const n = parseFloat(String(r.count).replace(/[^0-9.]/g, ''));
     assert.ok(!isNaN(n), 'fallback funnel count should be parseable: ' + r.count);
   });
 });
-check('north star has a metric', () => assert.ok(e.strategy.northStar.metric.length > 0));
-
-console.log('\nAll ' + passed + ' checks passed.');
+test('north star has a metric', () => assert.ok(e.strategy.northStar.metric.length > 0));

@@ -1,11 +1,9 @@
-// transform.jsx — Maps Claude API JSON output → window.MAGNET shape
+// transform.jsx — Maps Claude API JSON output → report data shape.
 // Every section prefers AI-generated fields and falls back to a heuristic
 // derived from the core data when a field is missing, so a partial response
 // still renders a complete report.
 
-(function () {
-
-  // ── small helpers ──────────────────────────────────────────────────────────
+// ── small helpers ──────────────────────────────────────────────────────────
   const arr = (x) => (Array.isArray(x) ? x : []);
   const str = (x) => (x == null ? '' : String(x));
   const firstSentence = (s) => str(s).split('.')[0].trim() + (str(s) ? '.' : '');
@@ -620,7 +618,7 @@
   }
 
   // ── ROOT ─────────────────────────────────────────────────────────────────────
-  window.transformToMagnet = function (d, inputs) {
+  function transformToMagnet(d, inputs) {
     d = d || {};
     const competitors = Array.isArray(inputs.competitors)
       ? inputs.competitors
@@ -658,6 +656,6 @@
       tactics: buildTactics(d, brand, budget, sym),
       measurement: buildMeasurement(d, brand, budget, sym)
     };
-  };
+  }
 
-})();
+export { transformToMagnet };

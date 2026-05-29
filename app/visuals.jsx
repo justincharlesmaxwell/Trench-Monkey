@@ -1,33 +1,58 @@
 // visuals.jsx — Reusable visualization components for the report.
-// All draw on tokens from colors_and_type.css.
+import React, { useState as useV, useEffect as useVE, useRef as useVR, useMemo as useVM } from 'react';
+import {
+  AlertTriangle, ArrowLeft, ArrowRight, Award, BarChart3, Binoculars,
+  Radio, Building2, Calendar, CalendarX, Check, CheckCircle2,
+  ChevronRight, Compass, Cpu, Download, FileEdit, FileText,
+  FlaskConical, FolderOpen, Gauge, GitFork, Globe, GripVertical,
+  HeartHandshake, History, Images, Info, Instagram, Key,
+  Layout, Link2, Loader2, Lock, LockOpen, MailPlus, Mic,
+  PieChart, PlayCircle, Plus, Presentation, Puzzle, Ruler,
+  Scale, Search, Settings, Share2, Shield, ShieldAlert, Shovel,
+  Sparkles, Sun, Target, Trophy, Type, Users, Video, Youtube, Zap,
+} from 'lucide-react';
 
-const { useState: useV, useEffect: useVE, useRef: useVR, useMemo: useVM, useCallback: useVC } = React;
+const ICON_MAP = {
+  'alert-triangle': AlertTriangle, 'arrow-left': ArrowLeft, 'arrow-right': ArrowRight,
+  'award': Award, 'bar-chart-3': BarChart3, 'binoculars': Binoculars,
+  'broadcast': Radio, 'building-2': Building2, 'calendar': Calendar,
+  'calendar-x': CalendarX, 'check': Check, 'check-circle-2': CheckCircle2,
+  'chevron-right': ChevronRight, 'compass': Compass, 'cpu': Cpu,
+  'download': Download, 'file-edit': FileEdit, 'file-text': FileText,
+  'flask-conical': FlaskConical, 'folder-open': FolderOpen, 'gauge': Gauge,
+  'git-fork': GitFork, 'globe': Globe, 'grip-vertical': GripVertical,
+  'heart-handshake': HeartHandshake, 'history': History, 'images': Images,
+  'info': Info, 'instagram': Instagram, 'key': Key, 'layout': Layout,
+  'link-2': Link2, 'loader-2': Loader2, 'lock': Lock, 'lock-open': LockOpen,
+  'mail-plus': MailPlus, 'mic': Mic, 'pie-chart': PieChart,
+  'play-circle': PlayCircle, 'plus': Plus, 'presentation': Presentation,
+  'puzzle': Puzzle, 'ruler': Ruler, 'scale': Scale, 'search': Search,
+  'settings': Settings, 'share-2': Share2, 'shield': Shield,
+  'shield-alert': ShieldAlert, 'shovel': Shovel, 'sparkles': Sparkles,
+  'sun': Sun, 'target': Target, 'trophy': Trophy, 'type': Type,
+  'users': Users, 'video': Video, 'youtube': Youtube, 'zap': Zap,
+};
 
-// Re-initialise Lucide icons whenever the tree updates.
-function useLucide() {
-  useVE(() => { if (window.lucide) window.lucide.createIcons(); });
-}
+// Icons are now React components from lucide-react — no DOM mutation needed.
+function useLucide() {}
 
-// =====================================================================
-// Icon — small wrapper for Lucide
-// =====================================================================
 function Icon({ name, size = 16, color }) {
-  return <i data-lucide={name} style={{ width: size, height: size, color }}></i>;
+  const LucideIcon = ICON_MAP[name];
+  return LucideIcon ? <LucideIcon size={size} color={color} /> : null;
 }
 
 // =====================================================================
-// Expandable Card — used in Diagnosis audit, Tactics email/CRO sections
+// Expandable Card
 // =====================================================================
 function ExpCard({ icon = "circle", title, meta, defaultOpen = false, children }) {
   const [open, setOpen] = useV(defaultOpen);
-  useLucide();
   return (
     <div className={"exp-card" + (open ? " exp-card--open" : "")}>
       <button className="exp-card__btn" onClick={() => setOpen(!open)}>
         <span className="exp-card__icon"><Icon name={icon} size={18} /></span>
         <span className="exp-card__title">{title}</span>
         {meta && <span className="exp-card__meta">{meta}</span>}
-        <span className="exp-card__chev"><Icon name="chevron-down" size={16} /></span>
+        <span className="exp-card__chev"><Icon name="chevron-right" size={16} /></span>
       </button>
       {open && <div className="exp-card__body">{children}</div>}
     </div>
@@ -39,7 +64,6 @@ function ExpCard({ icon = "circle", title, meta, defaultOpen = false, children }
 // =====================================================================
 function Tag({ tone = "default", children, icon }) {
   const cls = tone === "default" ? "tag" : `tag tag--${tone}`;
-  useLucide();
   return (
     <span className={cls}>
       {icon && <Icon name={icon} size={12} />}
@@ -52,7 +76,6 @@ function Tag({ tone = "default", children, icon }) {
 // Stat Tile
 // =====================================================================
 function Stat({ label, value, caption, delta, deltaTone, variant }) {
-  useLucide();
   const cls = "stat-tile" + (variant === "card" ? " stat-tile--card" : "");
   return (
     <div className={cls}>
@@ -102,10 +125,10 @@ function QuadMap({ competitors, yLabels = ["Premium", "Value"], xLabels = ["Show
 // =====================================================================
 function SWOT({ data }) {
   const blocks = [
-    { key: "strengths", short: "s", title: "Strengths", icon: "check-circle-2", items: data.strengths },
-    { key: "weaknesses", short: "w", title: "Weaknesses", icon: "alert-triangle", items: data.weaknesses },
-    { key: "opportunities", short: "o", title: "Opportunities", icon: "compass", items: data.opportunities },
-    { key: "threats", short: "t", title: "Threats", icon: "shield-alert", items: data.threats }
+    { key: "strengths",    short: "s", title: "Strengths",    icon: "check-circle-2", items: data.strengths },
+    { key: "weaknesses",   short: "w", title: "Weaknesses",   icon: "alert-triangle", items: data.weaknesses },
+    { key: "opportunities",short: "o", title: "Opportunities",icon: "compass",        items: data.opportunities },
+    { key: "threats",      short: "t", title: "Threats",      icon: "shield-alert",   items: data.threats }
   ];
   return (
     <div className="swot">
@@ -202,7 +225,7 @@ function JourneyMap({ stages, rows }) {
 }
 
 // =====================================================================
-// Budget Donut SVG (renders directly from allocations)
+// Budget Donut SVG
 // =====================================================================
 function BudgetDonut({ allocations, total, size = 260, stroke = 36 }) {
   const cx = size / 2, cy = size / 2;
@@ -240,13 +263,11 @@ function BudgetDonut({ allocations, total, size = 260, stroke = 36 }) {
 // Draggable + Lockable Budget Allocation Rows
 // =====================================================================
 function BudgetAllocator({ initial, total = 150000, currency = "£", filter = null }) {
-  // initial: [{ id, name, sub, pct, color, stage }]
   const [allocs, setAllocs] = useV(initial);
   const [locked, setLocked] = useV({});
   const dragSrc = useVR(null);
   const [overId, setOverId] = useV(null);
 
-  // Apply filter visibility
   const visible = useVM(() => filter
     ? allocs.filter(a => !filter || a.stage.includes(filter))
     : allocs, [allocs, filter]);
@@ -257,14 +278,9 @@ function BudgetAllocator({ initial, total = 150000, currency = "£", filter = nu
     return currency + Math.round(v);
   };
 
-  const toggleLock = (id) => {
-    setLocked(L => ({ ...L, [id]: !L[id] }));
-  };
+  const toggleLock = (id) => setLocked(L => ({ ...L, [id]: !L[id] }));
 
-  const onDragStart = (e, id) => {
-    dragSrc.current = id;
-    e.dataTransfer.effectAllowed = "move";
-  };
+  const onDragStart = (e, id) => { dragSrc.current = id; e.dataTransfer.effectAllowed = "move"; };
   const onDragOver = (e, id) => { e.preventDefault(); setOverId(id); };
   const onDrop = (e, id) => {
     e.preventDefault();
@@ -325,7 +341,6 @@ function BudgetAllocator({ initial, total = 150000, currency = "£", filter = nu
 // Funnel diagram (Measurement)
 // =====================================================================
 function Funnel({ rows }) {
-  // Max count for bar width
   const counts = rows.map(r => {
     const s = String(r.count || "");
     const n = parseFloat(s.replace(/[^0-9.]/g, "")) * (s.includes("M") ? 1e6 : s.includes("k") ? 1e3 : 1);
@@ -336,7 +351,7 @@ function Funnel({ rows }) {
     <div className="funnel">
       {rows.map((r, i) => {
         const c = counts[i];
-        const w = Math.max(28, Math.round((c / max) * 100)); // %
+        const w = Math.max(28, Math.round((c / max) * 100));
         return (
           <div className="funnel__row" key={i}>
             <div className={"funnel__bar" + (r.color === "orange" ? " funnel__bar--orange" : "")}
@@ -386,8 +401,6 @@ function Roadmap({ streams }) {
 // Channel matrix (effort vs impact)
 // =====================================================================
 function ChannelMatrix({ channels }) {
-  // Effort: 1=low, 10=high. Impact: 1=low, 10=high.
-  // Plot impact on Y (high at top), effort on X (low at left).
   return (
     <div className="quad-map" style={{ aspectRatio: "1.4 / 1" }}>
       <div className="quad-map__y quad-map__y--top">High impact</div>
@@ -399,7 +412,6 @@ function ChannelMatrix({ channels }) {
         {channels.map((c, i) => {
           const x = (c.effort - 1) / 9;
           const y = (c.impact - 1) / 9;
-          // Color by stage
           const isTOFU = c.stage.includes("TOFU");
           const isBOFU = c.stage.includes("BOFU");
           const color = isBOFU ? "var(--tm-orange)" : isTOFU ? "var(--tm-blue)" : "var(--tm-navy)";
@@ -420,13 +432,10 @@ function ChannelMatrix({ channels }) {
   );
 }
 
-// =====================================================================
-// Export shared
-// =====================================================================
-Object.assign(window, {
+export {
   Icon, ExpCard, Tag, Stat,
   QuadMap, SWOT, PersonaCard, JourneyMap,
   BudgetDonut, BudgetAllocator,
   Funnel, Roadmap, ChannelMatrix,
-  useLucide
-});
+  useLucide,
+};

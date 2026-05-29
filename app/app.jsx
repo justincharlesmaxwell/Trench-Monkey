@@ -1,6 +1,19 @@
 // app.jsx — Root component. Routes input → loading → report. Calls Claude API.
+import React, { useState as useAS, useEffect as useAE, useRef as useAR } from 'react';
+import { Icon, useLucide } from './visuals';
+import {
+  useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
+  TweakSelect, TweakButton
+} from './tweaks-panel';
+import { ChromeWindow } from './browser-window';
+import { InputForm } from './InputForm';
+import { LoadingScreen } from './LoadingScreen';
+import { Report } from './Report';
+import { transformToMagnet } from './transform';
+import { MagnetContext } from './context';
+import { DEMO_MAGNET, TWEAKS } from './data';
 
-const { useState: useAS, useEffect: useAE, useRef: useAR } = React;
+const USE_PROXY = import.meta.env.VITE_USE_PROXY === 'true';
 
 const STORAGE_KEY = 'tm_api_key';
 function getApiKey()    { return localStorage.getItem(STORAGE_KEY) || ''; }
@@ -261,21 +274,34 @@ REQUIREMENTS
 - Return raw JSON only. No \`\`\`json fences.`;
 
   async function attempt() {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: TM_MODEL,
-        max_tokens: 24000,
-        stream: true,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+    let response;
+    if (USE_PROXY) {
+      response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: TM_MODEL,
+          max_tokens: 24000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+    } else {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: TM_MODEL,
+          max_tokens: 24000,
+          stream: true,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+    }
 
     if (!response.ok) {
       const text = await response.text();
@@ -343,16 +369,15 @@ REQUIREMENTS
 
 // ─── Root App ─────────────────────────────────────────────────────────────────
 function App() {
-  const [tweaks, setTweak]     = useTweaks(window.TWEAKS);
+  const [tweaks, setTweak]     = useTweaks(TWEAKS);
   const [screen, setScreen]    = useAS(tweaks.startScreen || "input");
   const [submitted, setSubmitted] = useAS(null);
   const [apiError, setApiError]   = useAS('');
-  const [showKeyModal, setShowKeyModal] = useAS(!getApiKey());
+  const [showKeyModal, setShowKeyModal] = useAS(!USE_PROXY && !getApiKey());
   const [genChars, setGenChars]   = useAS(0);
   const [genSeconds, setGenSeconds] = useAS(null);
+  const [magnet, setMagnet] = useAS(tweaks.startScreen === 'report' ? DEMO_MAGNET : null);
   const pendingPayload = useAR(null);
-
-  useAE(() => { if (window.lucide) window.lucide.createIcons(); });
 
   const startGeneration = async (payload, key) => {
     setApiError('');
@@ -366,8 +391,8 @@ function App() {
     try {
       const sym    = payload.currencySymbol || '£';
       const raw    = await callClaude(payload, key, (n) => setGenChars(n));
-      const magnet = window.transformToMagnet(raw, { ...payload, currencySymbol: sym });
-      window.MAGNET = magnet;
+      const magnetData = transformToMagnet(raw, { ...payload, currencySymbol: sym });
+      setMagnet(magnetData);
 
       // Respect the loading animation's minimum duration
       const elapsed = Date.now() - startedAt;
@@ -384,6 +409,10 @@ function App() {
   };
 
   const handleSubmit = (payload) => {
+    if (USE_PROXY) {
+      startGeneration(payload, null);
+      return;
+    }
     const key = getApiKey();
     if (!key) {
       pendingPayload.current = payload;
@@ -405,6 +434,7 @@ function App() {
 
   const reset = () => {
     setSubmitted(null);
+    setMagnet(null);
     setScreen("input");
     setApiError('');
   };
@@ -433,84 +463,88 @@ function App() {
           onComplete={() => {}}
         />
       )}
-      {screen === "report" && window.MAGNET && (
-        <Report data={window.MAGNET} layout={layout} onNewPlan={reset} genSeconds={genSeconds} />
+      {screen === "report" && magnet && (
+        <Report data={magnet} layout={layout} onNewPlan={reset} genSeconds={genSeconds} />
       )}
     </div>
   );
 
   return (
-    <React.Fragment>
-      {tweaks.showBrowserChrome ? (
-        <div className="stage">
-          <ChromeWindow
-            tabs={[
-              { title: "Trench Monkey · Plans" },
-              { title: window.MAGNET ? window.MAGNET.brand.name : "Market Intelligence" },
-              { title: "Analytics" }
-            ]}
-            activeIndex={0}
-            url={"app.trenchmonkey.ai/plans/" + brandHost}
-            width={1440}
-            height={900}
-          >
+    <MagnetContext.Provider value={magnet}>
+      <React.Fragment>
+        {tweaks.showBrowserChrome ? (
+          <div className="stage">
+            <ChromeWindow
+              tabs={[
+                { title: "Trench Monkey · Plans" },
+                { title: magnet ? magnet.brand.name : "Market Intelligence" },
+                { title: "Analytics" }
+              ]}
+              activeIndex={0}
+              url={"app.trenchmonkey.ai/plans/" + brandHost}
+              width={1440}
+              height={900}
+            >
+              {inner}
+            </ChromeWindow>
+          </div>
+        ) : (
+          <div className="stage stage--fullbleed">
             {inner}
-          </ChromeWindow>
-        </div>
-      ) : (
-        <div className="stage stage--fullbleed">
-          {inner}
-        </div>
-      )}
+          </div>
+        )}
 
-      <TweaksPanel>
-        <TweakSection label="Layout">
-          <TweakRadio
-            label="Navigation"
-            value={tweaks.navLayout}
-            onChange={v => setTweak("navLayout", v)}
-            options={[
-              { value: "sidebar", label: "Sidebar" },
-              { value: "tabs",    label: "Tabs"    },
-              { value: "scroll",  label: "Scroll"  }
-            ]}
-          />
-          <TweakToggle
-            label="Browser chrome"
-            value={tweaks.showBrowserChrome}
-            onChange={v => setTweak("showBrowserChrome", v)}
-          />
-        </TweakSection>
-        <TweakSection label="API">
-          <TweakButton label="🔑 Set API key" onClick={() => setShowKeyModal(true)} secondary />
-        </TweakSection>
-        <TweakSection label="Demo">
-          <TweakSelect
-            label="Jump to screen"
-            value={screen}
-            onChange={v => {
-              if (v === "report" && !window.MAGNET) return;
-              setScreen(v);
-              if (v !== "input" && !submitted) setSubmitted({ url: "demo.example.com" });
-            }}
-            options={[
-              { value: "input",   label: "1. Input form"    },
-              { value: "loading", label: "2. Loading screen" },
-              { value: "report",  label: "3. Full report"    }
-            ]}
-          />
-          <TweakButton label="↺ Reset" onClick={reset} secondary />
-        </TweakSection>
-      </TweaksPanel>
+        <TweaksPanel>
+          <TweakSection label="Layout">
+            <TweakRadio
+              label="Navigation"
+              value={tweaks.navLayout}
+              onChange={v => setTweak("navLayout", v)}
+              options={[
+                { value: "sidebar", label: "Sidebar" },
+                { value: "tabs",    label: "Tabs"    },
+                { value: "scroll",  label: "Scroll"  }
+              ]}
+            />
+            <TweakToggle
+              label="Browser chrome"
+              value={tweaks.showBrowserChrome}
+              onChange={v => setTweak("showBrowserChrome", v)}
+            />
+          </TweakSection>
+          {!USE_PROXY && (
+            <TweakSection label="API">
+              <TweakButton label="🔑 Set API key" onClick={() => setShowKeyModal(true)} secondary />
+            </TweakSection>
+          )}
+          <TweakSection label="Demo">
+            <TweakSelect
+              label="Jump to screen"
+              value={screen}
+              onChange={v => {
+                if (v === "report" && !magnet) setMagnet(DEMO_MAGNET);
+                setScreen(v);
+                if (v !== "input" && !submitted) setSubmitted({ url: "demo.example.com" });
+              }}
+              options={[
+                { value: "input",   label: "1. Input form"    },
+                { value: "loading", label: "2. Loading screen" },
+                { value: "report",  label: "3. Full report"    }
+              ]}
+            />
+            <TweakButton label="↺ Reset" onClick={reset} secondary />
+          </TweakSection>
+        </TweaksPanel>
 
-      {showKeyModal && (
-        <ApiKeyModal
-          onSave={handleKeySave}
-          onCancel={pendingPayload.current ? () => { pendingPayload.current = null; setShowKeyModal(false); } : null}
-        />
-      )}
-    </React.Fragment>
+        {!USE_PROXY && showKeyModal && (
+          <ApiKeyModal
+            onSave={handleKeySave}
+            onCancel={pendingPayload.current ? () => { pendingPayload.current = null; setShowKeyModal(false); } : null}
+          />
+        )}
+      </React.Fragment>
+    </MagnetContext.Provider>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+export default App;

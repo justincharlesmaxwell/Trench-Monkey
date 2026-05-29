@@ -1,11 +1,14 @@
 // phases.jsx — The four phase views (Diagnosis, Strategy, Tactics, Measurement).
-// Each phase exposes a default export to window for app.jsx to mount.
+import React, { useState as useP, useContext } from 'react';
+import { MagnetContext } from './context';
+import {
+  Icon, ExpCard, Tag, Stat,
+  QuadMap, SWOT, PersonaCard,
+  BudgetDonut, BudgetAllocator,
+  Funnel, Roadmap, ChannelMatrix,
+  useLucide,
+} from './visuals';
 
-const { useState: useP, useEffect: useEP, useMemo: useMP } = React;
-
-// -----------------------------------------------------------------
-// Shared helpers
-// -----------------------------------------------------------------
 function PhaseHead({ eyebrow, title, sub }) {
   return (
     <header className="phase-head" data-screen-label={title}>
@@ -17,7 +20,7 @@ function PhaseHead({ eyebrow, title, sub }) {
   );
 }
 
-function SectionHead({ title, sub, id }) {
+function SectionHead({ title, id }) {
   return (
     <div className="section__head" id={id}>
       <h2 className="section__title">{title}</h2>
@@ -29,15 +32,14 @@ function SectionHead({ title, sub, id }) {
 // PHASE 1 — DIAGNOSIS
 // =================================================================
 function DiagnosisPhase() {
-  const D = window.MAGNET.diagnosis;
-  const B = window.MAGNET.brand;
+  const { diagnosis: D, brand: B } = useContext(MagnetContext);
   useLucide();
 
   return (
     <React.Fragment>
       <PhaseHead
         eyebrow="Phase 1 of 4 · Diagnosis"
-        title={"Where " + ((window.MAGNET && window.MAGNET.brand && window.MAGNET.brand.name) || "the brand") + " stands today"}
+        title={"Where " + (B?.name || "the brand") + " stands today"}
         sub="A 360° look at the brand, the market, the competition, and the audience — the baseline every strategy decision in Phase 2 builds on."
       />
 
@@ -103,7 +105,7 @@ function DiagnosisPhase() {
       {/* ===== Competitor landscape ===== */}
       <section className="section" id="d-competitors">
         <SectionHead title="Competitive landscape" />
-        <p className="section__sub">{"Hover any dot to see positioning notes. Orange dot is " + ((window.MAGNET && window.MAGNET.brand && window.MAGNET.brand.name) || "you") + "."}</p>
+        <p className="section__sub">{"Hover any dot to see positioning notes. Orange dot is " + (B?.name || "you") + "."}</p>
         <div className="grid-2" style={{ gap: 24, gridTemplateColumns: "1.1fr 0.9fr" }}>
           <QuadMap competitors={D.competitors} />
           <div className="col-gap-12">
@@ -138,7 +140,7 @@ function DiagnosisPhase() {
 // PHASE 2 — STRATEGY
 // =================================================================
 function StrategyPhase() {
-  const S = window.MAGNET.strategy;
+  const { strategy: S } = useContext(MagnetContext);
   const personas = S.personas || [];
   useLucide();
 
@@ -267,20 +269,19 @@ function StrategyPhase() {
 // PHASE 3 — TACTICS
 // =================================================================
 function TacticsPhase() {
-  const T = window.MAGNET.tactics;
-  const total = window.MAGNET.brand.budget;
+  const { tactics: T, brand } = useContext(MagnetContext);
+  const total = brand.budget;
   useLucide();
 
-  // Budget allocations (drag-reorderable) — built from the AI budget split
   const initialAllocs = T.allocations || [];
 
   const [filter, setFilter] = useP(null);
   const filters = [
-    { key: null, label: "All channels" },
-    { key: "BOFU", label: "Bottom-funnel" },
-    { key: "MOFU", label: "Middle-funnel" },
-    { key: "TOFU", label: "Top-funnel" },
-    { key: "Retention", label: "Retention" }
+    { key: null,        label: "All channels"  },
+    { key: "BOFU",      label: "Bottom-funnel" },
+    { key: "MOFU",      label: "Middle-funnel" },
+    { key: "TOFU",      label: "Top-funnel"    },
+    { key: "Retention", label: "Retention"     }
   ];
 
   return (
@@ -408,9 +409,9 @@ function TacticsPhase() {
         <SectionHead title="SEO & technical" />
         <div className="grid-3" style={{ gap: 16 }}>
           {[
-            { title: "On-page", icon: "type", items: T.seo.onPage },
-            { title: "Technical", icon: "cpu", items: T.seo.technical },
-            { title: "Off-page", icon: "link-2", items: T.seo.offPage }
+            { title: "On-page",  icon: "type",   items: T.seo.onPage   },
+            { title: "Technical",icon: "cpu",    items: T.seo.technical },
+            { title: "Off-page", icon: "link-2", items: T.seo.offPage  }
           ].map((g, i) => (
             <div key={i} className="card">
               <div className="card__eyebrow" style={{ color: "var(--tm-navy)" }}><Icon name={g.icon} size={14} /> {g.title.toUpperCase()}</div>
@@ -486,7 +487,7 @@ function TacticsPhase() {
 // PHASE 4 — MEASUREMENT
 // =================================================================
 function MeasurementPhase() {
-  const M = window.MAGNET.measurement;
+  const { measurement: M } = useContext(MagnetContext);
   useLucide();
 
   return (
@@ -595,9 +596,4 @@ function MeasurementPhase() {
   );
 }
 
-// -----------------------------------------------------------------
-// Export
-// -----------------------------------------------------------------
-Object.assign(window, {
-  DiagnosisPhase, StrategyPhase, TacticsPhase, MeasurementPhase
-});
+export { DiagnosisPhase, StrategyPhase, TacticsPhase, MeasurementPhase };
