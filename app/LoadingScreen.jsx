@@ -1,22 +1,19 @@
 // LoadingScreen.jsx — Cheeky multi-step progress, mascot bobbing in the middle.
-const { useState: useLS, useEffect: useLE } = React;
+import React, { useState as useLS, useEffect as useLE } from 'react';
+import { Icon } from './visuals';
 
 const LOADING_STEPS = [
-  { label: "Digging the trench…",            ms: 900, icon: "shovel" },
-  { label: "Sniffing out the market…",       ms: 800, icon: "search" },
-  { label: "Stealing competitor secrets…",   ms: 900, icon: "binoculars" },
-  { label: "Drawing audience portraits…",    ms: 800, icon: "users" },
-  { label: "Splitting the budget pie…",      ms: 700, icon: "pie-chart" },
-  { label: "Polishing the pitch deck…",      ms: 600, icon: "sparkles" }
+  { label: "Digging the trench…",            ms: 900,  icon: "shovel"    },
+  { label: "Sniffing out the market…",       ms: 800,  icon: "search"    },
+  { label: "Stealing competitor secrets…",   ms: 900,  icon: "binoculars"},
+  { label: "Drawing audience portraits…",    ms: 800,  icon: "users"     },
+  { label: "Splitting the budget pie…",      ms: 700,  icon: "pie-chart" },
+  { label: "Polishing the pitch deck…",      ms: 600,  icon: "sparkles"  }
 ];
 
 function LoadingScreen({ onComplete, brand, chars = 0 }) {
   const [current, setCurrent] = useLS(0);
   const [elapsedTime, setElapsedTime] = useLS(0);
-
-  useLE(() => {
-    if (window.lucide) window.lucide.createIcons();
-  });
 
   useLE(() => {
     let cancelled = false;
@@ -32,10 +29,9 @@ function LoadingScreen({ onComplete, brand, chars = 0 }) {
         if (cancelled) return;
         setCurrent(i);
         await new Promise(r => { running = setTimeout(r, LOADING_STEPS[i].ms); });
-        if (window.lucide) window.lucide.createIcons();
       }
       if (cancelled) return;
-      setCurrent(LOADING_STEPS.length); // all done — timer keeps running until API responds
+      setCurrent(LOADING_STEPS.length);
       if (!cancelled) onComplete && onComplete();
     }
     run();
@@ -63,7 +59,7 @@ function LoadingScreen({ onComplete, brand, chars = 0 }) {
           return (
             <div key={i} className={"loading-step" + (state === "active" ? " loading-step--active" : state === "done" ? " loading-step--done" : "")}>
               <span className="loading-step__ic">
-                <i data-lucide={state === "done" ? "check" : state === "active" ? "loader-2" : step.icon}></i>
+                <Icon name={state === "done" ? "check" : state === "active" ? "loader-2" : step.icon} size={16} />
               </span>
               <span className="loading-step__label">{step.label}</span>
               {state === "done" && <span className="loading-step__time">✓ done</span>}
@@ -76,4 +72,4 @@ function LoadingScreen({ onComplete, brand, chars = 0 }) {
   );
 }
 
-window.LoadingScreen = LoadingScreen;
+export { LoadingScreen };

@@ -1,5 +1,6 @@
 // InputForm.jsx — Studio marketing homepage + functional prospect brief form.
-const { useState: useIS, useEffect: useIE } = React;
+import React, { useState as useIS, useEffect as useIE } from 'react';
+import { Icon } from './visuals';
 
 const ST_PALETTE = { blue: "#17a8f1", orange: "#ff9614", navy: "#094cb2", green: "#1e9e5b" };
 
@@ -260,16 +261,16 @@ function TacticsPanels() {
 
 function MeasurementPanels() {
   const kpis = [
-    { name: "Brand search volume",  target: "+20% YoY",   stat: "+24%", mod: "up" },
-    { name: "Lead-to-quote rate",   target: "Target 38%", stat: "41%",  mod: "up" },
-    { name: "Quote-to-order rate",  target: "Target 24%", stat: "22%",  mod: "watch" },
+    { name: "Brand search volume",  target: "+20% YoY",    stat: "+24%", mod: "up"    },
+    { name: "Lead-to-quote rate",   target: "Target 38%",  stat: "41%",  mod: "up"    },
+    { name: "Quote-to-order rate",  target: "Target 24%",  stat: "22%",  mod: "watch" },
     { name: "Blended ROAS",         target: "Target 4.2×", stat: "3.9×", mod: "watch" },
-    { name: "Showroom NPS",         target: "Target 62",  stat: "59",   mod: "flat" },
+    { name: "Showroom NPS",         target: "Target 62",   stat: "59",   mod: "flat"  },
   ];
   const risks = [
-    { name: "Quote-to-order drop-off post-design visit",         sev: "high", label: "High" },
-    { name: "Wickes Q3 pricing aggression on entry-tier ranges", sev: "med",  label: "Watch" },
-    { name: "Seasonal demand dip · August showroom traffic",     sev: "med",  label: "Watch" },
+    { name: "Quote-to-order drop-off post-design visit",         sev: "high", label: "High"    },
+    { name: "Wickes Q3 pricing aggression on entry-tier ranges", sev: "med",  label: "Watch"   },
+    { name: "Seasonal demand dip · August showroom traffic",     sev: "med",  label: "Watch"   },
     { name: "Trade-pro partner programme launch readiness",      sev: "low",  label: "Managed" },
   ];
   return (
@@ -436,12 +437,10 @@ function InputForm({ onSubmit }) {
   const [formError,   setFormError]   = useIS("");
   const [videoOpen,   setVideoOpen]   = useIS(false);
 
-  useIE(() => { if (window.lucide) window.lucide.createIcons(); });
-
-  const goToBrief = () => setMode("brief");
+  const goToBrief   = () => setMode("brief");
   const goToLanding = () => setMode("landing");
-  const openVideo = () => setVideoOpen(true);
-  const closeVideo = () => setVideoOpen(false);
+  const openVideo   = () => setVideoOpen(true);
+  const closeVideo  = () => setVideoOpen(false);
 
   const removeChip = (i) => setCompetitors(c => c.filter((_, idx) => idx !== i));
   const addChip = () => {
@@ -485,7 +484,7 @@ function InputForm({ onSubmit }) {
           <nav className="st-nav__center" />
           <div className="st-nav__right">
             <button type="button" className="st-btn st-btn--ghost" onClick={goToLanding}>
-              <i data-lucide="arrow-left" style={{ width: 14, height: 14 }}></i>
+              <Icon name="arrow-left" size={14} />
               Back to home
             </button>
           </div>
@@ -594,7 +593,7 @@ function InputForm({ onSubmit }) {
                 <div className="st-form-card__foot">
                   <span className="st-form-card__note">
                     <span className="lock">
-                      <i data-lucide="lock" style={{ width: 11, height: 11 }}></i>
+                      <Icon name="lock" size={11} />
                     </span>
                     Inputs processed locally — never sent to our servers.
                   </span>
@@ -622,7 +621,6 @@ function InputForm({ onSubmit }) {
   return (
     <div key="landing" className="dir-studio" style={{ flex: 1, overflowY: "auto" }}>
 
-      {/* ── NAV ───────────────────────────────────────────────── */}
       <header className="st-nav">
         <div className="st-nav__brand">
           <div className="st-nav__brand-logo">
@@ -639,12 +637,11 @@ function InputForm({ onSubmit }) {
         <div className="st-nav__right">
           <button type="button" className="st-btn st-btn--primary" onClick={goToBrief}>
             Start a brief
-            <i data-lucide="arrow-right" style={{ width: 14, height: 14 }}></i>
+            <Icon name="arrow-right" size={14} />
           </button>
         </div>
       </header>
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="st-hero">
         <div>
           <h1 className="st-hero__h">
@@ -657,10 +654,10 @@ function InputForm({ onSubmit }) {
           <div className="st-hero__actions">
             <button type="button" className="st-btn st-btn--orange st-btn--lg" onClick={goToBrief}>
               Start a brief — free
-              <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
+              <Icon name="arrow-right" size={16} />
             </button>
             <button type="button" className="st-btn st-btn--blue st-btn--lg" onClick={openVideo}>
-              <i data-lucide="play-circle" style={{ width: 16, height: 16 }}></i>
+              <Icon name="play-circle" size={16} />
               Watch a sample
             </button>
           </div>
@@ -674,7 +671,6 @@ function InputForm({ onSubmit }) {
           </div>
         </div>
 
-        {/* Product preview */}
         <div className="st-preview">
           <div className="st-preview__chrome">
             <span className="dot" /><span className="dot" /><span className="dot" />
@@ -772,7 +768,6 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── STATS STRIP ───────────────────────────────────────── */}
       <section className="st-stats">
         <div className="st-stat">
           <div className="v"><span className="b">27.3s</span></div>
@@ -792,10 +787,8 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── INTERACTIVE PLAN PREVIEW ─────────────────────────── */}
       <StPlanSection />
 
-      {/* ── FEATURES ──────────────────────────────────────────── */}
       <section className="st-features">
         <div className="st-features__head">
           <div>
@@ -811,7 +804,7 @@ function InputForm({ onSubmit }) {
         <div className="st-features__grid">
           <article className="st-feat">
             <div className="st-feat__icon">
-              <i data-lucide="bar-chart-3" style={{ width: 22, height: 22 }}></i>
+              <Icon name="bar-chart-3" size={22} />
             </div>
             <h3 className="st-feat__title">Grounded in live market data.</h3>
             <p className="st-feat__body">
@@ -824,7 +817,7 @@ function InputForm({ onSubmit }) {
           </article>
           <article className="st-feat">
             <div className="st-feat__icon">
-              <i data-lucide="zap" style={{ width: 22, height: 22 }}></i>
+              <Icon name="zap" size={22} />
             </div>
             <h3 className="st-feat__title">A presentable plan in under thirty seconds.</h3>
             <p className="st-feat__body">
@@ -837,7 +830,7 @@ function InputForm({ onSubmit }) {
           </article>
           <article className="st-feat">
             <div className="st-feat__icon">
-              <i data-lucide="shield" style={{ width: 22, height: 22 }}></i>
+              <Icon name="shield" size={22} />
             </div>
             <h3 className="st-feat__title">Your inputs stay on your machine.</h3>
             <p className="st-feat__body">
@@ -851,7 +844,6 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── TESTIMONIAL ───────────────────────────────────────── */}
       <section className="st-testi">
         <div>
           <p className="st-testi__quote">
@@ -885,7 +877,6 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────── */}
       <section className="st-cta">
         <div className="st-cta__inner">
           <div className="st-cta__eb">— Free to start —</div>
@@ -900,7 +891,7 @@ function InputForm({ onSubmit }) {
           <div className="st-cta__actions">
             <button type="button" className="st-btn st-btn--orange st-btn--lg" onClick={goToBrief}>
               Start your first brief
-              <i data-lucide="arrow-right" style={{ width: 16, height: 16 }}></i>
+              <Icon name="arrow-right" size={16} />
             </button>
             <button type="button" className="st-btn st-btn--ghost st-btn--lg" onClick={goToBrief}>
               Book a 15-min walkthrough
@@ -919,7 +910,6 @@ function InputForm({ onSubmit }) {
         </div>
       </section>
 
-      {/* ── FOOTER ────────────────────────────────────────────── */}
       <footer className="st-footer">
         <span>© 2026 Trench Monkey Ltd · London</span>
         <span>
@@ -933,4 +923,4 @@ function InputForm({ onSubmit }) {
   );
 }
 
-window.InputForm = InputForm;
+export { InputForm };

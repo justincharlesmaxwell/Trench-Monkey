@@ -1,6 +1,5 @@
-
-// Chrome.jsx — Simplified Chrome browser window (dark theme, macOS)
-// No dependencies, no image assets. All inline styles + inline SVG.
+// browser-window.jsx — Simplified Chrome browser window (dark theme, macOS)
+import React from 'react';
 
 const CHROME_C = {
   barBg: '#202124',
@@ -20,7 +19,6 @@ function ChromeTrafficLights() {
   );
 }
 
-// Single tab (active has curved scoops)
 function ChromeTab({ title = 'New Tab', active = false }) {
   const curve = (flip) => (
     <svg width="8" height="10" viewBox="0 0 8 10"
@@ -61,9 +59,7 @@ function ChromeTabBar({ tabs = [{ title: 'New Tab' }], activeIndex = 0 }) {
 
 function ChromeToolbar({ url = 'example.com' }) {
   const iconDot = (
-    <div style={{
-      width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
+    <div style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: 16, height: 16, borderRadius: '50%', background: CHROME_C.dim, opacity: 0.4 }} />
     </div>
   );
@@ -73,27 +69,20 @@ function ChromeToolbar({ url = 'example.com' }) {
       display: 'flex', alignItems: 'center', gap: 4, padding: '0 8px',
     }}>
       {iconDot}
-      {/* url bar */}
       <div style={{
         flex: 1, height: 30, borderRadius: 15, background: CHROME_C.urlBg,
         display: 'flex', alignItems: 'center', gap: 8, padding: '0 14px',
         margin: '0 6px',
       }}>
         <div style={{ width: 12, height: 12, borderRadius: '50%', background: CHROME_C.dim, opacity: 0.4 }} />
-        <span style={{
-          flex: 1, color: CHROME_C.text, fontSize: 13,
-          fontFamily: 'system-ui, sans-serif',
-        }}>{url}</span>
+        <span style={{ flex: 1, color: CHROME_C.text, fontSize: 13, fontFamily: 'system-ui, sans-serif' }}>{url}</span>
       </div>
       {iconDot}
     </div>
   );
 }
 
-function ChromeWindow({
-  tabs = [{ title: 'New Tab' }], activeIndex = 0, url = 'example.com',
-  width = 900, height = 600, children,
-}) {
+function ChromeWindow({ tabs = [{ title: 'New Tab' }], activeIndex = 0, url = 'example.com', width = 900, height = 600, children }) {
   return (
     <div style={{
       width, height, borderRadius: 10, overflow: 'hidden',
@@ -109,6 +98,4 @@ function ChromeWindow({
   );
 }
 
-Object.assign(window, {
-  ChromeWindow, ChromeTabBar, ChromeToolbar, ChromeTab, ChromeTrafficLights,
-});
+export { ChromeWindow, ChromeTabBar, ChromeToolbar, ChromeTab, ChromeTrafficLights };

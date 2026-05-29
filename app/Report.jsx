@@ -1,5 +1,7 @@
 // Report.jsx — Sidebar-nav report shell. Sections are anchor-linked.
-const { useState: useRS, useEffect: useRE, useRef: useRR } = React;
+import React, { useState as useRS, useEffect as useRE, useRef as useRR } from 'react';
+import { Icon, useLucide } from './visuals';
+import { DiagnosisPhase, StrategyPhase, TacticsPhase, MeasurementPhase } from './phases';
 
 const PHASES = [
   {
@@ -316,5 +318,4 @@ function Report({ data, layout = "sidebar", onNewPlan, genSeconds }) {
   );
 }
 
-window.Report = Report;
-window.PHASES = PHASES;
+export { Report, PHASES };
