@@ -1184,3 +1184,44 @@ select.tm-field__input {
 /* Small inline icon helper */
 .ic-sm { width: 14px; height: 14px; display: inline-flex; vertical-align: -2px; }
 .ic-sm svg { width: 14px; height: 14px; }
+
+/* ── Toast ─────────────────────────────────────────────────────── */
+.tm-toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: var(--tm-ink); color: #fff;
+  padding: 11px 18px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
+  z-index: 3000; box-shadow: 0 12px 28px rgba(15, 21, 35, 0.28);
+  animation: tm-toast-in 180ms var(--tm-ease-out, ease-out);
+}
+@keyframes tm-toast-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ── Print / "Export PDF" ──────────────────────────────────────── */
+.report--printing .report__main { overflow: visible; }
+
+@media print {
+  .app-header, .report__sidebar, .tabs-bar,
+  .twk-panel, .loading-screen, .tm-toast { display: none !important; }
+  html, body { background: #fff !important; }
+  .stage, .stage--fullbleed, .app-shell,
+  .report, .report__main, .report__inner {
+    display: block !important;
+    height: auto !important; min-height: 0 !important;
+    overflow: visible !important;
+  }
+  .report__main { padding: 0 !important; }
+  .section { break-inside: avoid; }
+  .phase-head { break-before: page; }
+  .phase-head:first-of-type { break-before: avoid; }
+}
+
+/* ── Responsive: collapse the report layout on narrow viewports ── */
+@media (max-width: 860px) {
+  .report { flex-direction: column; }
+  .report__sidebar {
+    width: 100%; flex-direction: row; align-items: center;
+    overflow-x: auto; border-right: none;
+    border-bottom: 1px solid var(--tm-hairline);
+  }
+  .grid-2, .grid-3, .grid-4, .kpi-grid { grid-template-columns: 1fr !important; }
+}

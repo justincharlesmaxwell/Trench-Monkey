@@ -107,7 +107,7 @@ function DiagnosisPhase() {
         <div className="grid-2" style={{ gap: 24, gridTemplateColumns: "1.1fr 0.9fr" }}>
           <QuadMap competitors={D.competitors} />
           <div className="col-gap-12">
-            {D.competitors.filter(c => !c.isSelf).slice(0, 5).map((c, i) => (
+            {D.competitors.filter(c => !c.isSelf).map((c, i) => (
               <div key={i} className="card" style={{ padding: "14px 18px" }}>
                 <div className="row-between" style={{ marginBottom: 4 }}>
                   <strong style={{ color: "var(--tm-ink)", fontSize: 14 }}>{c.name}</strong>

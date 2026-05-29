@@ -432,6 +432,7 @@ function InputForm({ onSubmit }) {
   const [competitors, setCompetitors] = useIS([]);
   const [draft,       setDraft]       = useIS("");
   const [budget,      setBudget]      = useIS("");
+  const [currency,    setCurrency]    = useIS("£");
   const [formError,   setFormError]   = useIS("");
   const [videoOpen,   setVideoOpen]   = useIS(false);
 
@@ -462,7 +463,7 @@ function InputForm({ onSubmit }) {
     if (!budget.trim())   { setFormError("Please enter a marketing budget."); return; }
     const budgetNum = parseFloat(String(budget).replace(/[^0-9.]/g, ""));
     if (isNaN(budgetNum) || budgetNum <= 0) { setFormError("Please enter a valid budget number."); return; }
-    onSubmit({ url: url.trim(), industry: industry.trim(), competitors, budget: budgetNum, currencySymbol: "£" });
+    onSubmit({ url: url.trim(), industry: industry.trim(), competitors, budget: budgetNum, currencySymbol: currency });
   };
 
   /* ── BRIEF FORM SCREEN ──────────────────────────────────────── */
@@ -565,7 +566,18 @@ function InputForm({ onSubmit }) {
                       Marketing budget <span className="opt">required</span>
                     </label>
                     <div className="st-input">
-                      <span className="sym">£</span>
+                      <select
+                        className="sym"
+                        aria-label="Currency"
+                        value={currency}
+                        onChange={e => setCurrency(e.target.value)}
+                        style={{ border: "none", background: "transparent", font: "inherit", color: "inherit", cursor: "pointer", outline: "none", padding: 0 }}
+                      >
+                        <option value="£">£</option>
+                        <option value="$">$</option>
+                        <option value="€">€</option>
+                        <option value="A$">A$</option>
+                      </select>
                       <input
                         type="text"
                         placeholder="150,000"
@@ -902,7 +914,7 @@ function InputForm({ onSubmit }) {
             <li><span className="tick">✓</span> Competitor benchmarks &amp; share-of-voice movement</li>
             <li><span className="tick">✓</span> Audience segments with priority scoring</li>
             <li><span className="tick">✓</span> Channel-level budget split &amp; 30/60/90 roadmap</li>
-            <li><span className="tick">✓</span> Export to PDF, Google Slides, or Notion</li>
+            <li><span className="tick">✓</span> Export to PDF, or copy a shareable summary</li>
           </ul>
         </div>
       </section>

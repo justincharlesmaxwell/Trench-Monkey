@@ -19,13 +19,24 @@ function ApiKeyModal({ onSave, onCancel }) {
     onSave(k);
   };
 
+  // Escape closes the modal when cancelling is allowed (i.e. a key is already set).
+  useAE(() => {
+    const onKey = (e) => { if (e.key === 'Escape' && onCancel) onCancel(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onCancel]);
+
   return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(15,21,35,0.55)', backdropFilter:'blur(4px)', zIndex:2000, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
-      <div style={{ background:'white', borderRadius:18, padding:'32px 32px 28px', maxWidth:460, width:'100%', boxShadow:'0 32px 64px rgba(15,21,35,0.18)' }}>
+    <div
+      style={{ position:'fixed', inset:0, background:'rgba(15,21,35,0.55)', backdropFilter:'blur(4px)', zIndex:2000, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}
+      onMouseDown={e => { if (e.target === e.currentTarget && onCancel) onCancel(); }}
+    >
+      <div role="dialog" aria-modal="true" aria-labelledby="tm-keymodal-title"
+           style={{ background:'white', borderRadius:18, padding:'32px 32px 28px', maxWidth:460, width:'100%', boxShadow:'0 32px 64px rgba(15,21,35,0.18)' }}>
         <div className="card__eyebrow" style={{ marginBottom:14 }}>
           <Icon name="key" size={14} /> API KEY REQUIRED
         </div>
-        <h2 style={{ fontSize:22, fontWeight:700, color:'var(--tm-ink)', marginBottom:8, lineHeight:1.2 }}>
+        <h2 id="tm-keymodal-title" style={{ fontSize:22, fontWeight:700, color:'var(--tm-ink)', marginBottom:8, lineHeight:1.2 }}>
           Enter your Anthropic API key
         </h2>
         <p style={{ fontSize:13, color:'var(--tm-text-muted)', marginBottom:20, lineHeight:1.55 }}>
@@ -64,7 +75,40 @@ function ApiKeyModal({ onSave, onCancel }) {
 }
 
 // ─── Claude API call ──────────────────────────────────────────────────────────
-async function callClaude(payload, apiKey) {
+// Model: Sonnet is fast, cheap (~2–4p/pitch) and reliable at structured JSON.
+// Swap to 'claude-opus-4-8' if you want maximum strategic depth at higher cost.
+const TM_MODEL = 'claude-sonnet-4-6';
+
+// Pull the first balanced JSON object out of a string, tolerating code fences or
+// stray prose around it. Returns the parsed object, or null if none is found.
+function extractJson(text) {
+  if (!text) return null;
+  // Try the whole thing first (fast path for clean responses).
+  const stripped = text.replace(/^\s*```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+  try { return JSON.parse(stripped); } catch (_) {}
+  // Otherwise scan for the first balanced { … } block, ignoring braces in strings.
+  const start = stripped.indexOf('{');
+  if (start === -1) return null;
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < stripped.length; i++) {
+    const ch = stripped[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+    } else if (ch === '"') inStr = true;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) {
+        try { return JSON.parse(stripped.slice(start, i + 1)); } catch (_) { return null; }
+      }
+    }
+  }
+  return null;
+}
+
+async function callClaude(payload, apiKey, onProgress) {
   const url        = payload.url || '';
   const industry   = payload.industry || '';
   const budget     = parseFloat(String(payload.budget || 0).replace(/[^0-9.]/g, '')) || 0;
@@ -216,64 +260,85 @@ REQUIREMENTS
 - Be deeply specific to this prospect — reference the named competitors and real search behaviour throughout. No generic filler.
 - Return raw JSON only. No \`\`\`json fences.`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-opus-4-7',
-      max_tokens: 24000,
-      stream: true,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
+  async function attempt() {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: TM_MODEL,
+        max_tokens: 24000,
+        stream: true,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
 
-  if (!response.ok) {
-    const text = await response.text();
-    let detail = text;
-    try { const j = JSON.parse(text); detail = j.error?.message || text; } catch (_) {}
-    if (response.status === 401) throw new Error('Invalid API key — open the tweaks panel and set a valid sk-ant-... key.');
-    if (response.status === 403) throw new Error('API key rejected. Make sure it has credit and is not restricted.');
-    if (response.status === 429) throw new Error('Rate limited. Wait a moment and try again.');
-    throw new Error('API ' + response.status + ' — ' + detail.slice(0, 200));
+    if (!response.ok) {
+      const text = await response.text();
+      let detail = text;
+      try { const j = JSON.parse(text); detail = j.error?.message || text; } catch (_) {}
+      if (response.status === 401) throw new Error('Invalid API key — open the tweaks panel and set a valid sk-ant-... key.');
+      if (response.status === 403) throw new Error('API key rejected. Make sure it has credit and is not restricted.');
+      const e = new Error(response.status === 429
+        ? 'Rate limited. Wait a moment and try again.'
+        : 'API ' + response.status + ' — ' + detail.slice(0, 200));
+      e.retryable = response.status === 429 || response.status >= 500;
+      throw e;
+    }
+
+    const reader  = response.body.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = '';
+    let buffer      = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') continue;
+        try {
+          const ev = JSON.parse(data);
+          if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+            accumulated += ev.delta.text;
+            if (onProgress) onProgress(accumulated.length);
+          }
+        } catch (_) {}
+      }
+    }
+
+    const parsed = extractJson(accumulated);
+    if (!parsed) {
+      console.error('Raw response:', accumulated);
+      const e = new Error("Could not parse the response JSON.");
+      e.parseFail = true;
+      throw e;
+    }
+    return parsed;
   }
 
-  const reader  = response.body.getReader();
-  const decoder = new TextDecoder();
-  let accumulated = '';
-  let buffer      = '';
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop();
-    for (const line of lines) {
-      if (!line.startsWith('data: ')) continue;
-      const data = line.slice(6).trim();
-      if (data === '[DONE]') continue;
-      try {
-        const ev = JSON.parse(data);
-        if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
-          accumulated += ev.delta.text;
-        }
-      } catch (_) {}
+  // Up to two attempts: retry once on a parse failure, rate-limit, or server error.
+  let lastErr;
+  for (let i = 0; i < 2; i++) {
+    try {
+      return await attempt();
+    } catch (e) {
+      lastErr = e;
+      if (!(e.parseFail || e.retryable)) throw e;
+      if (i === 0) await new Promise(r => setTimeout(r, 1200));
     }
   }
-
-  const clean = accumulated
-    .replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '').trim();
-  try {
-    return JSON.parse(clean);
-  } catch (e) {
-    console.error('Raw response:', accumulated);
-    throw new Error("Could not parse the response JSON. Try generating again.");
-  }
+  throw new Error(lastErr && lastErr.parseFail
+    ? "Couldn't parse Claude's response after retrying. Please generate again."
+    : (lastErr ? lastErr.message : 'Generation failed. Please try again.'));
 }
 
 // ─── Root App ─────────────────────────────────────────────────────────────────
@@ -283,6 +348,8 @@ function App() {
   const [submitted, setSubmitted] = useAS(null);
   const [apiError, setApiError]   = useAS('');
   const [showKeyModal, setShowKeyModal] = useAS(!getApiKey());
+  const [genChars, setGenChars]   = useAS(0);
+  const [genSeconds, setGenSeconds] = useAS(null);
   const pendingPayload = useAR(null);
 
   useAE(() => { if (window.lucide) window.lucide.createIcons(); });
@@ -290,14 +357,16 @@ function App() {
   const startGeneration = async (payload, key) => {
     setApiError('');
     setSubmitted(payload);
+    setGenChars(0);
     setScreen("loading");
 
     const MIN_MS   = 5400; // let the loading animation finish (~5s total)
     const startedAt = Date.now();
 
     try {
-      const raw    = await callClaude(payload, key);
-      const magnet = window.transformToMagnet(raw, { ...payload, currencySymbol: '£' });
+      const sym    = payload.currencySymbol || '£';
+      const raw    = await callClaude(payload, key, (n) => setGenChars(n));
+      const magnet = window.transformToMagnet(raw, { ...payload, currencySymbol: sym });
       window.MAGNET = magnet;
 
       // Respect the loading animation's minimum duration
@@ -305,6 +374,7 @@ function App() {
       if (elapsed < MIN_MS) {
         await new Promise(r => setTimeout(r, MIN_MS - elapsed));
       }
+      setGenSeconds((Date.now() - startedAt) / 1000);
       setScreen("report");
     } catch (err) {
       setApiError(err.message);
@@ -359,11 +429,12 @@ function App() {
       {screen === "loading" && (
         <LoadingScreen
           brand={brandHost}
+          chars={genChars}
           onComplete={() => {}}
         />
       )}
       {screen === "report" && window.MAGNET && (
-        <Report data={window.MAGNET} layout={layout} onNewPlan={reset} />
+        <Report data={window.MAGNET} layout={layout} onNewPlan={reset} genSeconds={genSeconds} />
       )}
     </div>
   );

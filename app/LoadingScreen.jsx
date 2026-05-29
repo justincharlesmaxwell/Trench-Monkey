@@ -10,7 +10,7 @@ const LOADING_STEPS = [
   { label: "Polishing the pitch deck…",      ms: 600, icon: "sparkles" }
 ];
 
-function LoadingScreen({ onComplete, brand }) {
+function LoadingScreen({ onComplete, brand, chars = 0 }) {
   const [current, setCurrent] = useLS(0);
   const [elapsedTime, setElapsedTime] = useLS(0);
 
@@ -52,7 +52,7 @@ function LoadingScreen({ onComplete, brand }) {
       </h2>
       <p className="loading-screen__caption">
         {current >= LOADING_STEPS.length
-          ? <>Finalising your report… {elapsedTime.toFixed(1)}s elapsed</>
+          ? <>Finalising your report… {elapsedTime.toFixed(1)}s elapsed{chars > 0 ? ` · ${(chars / 1000).toFixed(1)}k characters received` : ''}</>
           : <>Six dirty jobs, one report. {elapsedTime.toFixed(1)}s elapsed · target under 40s.</>
         }
       </p>
