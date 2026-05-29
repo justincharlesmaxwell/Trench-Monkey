@@ -472,7 +472,7 @@ function InputForm({ onSubmit }) {
         <header className="st-nav">
           <div className="st-nav__brand">
             <div className="st-nav__brand-logo">
-              <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
+              <img src={import.meta.env.BASE_URL + "app/assets/monkey-logo.png"} alt="Trench Monkey" />
             </div>
             <div className="st-nav__brand-text">
               <div className="st-nav__brand-word">
@@ -624,7 +624,7 @@ function InputForm({ onSubmit }) {
       <header className="st-nav">
         <div className="st-nav__brand">
           <div className="st-nav__brand-logo">
-            <img src="app/assets/monkey-logo.png" alt="Trench Monkey" />
+            <img src={import.meta.env.BASE_URL + "app/assets/monkey-logo.png"} alt="Trench Monkey" />
           </div>
           <div className="st-nav__brand-text">
             <div className="st-nav__brand-word">
