@@ -32,7 +32,9 @@ function SectionHead({ title, id }) {
 // PHASE 1 — DIAGNOSIS
 // =================================================================
 function DiagnosisPhase() {
-  const { diagnosis: D, brand: B } = useContext(MagnetContext);
+  const magnet = useContext(MagnetContext);
+  if (!magnet) return null;
+  const { diagnosis: D, brand: B } = magnet;
   useLucide();
 
   return (
@@ -140,7 +142,9 @@ function DiagnosisPhase() {
 // PHASE 2 — STRATEGY
 // =================================================================
 function StrategyPhase() {
-  const { strategy: S } = useContext(MagnetContext);
+  const magnet = useContext(MagnetContext);
+  if (!magnet) return null;
+  const { strategy: S } = magnet;
   const personas = S.personas || [];
   useLucide();
 
@@ -269,7 +273,9 @@ function StrategyPhase() {
 // PHASE 3 — TACTICS
 // =================================================================
 function TacticsPhase() {
-  const { tactics: T, brand } = useContext(MagnetContext);
+  const magnet = useContext(MagnetContext);
+  if (!magnet) return null;
+  const { tactics: T, brand } = magnet;
   const total = brand.budget;
   useLucide();
 
@@ -487,7 +493,9 @@ function TacticsPhase() {
 // PHASE 4 — MEASUREMENT
 // =================================================================
 function MeasurementPhase() {
-  const { measurement: M } = useContext(MagnetContext);
+  const magnet = useContext(MagnetContext);
+  if (!magnet) return null;
+  const { measurement: M } = magnet;
   useLucide();
 
   return (
